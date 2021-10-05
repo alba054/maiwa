@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Sapi extends Model
+{
+
+    use HasFactory;
+    protected $guarded = [];
+
+    public function jenis_sapi()  
+    {
+        return $this->belongsTo(JenisSapi::class);
+    }
+    public function peternak()  
+    {
+        return $this->belongsTo(Peternak::class)->with('user');
+    }
+    public function pkb()
+    {
+        return $this->hasMany(PeriksaKebuntingan::class);
+    }
+    public function performa()
+    {
+        return $this->hasMany(Performa::class);
+    }
+    public function ib()
+    {
+        return $this->hasMany(InsiminasiBuatan::class);
+    }
+    public function perlakuan()
+    {
+        return $this->hasMany(Perlakuan::class);
+    }
+    public function notifikasi()
+    {
+        return $this->hasMany(Notifikasi::class);
+    }
+    public function straw()
+    {
+        return $this->hasMany(Strow::class);
+    }
+    public function statussapi()
+    {
+        return $this->hasMany(StatusSapi::class);
+    }
+    
+}
