@@ -10,6 +10,12 @@ class Kecamatan extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [ 
+        'kabupaten_id' => 'integer', 
+       
+        
+        ];
+
     public function kabupaten()  
     {
         return $this->belongsTo(Kabupaten::class);

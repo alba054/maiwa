@@ -5,11 +5,23 @@
         <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
             <div class="card overflow-hidden dash1-card border-0">
                 <div class="card-body">
-                    <p class=" mb-1 ">Total Sales</p>
-                    <h2 class="mb-1 number-font">$3,257</h2>
-                    <small class="fs-12 text-muted">Compared to Last Month</small>
-                    <span class="ratio bg-warning">76%</span>
-                    <span class="ratio-text text-muted">Goals Reached</span>
+                    <p class=" mb-1">Total TSR</p>
+                    <h2 class="mb-1 number-font">{{ $countTsr . ' Orang' }}</h2>
+                    {{-- <small class="fs-12 text-muted">Compared to Last Month</small> --}}
+                    {{-- <span class="ratio bg-success">53%</span> --}}
+                    {{-- <span class="ratio-text text-muted">Goals Reached</span> --}}
+                </div>
+                <div id="spark4"></div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
+            <div class="card overflow-hidden dash1-card border-0">
+                <div class="card-body">
+                    <p class=" mb-1 ">Total Pendamping</p>
+                    <h2 class="mb-1 number-font">{{ $countPendamping . ' Orang' }}</h2>
+                    {{-- <small class="fs-12 text-muted">Compared to Last Month</small> --}}
+                    {{-- <span class="ratio bg-warning">76%</span> --}}
+                    {{-- <span class="ratio-text text-muted">Goals Reached</span> --}}
                 </div>
                 <div id="spark1"></div>
             </div>
@@ -17,11 +29,11 @@
         <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
             <div class="card overflow-hidden dash1-card border-0">
                 <div class="card-body">
-                    <p class=" mb-1 ">Total User</p>
-                    <h2 class="mb-1 number-font">1,678</h2>
-                    <small class="fs-12 text-muted">Compared to Last Month</small>
-                    <span class="ratio bg-info">85%</span>
-                    <span class="ratio-text text-muted">Goals Reached</span>
+                    <p class=" mb-1 ">Total Peternak</p>
+                    <h2 class="mb-1 number-font">{{ $countPeternak . ' Orang' }}</h2>
+                    {{-- <small class="fs-12 text-muted">Compared to Last Month</small> --}}
+                    {{-- <span class="ratio bg-info">85%</span> --}}
+                    {{-- <span class="ratio-text text-muted">Goals Reached</span> --}}
                 </div>
                 <div id="spark2"></div>
             </div>
@@ -29,36 +41,25 @@
         <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
             <div class="card overflow-hidden dash1-card border-0">
                 <div class="card-body">
-                    <p class=" mb-1 ">Total Income</p>
-                    <h2 class="mb-1 number-font">$2,590</h2>
-                    <small class="fs-12 text-muted">Compared to Last Month</small>
-                    <span class="ratio bg-danger">62%</span>
-                    <span class="ratio-text text-muted">Goals Reached</span>
+                    <p class=" mb-1 ">Total Sapi</p>
+                    <h2 class="mb-1 number-font">{{ $countSapi . ' Ekor' }}</h2>
+                    {{-- <small class="fs-12 text-muted">Compared to Last Month</small> --}}
+                    {{-- <span class="ratio bg-danger">62%</span> --}}
+                    {{-- <span class="ratio-text text-muted">Goals Reached</span> --}}
                 </div>
                 <div id="spark3"></div>
             </div>
         </div>
-        <div class="col-xl-3 col-lg-6 col-md-6 col-xm-12">
-            <div class="card overflow-hidden dash1-card border-0">
-                <div class="card-body">
-                    <p class=" mb-1">Total Tax</p>
-                    <h2 class="mb-1 number-font">$1,954</h2>
-                    <small class="fs-12 text-muted">Compared to Last Month</small>
-                    <span class="ratio bg-success">53%</span>
-                    <span class="ratio-text text-muted">Goals Reached</span>
-                </div>
-                <div id="spark4"></div>
-            </div>
-        </div>
+
     </div>
     <!-- End Row-1 -->
 
     <!-- Row-2 -->
     <div class="row">
-        <div class="col-xl-8 col-lg-8 col-md-12">
+        <div class="col-xl-8 col-lg-8 col-md-12" wire:ignore>
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Sales Analysis</h3>
+                    <h3 class="card-title">Analisis Sapi</h3>
                     <div class="card-options">
                         <div class="btn-group p-0">
                             <button class="btn btn-outline-light btn-sm" type="button">Week</button>
@@ -70,39 +71,40 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-xl-3 col-6">
-                            <p class="mb-1">Total Sales</p>
-                            <h3 class="mb-0 fs-20 number-font1">$52,618</h3>
+                            <p class="mb-1">Total Sapi</p>
+                            <h3 class="mb-0 fs-20 number-font1">52,618</h3>
                             <p class="fs-12 text-muted"><span class="text-danger mr-1"><i
                                         class="fe fe-arrow-down"></i>0.9%</span>this month</p>
                         </div>
                         <div class="col-xl-3 col-6 ">
-                            <p class=" mb-1">Maximum Sales</p>
-                            <h3 class="mb-0 fs-20 number-font1">$26,197</h3>
+                            <p class=" mb-1">Total Data Kelahiran</p>
+                            <h3 class="mb-0 fs-20 number-font1">56,197</h3>
                             <p class="fs-12 text-muted"><span class="text-success mr-1"><i
                                         class="fe fe-arrow-up"></i>0.15%</span>this month</p>
                         </div>
                         <div class="col-xl-3 col-6">
-                            <p class=" mb-1">Total Units Sold</p>
+                            <p class=" mb-1">Total Data Kematian</p>
                             <h3 class="mb-0 fs-20 number-font1">13,876</h3>
                             <p class="fs-12 text-muted"><span class="text-danger mr-1"><i
                                         class="fe fe-arrow-down"></i>0.8%</span>this month</p>
                         </div>
-                        <div class="col-xl-3 col-6">
+                        {{-- <div class="col-xl-3 col-6">
                             <p class=" mb-1">Maximum Units Sold</p>
                             <h3 class="mb-0 fs-20 number-font1">5,876</h3>
                             <p class="fs-12 text-muted"><span class="text-success mr-1"><i
                                         class="fe fe-arrow-up"></i>0.06%</span>this month</p>
-                        </div>
+                        </div> --}}
                     </div>
                     <div id="echart1" class="chart-tasks chart-dropshadow text-center"></div>
                     <div class="text-center mt-2">
-                        <span class="mr-4"><span class="dot-label bg-primary"></span>Total Sales</span>
-                        <span><span class="dot-label bg-secondary"></span>Total Units Sold</span>
+                        <span class="mr-4"><span class="dot-label bg-primary"></span>Data Kelahiran</span>
+                        <span><span class="dot-label bg-secondary"></span>Data Kematian</span>
+                        <span><span class="dot-label bg-warning"></span>Data Panen</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-lg-4 col-md-12">
+        <div class="col-xl-4 col-lg-4 col-md-12" wire:ignore>
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Recent Activity</h3>
@@ -120,75 +122,20 @@
                 <div class="card-body">
                     <div class="latest-timeline scrollbar3" id="scrollbar3">
                         <ul class="timeline mb-0">
-                            <li class="mt-0">
-                                <div class="d-flex"><span class="time-data">Task Finished</span><span
-                                        class="ml-auto text-muted fs-11">09 June 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Joseph Ellison</span> finished
-                                    task
-                                    on<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold"> Project
-                                        Management</a></p>
-                            </li>
-                            <li>
-                                <div class="d-flex"><span class="time-data">New Comment</span><span
-                                        class="ml-auto text-muted fs-11">05 June 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Elizabeth Scott</span> Product
-                                    delivered<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold">
-                                        Service
-                                        Management</a></p>
-                            </li>
-                            <li>
-                                <div class="d-flex"><span class="time-data">Target Completed</span><span
-                                        class="ml-auto text-muted fs-11">01 June 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Sonia Peters</span> finished
-                                    target
-                                    on<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold"> this
-                                        month
-                                        Sales</a></p>
-                            </li>
-                            <li>
-                                <div class="d-flex"><span class="time-data">Revenue Sources</span><span
-                                        class="ml-auto text-muted fs-11">26 May 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Justin Nash</span> source
-                                    report
-                                    on<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold">
-                                        Generated</a>
-                                </p>
-                            </li>
-                            <li>
-                                <div class="d-flex"><span class="time-data">Dispatched Order</span><span
-                                        class="ml-auto text-muted fs-11">22 May 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Ella Lambert</span> ontime
-                                    order
-                                    delivery <a href="{{ url('/' . ($page = '#')) }}"
-                                        class="font-weight-semibold">Service
-                                        Management</a></p>
-                            </li>
-                            <li>
-                                <div class="d-flex"><span class="time-data">New User Added</span><span
-                                        class="ml-auto text-muted fs-11">19 May 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Nicola Blake</span> visit the
-                                    site<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold">
-                                        Membership
-                                        allocated</a></p>
-                            </li>
-                            <li>
-                                <div class="d-flex"><span class="time-data">Revenue Sources</span><span
-                                        class="ml-auto text-muted fs-11">15 May 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Richard Mills</span> source
-                                    report
-                                    on<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold">
-                                        Generated</a>
-                                </p>
-                            </li>
-                            <li class="mb-0">
-                                <div class="d-flex"><span class="time-data">New Order Placed</span><span
-                                        class="ml-auto text-muted fs-11">11 May 2020</span></div>
-                                <p class="text-muted fs-12"><span class="text-info">Steven Hart</span> is proces
-                                    the
-                                    order<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold">
-                                        #987</a>
-                                </p>
-                            </li>
+                            @foreach ($laporans as $item)
+                                <li class="mt-0">
+                                    <div class="d-flex"><span
+                                            class="time-data">{{ $item->perlakuan }}</span><span
+                                            class="ml-auto text-muted fs-11">{{ $item->tanggal }}</span></div>
+                                    <p class="text-muted fs-12"><span
+                                            class="text-info">{{ $item->pendamping->user->name }}</span>
+                                        finished
+                                        task
+                                        on<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold">
+                                            {{ $item->sapi->eartag }}</a></p>
+                                </li>
+                            @endforeach
+
                         </ul>
                     </div>
                 </div>
@@ -196,13 +143,100 @@
         </div>
     </div>
     <!-- End Row-2 -->
+    <!-- Row-3 -->
+    <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-12" wire:ignore>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Analisis Upah Pendamping</h3>
+                    <div class="card-options">
+                        <div class="btn-group p-0">
+                            <button class="btn btn-outline-light btn-sm" type="button">Week</button>
+                            <button class="btn btn-light btn-sm" type="button">Month</button>
+                            <button class="btn btn-outline-light btn-sm" type="button">Year</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-xl-3 col-6">
+                            <p class="mb-1">Total Pendamping</p>
+                            <h3 class="mb-0 fs-20 number-font1">{{ $countPendamping }} Orang</h3>
+
+                        </div>
+                        <div class="col-xl-3 col-6 ">
+                            <p class=" mb-1">Total Upah Kinerja</p>
+                            <h3 class="mb-0 fs-20 number-font1">Rp. {{ number_format($laporans->sum('upah')) }}</h3>
+
+                        </div>
+
+                    </div>
+                    <div id="echart2" class="chart-tasks chart-dropshadow text-center"></div>
+                    <div class="text-center mt-2">
+
+                        <span><span class="dot-label bg-warning"></span>Data Kinerja</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6 col-lg-6 col-md-12" wire:ignore>
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Analisis Jenis Kelamin Sapi</h3>
+                    <div class="card-options">
+                        <div class="btn-group p-0">
+                            <button class="btn btn-outline-light btn-sm" type="button">Week</button>
+                            <button class="btn btn-light btn-sm" type="button">Month</button>
+                            <button class="btn btn-outline-light btn-sm" type="button">Year</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-xl-3 col-6">
+                            <p class="mb-1">Total Sapi</p>
+                            <h3 class="mb-0 fs-20 number-font1">{{ count($sapis) }} Ekor</h3>
+
+                        </div>
+                        <div class="col-xl-3 col-6 ">
+                            <p class=" mb-1">Total Sapi Jantan</p>
+                            <h3 class="mb-0 fs-20 number-font1">{{ $sapis->where('kelamin', 'Jantan')->count() }}
+                                Ekor
+                            </h3>
+
+                        </div>
+                        <div class="col-xl-3 col-6 ">
+                            <p class=" mb-1">Total Sapi Betina</p>
+                            <h3 class="mb-0 fs-20 number-font1">{{ $sapis->where('kelamin', 'Betina')->count() }}
+                                Ekor
+                            </h3>
+
+                        </div>
+
+                        {{-- <div class="col-xl-3 col-6">
+                            <p class=" mb-1">Maximum Units Sold</p>
+                            <h3 class="mb-0 fs-20 number-font1">5,876</h3>
+                            <p class="fs-12 text-muted"><span class="text-success mr-1"><i
+                                        class="fe fe-arrow-up"></i>0.06%</span>this month</p>
+                        </div> --}}
+                    </div>
+                    <div id="echart3" class="chart-tasks chart-dropshadow text-center"></div>
+                    <div class="text-center mt-2">
+                        <span class="mr-4"><span class="dot-label bg-primary"></span>Data Sapi Jantan</span>
+                        <span><span class="dot-label bg-secondary"></span>Data Sapi Betina</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Row-3 -->
 
     <!--Row-->
     <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Top Product Sales Overview</h3>
+                    <h3 class="card-title">Data Sapi</h3>
                     <div class="card-options">
                         <a href="{{ url('/' . ($page = '#')) }}" class="option-dots" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal fs-20"></i></a>
@@ -214,102 +248,71 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-vcenter text-nowrap mb-0 table-striped table-bordered border-top">
-                            <thead
-                                class="">
-                                <tr>
-                                    <th>Product</th>
-                                    <th>Sold</th>
-                                    <th>Record point</th>
-                                    <th>Stock</th>
-                                    <th>Amount</th>
-                                    <th>Stock Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="
-                                font-weight-bold"><img class="w-7 h-7 rounded shadow mr-3"
-                                    src="{{ URL::asset('assets/images/orders/7.jpg') }}" alt="media1"> New
-                                Book
-                                </td>
-                                <td><span class="badge badge-primary">18</span></td>
-                                <td>05</td>
-                                <td>112</td>
-                                <td class="number-font">$ 2,356</td>
-                                <td><i class="fa fa-check mr-1 text-success"></i> In Stock</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-weight-bold"><img class="w-7 h-7 rounded shadow mr-3"
-                                            src="{{ URL::asset('assets/images/orders/8.jpg') }}" alt="media1"> New
-                                        Bowl
-                                    </td>
-                                    <td><span class="badge badge-info">10</span></td>
-                                    <td>04</td>
-                                    <td>210</td>
-                                    <td class="number-font">$ 3,522</td>
-                                    <td><i class="fa fa-check text-success"></i> In Stock</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-weight-bold"><img class="w-7 h-7 rounded shadow mr-3"
-                                            src="{{ URL::asset('assets/images/orders/9.jpg') }}" alt="media1"> Modal
-                                        Car</td>
-                                    <td><span class="badge badge-secondary">15</span></td>
-                                    <td>05</td>
-                                    <td>215</td>
-                                    <td class="number-font">$ 5,362</td>
-                                    <td><i class="fa fa-check text-success"></i> In Stock</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-weight-bold"><img class="w-7 h-7 rounded shadow mr-3"
-                                            src="{{ URL::asset('assets/images/orders/10.jpg') }}" alt="media1">
-                                        Headset
-                                    </td>
-                                    <td><span class="badge badge-primary">21</span></td>
-                                    <td>07</td>
-                                    <td>102</td>
-                                    <td class="number-font">$ 1,326</td>
-                                    <td><i class="fa fa-check text-success"></i> In Stock</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-weight-bold"><img class="w-7 h-7 rounded shadow mr-3"
-                                            src="{{ URL::asset('assets/images/orders/12.jpg') }}" alt="media1"> Watch
-                                    </td>
-                                    <td><span class="badge badge-danger">34</span></td>
-                                    <td>10</td>
-                                    <td>325</td>
-                                    <td class="number-font">$ 5,234</td>
-                                    <td><i class="fa fa-check text-success"></i> In Stock</td>
-                                </tr>
-                                <tr>
-                                    <td class="font-weight-bold"><img class="w-7 h-7 rounded shadow mr-3"
-                                            src="{{ URL::asset('assets/images/orders/13.jpg') }}" alt="media1">
-                                        Branded
-                                        Shoes</td>
-                                    <td><span class="badge badge-success">11</span></td>
-                                    <td>04</td>
-                                    <td>0</td>
-                                    <td class="number-font">$ 3,256</td>
-                                    <td><i class="fa fa-exclamation-triangle text-warning"></i> Out of stock</td>
-                                </tr>
-                                <tr class="mb-0">
-                                    <td class="font-weight-bold"><img class="w-7 h-7 rounded shadow mr-3"
-                                            src="{{ URL::asset('assets/images/orders/11.jpg') }}" alt="media1"> New
-                                        EarPhones</td>
-                                    <td><span class="badge badge-warning">60</span></td>
-                                    <td>10</td>
-                                    <td>0</td>
-                                    <td class="number-font">$ 7,652</td>
-                                    <td><i class="fa fa-exclamation-triangle text-danger"></i> Out of stock</td>
-                                </tr>
+                            @if (count($sapis) != 0)
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Eartag</th>
+                                        <th>Nama Sapi</th>
+                                        <th>Tgl Lahir</th>
+                                        <th>Umur</th>
+                                        <th>Kelamin</th>
+                                        <th>Jenis Sapi</th>
+                                        <th>Status Sapi</th>
+                                        <th>Peternak</th>
+                                        <th>Pendamping</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($sapis as $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+
+                                            <td><a href="{{ route('sapi.show', $item) }}">{{ $item->eartag }}</a>
+                                            </td>
+                                            <td>{{ $item->nama_sapi }}</td>
+                                            <td>{{ $item->tanggal_lahir }}</td>
+                                            <td>
+                                                @php
+                                                    date_default_timezone_set('Asia/Makassar');
+                                                    $now = now()->format('Y/m/d');
+                                                    $bday = Carbon\Carbon::parse($item->tanggal_lahir);
+                                                    echo $bday->diffInYears($now) . ' Tahun, ' . $bday->diffInMonths($now) . ' Bulan, ' . $bday->diffInDays($now) . ' Hari';
+                                                @endphp
+                                            </td>
+                                            <td>{{ $item->kelamin }}</td>
+                                            <td>{{ $item->jenis_sapi->jenis }}</td>
+                                            <td>{{ $item->status_sapi->status }}</td>
+                                            <td>{{ $item->peternak->nama_peternak }}</td>
+                                            <td>{{ $item->peternak->pendamping->user->name }}</td>
+
+
+                                        </tr>
+
+                                    @endforeach
                                 </tbody>
+
+                            @else
+                                There no Data Yet
+                            @endif
                         </table>
+                        {{ $sapis->links() }}
+
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
     <!--End row-->
 </div>
+
+@push('script')
+    @include('livewire.home.cart1')
+    @include('livewire.home.cart2')
+    @include('livewire.home.cart3')
+@endpush

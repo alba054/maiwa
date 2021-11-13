@@ -9,6 +9,10 @@ class StatusSapi extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    protected $casts = [ 
+        'sapi_id' => 'integer', 
+        
+        ];
     public function sapi()  
     {
         return $this->belongsTo(Sapi::class)->with(['peternak','jenis_sapi']);

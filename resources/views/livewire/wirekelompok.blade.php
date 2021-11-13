@@ -1,8 +1,10 @@
 <div class="row">
+
     <div class="col-xl-3 col-lg-4">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Tambah Kelompok</div>
+                <div class="card-title">Tambah Kelompok
+                </div>
             </div>
             <div class="card-body">
                 <div class="text-center mb-5">
@@ -18,9 +20,17 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+
+                <div class="dimmer active" style="height: 5px; margin-top: 0;" wire:loading>
+                    <div class="spinner4">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                </div>
             </div>
             <div class="card-footer text-right">
-                <button wire:click="save" class="btn btn-primary">Submit</button>
+                <button wire:click="save" class="btn btn-outline-primary">Submit</button>
             </div>
         </div>
     </div>
@@ -63,10 +73,10 @@
                                         </td>
                                         <td class="text-right">
                                             <i wire:click="selectedItem({{ $item->id }},'update')"
-                                                class="fe fe-edit f-16 btn btn-success" style="cursor:
+                                                class="fe fe-edit f-16 btn btn-outline-success" style="cursor:
                             pointer"></i>
                                             <i wire:click="selectedItem({{ $item->id }},'delete')"
-                                                class="fe fe-trash-2 f-16 btn btn-danger" style="cursor:
+                                                class="fe fe-trash-2 f-16 btn btn-outline-danger" style="cursor:
                             pointer"></i>
                                         </td>
                                     </tr>

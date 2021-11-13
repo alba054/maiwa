@@ -8,8 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Desa extends Model
 {
     use HasFactory;
-     protected $guarded = [];
+    protected $guarded = [];
 
+     protected $casts = [ 
+        'kecamatan_id' => 'integer', 
+        ];
     public function kecamatan()  
     {
         return $this->belongsTo(Kecamatan::class)->with('kabupaten');

@@ -11,13 +11,21 @@ class Sapi extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [ 
+        'jenis_sapi_id' => 'integer', 
+        'status_sapi_id' => 'integer',
+        'peternak_id' => 'integer',
+       
+        ];
+
+    public function peternak()  
+    {
+        return $this->belongsTo(Peternak::class)->with(['desa','pendamping']);
+    }
+    
     public function jenis_sapi()  
     {
         return $this->belongsTo(JenisSapi::class);
-    }
-    public function peternak()  
-    {
-        return $this->belongsTo(Peternak::class)->with('user');
     }
     public function pkb()
     {
@@ -35,6 +43,10 @@ class Sapi extends Model
     {
         return $this->hasMany(Perlakuan::class);
     }
+    public function panens()
+    {
+        return $this->hasMany(Panen::class);
+    }
     public function notifikasi()
     {
         return $this->hasMany(Notifikasi::class);
@@ -43,9 +55,17 @@ class Sapi extends Model
     {
         return $this->hasMany(Strow::class);
     }
-    public function statussapi()
+    public function status_sapi()
     {
-        return $this->hasMany(StatusSapi::class);
+        return $this->belongsTo(StatusSapi::class);
+    }
+    public function laporans()
+    {
+        return $this->hasMany(Laporan::class);
+    }
+    public function peternak_sapis()
+    {
+        return $this->hasMany(PeternakSapi::class);
     }
     
 }

@@ -4,14 +4,21 @@ namespace App\Http\Livewire;
 
 use App\Models\Hasil;
 use App\Models\Metode;
+use App\Models\Pendamping;
 use App\Models\PeriksaKebuntingan;
+use App\Models\Peternak;
+use App\Models\PeternakSapi;
 use App\Models\Sapi;
+use App\Models\Tsr;
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Intervention\Image\ImageManager;
+
 
 class WireMonPeriksaKebuntingan extends Component
 {
-    public $selectedItemId, $waktu_pk, $metode_id, $hasil_id, $sapi_id, $startDate, $endDate, $searchTerm, $sapiId, $userId, $metodeId, $hasilId;
+    public $selectedItemId, $startDate, $endDate, $searchTerm, $sapiId, $peternakId, $pendampingId, $tsrId, $userId, $metodeId, $hasilId;
 
      protected $rules = [
         'metode_id' => 'required',
@@ -31,6 +38,7 @@ class WireMonPeriksaKebuntingan extends Component
         'delete',
         'isSuccess',
         'isError',
+        'formFilter',
         'refreshParent'=>'$refresh',
     ];
 
@@ -43,8 +51,43 @@ class WireMonPeriksaKebuntingan extends Component
         $this->waktu_pk = $today;
 
     }
+    public function formFilter($data)
+    {
+        // dd($data['startDate']);
+
+        $this->startDate = $data['startDate'] == null ? $this->waktu_pk : $data['startDate'];
+        $this->endDate = $data['endDate'] == null ? $this->waktu_pk : $data['endDate'];
+        
+        $this->metodeId = $data['metodeId'];
+        $this->hasilId = $data['hasilId'];
+        $this->sapiId = $data['sapiId'];
+        $this->peternakId = $data['peternakId'];
+        $this->pendampingId = $data['pendampingId'];
+        $this->tsrId = $data['tsrId'];
+
+
+
+    }
+    public function formAdd($data)
+    {
+        // dd($data['startDate']);
+
+        $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
+        $this->endDate = $data['endDate'] == null ? $this->waktu_pk : $data['endDate'];
+        
+        $this->metodeId = $data['metodeId'];
+        $this->hasilId = $data['hasilId'];
+        $this->sapiId = $data['sapiId'];
+        $this->peternakId = $data['peternakId'];
+        $this->pendampingId = $data['pendampingId'];
+        $this->tsrId = $data['tsrId'];
+
+
+
+    }
     public function resultData()
     {
+        
         // dd("start ".$this->startDate.", end ".$this->endDate);
 
         $haha = $this->userId;
@@ -52,7 +95,7 @@ class WireMonPeriksaKebuntingan extends Component
         ->where(function ($query){
             
             if($this->metodeId != null){
-                $query->Where('metode_id','like','%'.$this->metodeId.'%');
+                $query->Where('metode_id',$this->metodeId);
             }
             if($this->hasilId != null){
                 $query->Where('hasil_id','like','%'.$this->hasilId.'%');
@@ -60,13 +103,22 @@ class WireMonPeriksaKebuntingan extends Component
             if($this->sapiId != null){
                 $query->Where('sapi_id','like','%'.$this->sapiId.'%');
             }
+            if($this->peternakId != null){
+                $query->Where('peternak_id','like','%'.$this->peternakId.'%');
+            }
+            if($this->pendampingId != null){
+                $query->Where('pendamping_id',$this->pendampingId);
+            }
+            if($this->tsrId != null){
+                $query->Where('tsr_id','like','%'.$this->tsrId.'%');
+            }
             
         })
-        ->whereHas('sapi.peternak', function($q) use($haha) {
-            if($haha != null){
-                $q->where('user_id', $haha);
-            }
-        })
+        // ->whereHas('sapi.peternak', function($q) use($haha) {
+        //     if($haha != null){
+        //         $q->where('user_id', $haha);
+        //     }
+        // })
         ->WhereBetween('waktu_pk',[$this->startDate, $this->endDate])
         ->get();
     }
@@ -75,16 +127,40 @@ class WireMonPeriksaKebuntingan extends Component
         return view('livewire.wire-mon-periksa-kebuntingan',[
             'periksa_kebuntingans' => $this->resultData(),
             'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
-            'users' => User::where('hak_akses',2)->get(),
+            'pendampings' => Pendamping::orderBy('id','ASC')->get(),
+            'tsrs' => Tsr::orderBy('id','ASC')->get(),
             'metodes' => Metode::orderBy('metode','ASC')->get(),
             'hasils' => Hasil::orderBy('hasil','ASC')->get(),
+            'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get(),
         ]);
     }
 
-    public function selectedItem($itemId, $action){
-        
+    public function openSearchModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalSearch');
+    }
+    public function openAddModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalAdd');
+    }
+
+    public function selectedItem($itemId, $action)
+    {
+
         $this->selectedItemId = $itemId;
-        $action == 'delete' ? $this->triggerConfirm() : $this->edit(); 
+
+
+        if($action == 'delete'){
+            $this->triggerConfirm();
+        }else if ($action == 'export') {
+            return redirect()->to('/export/pkb/1/'.$itemId);
+        }else{
+            $this->emit('getModelId',$this->selectedItemId);
+            $this->dispatchBrowserEvent('openModalAdd');
+        }
+        
     }
     public function edit(){
         $data = PeriksaKebuntingan::find($this->selectedItemId);
@@ -93,37 +169,7 @@ class WireMonPeriksaKebuntingan extends Component
         $this->hasil_id = $data->hasil_id;
     }
 
-    public function save(){
-        $this->selectedItemId ?   $this->update() : $this->store();    
-    }
-    public function store()
-    {
-        $data = $this->validate();
-        $data['waktu_pk'] = $this->waktu_pk;
-        $save = PeriksaKebuntingan::create($data);
-        $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
-
-        $this->cleanVars();   
-        
-    }
-    public function update()
-    {
-         $validateData = [];
-        
-        $validateData = array_merge($validateData,[
-            'metode_id' => 'required',
-            'hasil_id' => 'required',
-            'sapi_id' => 'required',
-        ]);
-
-        $data = $this->validate($validateData);
-
-        $save = PeriksaKebuntingan::find($this->selectedItemId)->update($data);
-        $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
-
-        $this->cleanVars();   
-    }
-
+    
     public function delete()
     {
         $delete = PeriksaKebuntingan::destroy($this->selectedItemId);

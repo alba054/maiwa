@@ -9,6 +9,18 @@
         <div class="py-1">
             <form class="form" novalidate="">
                 <div class="form-group">
+                    <label class="form-label">Peternak<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="peternak_id">
+                        <option value="">Pilih Peternak</option>
+                        @foreach ($peternaks as $item)
+                            <option value="{{ $item->id }}"> {{ $item->nama_peternak }} </option>
+                        @endforeach
+                    </select>
+                    @error('peternak_id')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
                     <label class="form-label">Jenis Sapi<span class="text-danger">*</span></label>
                     <select class="custom-select" wire:model="jenis_sapi_id">
                         <option value="">Please Choose</option>
@@ -21,38 +33,19 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Peternak<span class="text-danger">*</span></label>
-                    <select class="custom-select" wire:model="peternak_id">
+                    <label class="form-label">Status Sapi<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="status_sapi_id">
                         <option value="">Please Choose</option>
-                        @foreach ($peternaks as $item)
-                            <option value="{{ $item->id }}"> {{ $item->nama_peternak }} </option>
+                        @foreach ($status_sapis as $item)
+                            <option value="{{ $item->id }}"> {{ $item->status . ' ,  ' . $item->ket_status }}
+                            </option>
                         @endforeach
                     </select>
-                    @error('peternak_id')
+                    @error('jenis_sapi_id')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Ertag<span class="text-danger">*</span></label>
-                    <input wire:model="ertag" type="text" class="form-control" placeholder="e.g: T001/QAZ/007">
-                    @error('ertag')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Ertag Induk<span class="text-danger">*</span></label>
-                    <input wire:model="ertag_induk" type="text" class="form-control" placeholder="e.g: T001/QAZ/007">
-                    @error('ertag_induk')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Nama Sapi<span class="text-danger">*</span></label>
-                    <input wire:model="nama_sapi" type="text" class="form-control" placeholder="e.g: Sapi Asep">
-                    @error('nama_sapi')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+
                 <div class="form-group">
                     <label>Tanggal Lahir<span class="text-danger">*</span></label>
                     <div wire:ignore class="date" id="appointmentDate" data-target-input="nearest"
@@ -64,6 +57,35 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+                <div class="form-group">
+                    <label class="form-label">Anak Ke -<span class="text-danger">*</span></label>
+                    <input wire:model="anak_ke" type="number" class="form-control" placeholder="e.g: 10">
+                    @error('anak_ke')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label">eartag Induk<span class="text-danger">*</span></label>
+                    <input wire:model="eartag_induk" type="text" class="form-control" placeholder="e.g: 007">
+                    @error('eartag_induk')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label">eartag<span class="text-danger">*</span></label>
+                    <input wire:model="eartag" type="text" class="form-control" placeholder="e.g: T001/QAZ/007">
+                    @error('eartag')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Nama Sapi<span class="text-danger">*</span></label>
+                    <input wire:model="nama_sapi" type="text" class="form-control" placeholder="e.g: Sapi Asep">
+                    @error('nama_sapi')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
                 <div class="form-group">
                     <label class="form-label">Jenis Kelamin<span class="text-danger">*</span></label>
                     <input wire:model="kelamin" type="text" class="form-control" placeholder="e.g: Jantan/Betina">
@@ -78,13 +100,7 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Anak Ke -<span class="text-danger">*</span></label>
-                    <input wire:model="anak_ke" type="number" class="form-control" placeholder="e.g: 10">
-                    @error('anak_ke')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+
 
                 <div class="row">
                     <div class="col">
@@ -102,40 +118,40 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label>Foto Belakang<span class="text-danger">*</span></label>
-                            <input class="form-control" type="file" id="formFile" wire:model="foto_belakang">
-                            @error('foto_belakang')
+                            <label>Foto Samping<span class="text-danger">*</span></label>
+                            <input class="form-control" type="file" id="formFile" wire:model="foto_samping">
+                            @error('foto_samping')
                                 <small class="mt-2 text-danger">{{ $message }}</small>
                             @enderror
 
-                            @if ($foto_belakang)
-                                <img src="{{ $foto_belakang->temporaryUrl() }}" width="100%" class="mt-2">
+                            @if ($foto_samping)
+                                <img src="{{ $foto_samping->temporaryUrl() }}" width="100%" class="mt-2">
                             @endif
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label>Foto Samping Kiri<span class="text-danger">*</span></label>
-                            <input class="form-control" type="file" id="formFile" wire:model="foto_kiri">
-                            @error('foto_kiri')
+                            <label>Foto Peternak dgn Sapi<span class="text-danger">*</span></label>
+                            <input class="form-control" type="file" id="formFile" wire:model="foto_peternak">
+                            @error('foto_peternak')
                                 <small class="mt-2 text-danger">{{ $message }}</small>
                             @enderror
 
-                            @if ($foto_kiri)
-                                <img src="{{ $foto_kiri->temporaryUrl() }}" width="100%" class="mt-2">
+                            @if ($foto_peternak)
+                                <img src="{{ $foto_peternak->temporaryUrl() }}" width="100%" class="mt-2">
                             @endif
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label>Foto Samping Kanan<span class="text-danger">*</span></label>
-                            <input class="form-control" type="file" id="formFile" wire:model="foto_kanan">
-                            @error('foto_kanan')
+                            <label>Foto Rumah Peternak<span class="text-danger">*</span></label>
+                            <input class="form-control" type="file" id="formFile" wire:model="foto_rumah">
+                            @error('foto_rumah')
                                 <small class="mt-2 text-danger">{{ $message }}</small>
                             @enderror
 
-                            @if ($foto_kanan)
-                                <img src="{{ $foto_kanan->temporaryUrl() }}" width="100%" class="mt-2">
+                            @if ($foto_rumah)
+                                <img src="{{ $foto_rumah->temporaryUrl() }}" width="100%" class="mt-2">
                             @endif
                         </div>
                     </div>
@@ -148,7 +164,7 @@
     <div class="modal-footer">
         <div class="row">
             <div class="col d-flex justify-content-end">
-                <button wire:click="save" class="btn btn-primary" type="submit">Save Changes</button>
+                <button wire:click="save" class="btn btn-outline-primary" type="submit">Save Changes</button>
             </div>
         </div>
     </div>

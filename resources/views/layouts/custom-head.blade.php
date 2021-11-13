@@ -1,5 +1,5 @@
   <!-- Title -->
-  <title>MBC - Admin Panel</title>
+  <title>MBC - Maiwa Breeding Center</title>
 
   <!--Favicon -->
   <link rel="icon" href="{{ URL::asset('assets/images/brand/favicon.ico') }}" type="image/x-icon" />
@@ -19,5 +19,6 @@
   <link href="{{ URL::asset('assets/css/icons.css') }}" rel="stylesheet" />
 
   @yield('css')
+
   <!-- Color Skin css -->
   <link id="theme" href="{{ URL::asset('assets/colors/color1.css') }}" rel="stylesheet" type="text/css" />

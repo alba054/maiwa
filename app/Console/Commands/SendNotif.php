@@ -41,19 +41,19 @@ class SendNotif extends Command
     {
         date_default_timezone_set("Asia/Makassar");
         // $date = date('Y-m-d : H:i');
-        $today = date('Y/m/d');
-        $data = Notifikasi::with('sapi')
+        $data = Notifikasi::with(['sapi'])
         ->orderBy('tanggal', 'ASC')
-        ->WhereBetween('tanggal', [now()->subdays(7)->format('Y-m-d'), now()->format('Y-m-d')])
-        ->get();
-        // return $data;
-        // echo(now()->format('Y-m-d'));
+        // ->whereDate('tanggal',now()->subdays(1)->format('Y-m-d'))
+        ->WhereBetween('tanggal', [now()->subdays(1)->format('Y-m-d'), now()->format('Y-m-d')])
 
+        ->where('status','no')
+        ->get();
+       
         foreach ($data as $key => $value) {
-            $token = $value->sapi->peternak->user->remember_token;
-            // dd($token);
-            // echo($token.'<br/>');
-            $pesan = $value->pesan.' ke Sapi '.$value->sapi->ertag;
+            $token = $value->sapi->peternak->pendamping->user->remember_token;
+            
+            $pesan = $value->pesan.' ke Sapi '.$value->sapi->eartag;
+
             $this->sendFCM($token, 'MBC', $pesan);
         }
     }

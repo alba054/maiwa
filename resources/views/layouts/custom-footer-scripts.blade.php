@@ -15,4 +15,4 @@
 		<script src="{{URL::asset('assets/plugins/rating/jquery.rating-stars.js')}}"></script>
 		@yield('js')
 		<!-- Custom js-->
-		<script src="{{URL::asset('assets/js/custom.js')}}"></script>	
+		<script src="{{URL::asset('assets/js/custom.js')}}"></script>

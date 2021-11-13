@@ -96,7 +96,8 @@
                                                 <div></div>
                                                 <div></div>
                                             </div>
-                                            <img src="{{ URL::asset('assets/images/png/login.png') }}" alt="img">
+                                            <img style="width: 900px"
+                                                src="{{ URL::asset('assets/images/brand/mbc.png') }}" alt="img">
                                         </div>
                                     </div>
                                 </div>

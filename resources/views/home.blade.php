@@ -23,6 +23,7 @@
     <!--End Page header-->
 @endsection
 @section('content')
+
     @livewire('wirehome')
 
     </div>
@@ -30,4 +31,31 @@
     </div>
 @endsection
 @section('js')
+    <!--INTERNAL Peitychart js-->
+    <script src="{{ URL::asset('assets/plugins/peitychart/jquery.peity.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/peitychart/peitychart.init.js') }}"></script>
+
+    <!--INTERNAL Apexchart js-->
+    <script src="{{ URL::asset('assets/js/apexcharts.js') }}"></script>
+
+    <!--INTERNAL ECharts js-->
+    <script src="{{ URL::asset('assets/plugins/echarts/echarts.js') }}"></script>
+
+    <!--INTERNAL Chart js -->
+    <script src="{{ URL::asset('assets/plugins/chart/chart.bundle.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/chart/utils.js') }}"></script>
+
+    <!-- INTERNAL Select2 js -->
+    <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/select2.js') }}"></script>
+
+    <!--INTERNAL Moment js-->
+    <script src="{{ URL::asset('assets/plugins/moment/moment.js') }}"></script>
+
+    <!--INTERNAL Index js-->
+    <script src="{{ URL::asset('assets/js/index1.js') }}"></script>
+
+    {{-- @include('home.cart1') --}}
+
+    @stack('script')
 @endsection

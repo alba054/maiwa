@@ -18,7 +18,7 @@
                     <select class="custom-select" wire:model="sapi_id">
                         <option value="">Please Choose</option>
                         @foreach ($sapis as $item)
-                            <option value="{{ $item->id }}"> {{ $item->nama_sapi }} </option>
+                            <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
                         @endforeach
                     </select>
                     @error('sapi_id')
@@ -38,6 +38,14 @@
                     @error('batch')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
+                </div>
+
+                <div class="dimmer active" style="height: 5px; margin-top: 0;" wire:loading>
+                    <div class="spinner4">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
                 </div>
             </div>
             <div class="card-footer text-right">
@@ -64,7 +72,7 @@
                             <select class="custom-select" wire:model="sapiId">
                                 <option value="">Please Choose</option>
                                 @foreach ($sapis as $item)
-                                    <option value="{{ $item->id }}"> {{ $item->ertag }} </option>
+                                    <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
                                 @endforeach
                             </select>
                         </div>
@@ -93,7 +101,7 @@
                                 @foreach ($strows as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->sapi->nama_sapi }}</td>
+                                        <td>{{ $item->sapi->eartag }}</td>
                                         <td>{{ $item->kode_batch }}</td>
                                         <td>{{ $item->batch }}</td>
 

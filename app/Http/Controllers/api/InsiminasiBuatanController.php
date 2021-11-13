@@ -2,16 +2,41 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helper\Constcoba;
 use App\Http\Controllers\Controller;
 use App\Models\InsiminasiBuatan;
+use App\Models\Laporan;
+use App\Models\Notifikasi;
+use App\Models\Pendamping;
+use App\Models\Peternak;
+use App\Models\PeternakSapi;
+use App\Models\Sapi;
+use App\Models\Tsr;
+use App\Models\Upah;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
 
 class InsiminasiBuatanController extends Controller
 {
    
-    public function index()
+    public function index($userId)
     {
-        $data = InsiminasiBuatan::with(['sapi','strow'])->latest()->get();
+        $data = [];
+        $hak_akses = User::find($userId)->hak_akses;
+        if ($hak_akses == 3) {
+            
+            $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
+            $data = InsiminasiBuatan::with(['sapi','strow'])
+            ->where('pendamping_id', $pendampingId)
+            ->latest()->get();
+        }else{
+            $tsrId = Tsr::where('user_id', $userId)->first()->id;
+            $data = InsiminasiBuatan::with(['sapi','strow'])
+            ->where('tsr_id', $tsrId)
+            ->latest()->get();
+        }
+        
         return response()->json([
                 'responsecode' => '1',
                 'responsemsg' => 'Success',
@@ -22,30 +47,94 @@ class InsiminasiBuatanController extends Controller
     
     public function store(Request $request)
     {
-        $save = InsiminasiBuatan::create([
-            'waktu_ib' => $request->waktu,
-            'dosis_ib' => $request->dosis,
-            'strow_id' => $request->strowId,
-            'sapi_id' => $request->sapiId,
-        ]);
+        date_default_timezone_set("Asia/Makassar");
+        $today = date('Y/m/d');
+        
+        $sapi = Sapi::find($request->sapi_id);
+        $peternak = Peternak::find($sapi->peternak_id);
 
-        $data = InsiminasiBuatan::with(['sapi','strow'])->latest()->get();
+
+        $waktu_ib = $today;
+        $strow_id = $request->strow_id;
+        $sapi_id = $request->sapi_id;
+        $image = $request->image;
+
+        $imageName = $request->foto;
+
+        if (!empty($image)) {
+            $imageName = $this->handleImageIntervention($request->image);
+        }
+
+        $dosis_ib = count(InsiminasiBuatan::where('sapi_id', $sapi_id)->get()) + 1;
+
+        $data = [
+            'waktu_ib' => $waktu_ib,
+            'dosis_ib' => $dosis_ib,
+            'strow_id' => $strow_id,
+            'sapi_id' => $sapi_id,
+            'peternak_id' => $peternak->id,
+            'pendamping_id' => $peternak->pendamping_id,
+            'tsr_id' => $peternak->pendamping->tsr_id,
+            'foto' => $imageName
+        ];
+
+        if ($request->id == 0) {
+            $upah = Upah::find(3);
+                    Laporan::create([
+                        'sapi_id' => $sapi_id,
+                        'peternak_id' => $peternak->id,
+                        'pendamping_id' => $peternak->pendamping_id,
+                        'tsr_id' => $peternak->pendamping->tsr_id,
+                        'tanggal' => $today, 
+                        'perlakuan' => $upah->detail,
+                        'upah' => $upah->price,
+                        ]);
+        }
+
+        $save = $request->id == 0 ? InsiminasiBuatan::create($data) : InsiminasiBuatan::find($request->id)->update($data);
+
 
         if ($save) {
+            $token = $sapi->peternak->pendamping->user->remember_token;
+            // dd($token);
+            // echo($token.'<br/>');
+
+            $notifikasi = Notifikasi::find($request->notifikasi_id);
+            if ($notifikasi) {
+                $notifikasi->update([
+                    'status' => 'yes'
+                ]);
+            }
+
+            $pesan = 'Terima Kasih, Telah melakukan Insiminasi Buatan '.$sapi->eartag;
+
+            Constcoba::sendFCM($token, 'MBC', $pesan, "0");
+            
             return response()->json([
                 'responsecode' => '1',
                 'responsemsg' => 'Created !',
-                'insiminasi_buatan' => $data,
+                
             ], 201);
 
         } else {
             return response()->json([
                 'responsecode' => '0',
                 'responsemsg' => 'Something Wrong',
-                'insiminasi_buatan' => $data,
-                
-            ], 204);
+            ], 201);
         }
+    }
+
+    public function handleImageIntervention($res_foto)
+    {
+        $res_foto->store('public/photos');
+        $imageName = $res_foto->hashName();
+        $data['foto'] = $imageName;
+
+        $manager = new ImageManager();
+        $image = $manager->make('storage/photos/'.$imageName)->resize(500,300);
+        $image->save('storage/photos_thumb/'.$imageName);
+
+        return $imageName;
     }
 
     

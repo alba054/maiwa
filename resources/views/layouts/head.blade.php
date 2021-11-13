@@ -1,8 +1,8 @@
   <!-- Title -->
-  <title>MBC - Admin Panel</title>
+  <title>MBC - Maiwa Breeding Center</title>
 
   <!--Favicon -->
-  <link rel="icon" href="{{ URL::asset('assets/images/brand/favicon.ico') }}" type="image/x-icon" />
+  <link rel="icon" href="{{ URL::asset('assets/images/brand/mbc2.png') }}" type="image/x-icon" />
 
   <!--Bootstrap css -->
   <link href="{{ URL::asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -14,6 +14,9 @@
 
   <!-- Animate css -->
   <link href="{{ URL::asset('assets/css/animated.css') }}" rel="stylesheet" />
+
+  <!--Sidemenu css -->
+  <link href="{{ URL::asset('assets/css/sidemenu.css') }}" rel="stylesheet">
 
   <!-- P-scroll bar css-->
   <link href="{{ URL::asset('assets/plugins/p-scrollbar/p-scrollbar.css') }}" rel="stylesheet" />

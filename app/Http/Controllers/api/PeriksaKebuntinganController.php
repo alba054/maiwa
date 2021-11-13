@@ -2,17 +2,44 @@
 
 namespace App\Http\Controllers\api;
 
+use App\Helper\Constcoba;
 use App\Http\Controllers\Controller;
+use App\Models\Laporan;
+use App\Models\Notifikasi;
+use App\Models\Pendamping;
 use App\Models\PeriksaKebuntingan;
+use App\Models\Peternak;
+use App\Models\PeternakSapi;
+use App\Models\Sapi;
+use App\Models\Tsr;
+use App\Models\Upah;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Intervention\Image\ImageManager;
 
 class PeriksaKebuntinganController extends Controller
 {
     
-    public function index()
+    public function index($userId)
     {
-        //
-        $data = PeriksaKebuntingan::with('sapi')->latest()->get();
+        $data = [];
+        $hak_akses = User::find($userId)->hak_akses;
+        if ($hak_akses == 3) {
+            
+            $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
+        // return $pendampingId;
+            $data = PeriksaKebuntingan::with(['sapi','hasil','metode'])
+            ->where('pendamping_id', $pendampingId)
+            ->latest()->get();
+        }else{
+            $tsrId = Tsr::where('user_id', $userId)->first()->id;
+        // return $pendampingId;
+            $data = PeriksaKebuntingan::with(['sapi','hasil','metode'])
+            ->where('tsr_id', $tsrId)
+            ->latest()->get();
+        }
+        
+        
         return response()->json([
                 'responsecode' => '1',
                 'responsemsg' => 'Success',
@@ -23,31 +50,90 @@ class PeriksaKebuntinganController extends Controller
     public function store(Request $request)
     {
         //
-        $save = PeriksaKebuntingan::create([
-            'waktu_pk' => $request->waktu_pk,
-            'metode' => $request->metode,
-            'hasil' => $request->hasil,
-            'sapi_id' => $request->sapi_id,
-        ]);
 
-        $data = PeriksaKebuntingan::with('sapi')->latest()->get();
+        date_default_timezone_set("Asia/Makassar");
+        $today = date('Y/m/d');
 
+        $sapi = Sapi::find($request->sapi_id);
+        $peternak = Peternak::find($sapi->peternak_id);
        
+        $image = $request->image;
+
+        $imageName = $request->foto;
+
+        if (!empty($image)) {
+            // $image->store('public/produk_photo');
+            $imageName = $this->handleImageIntervention($request->image);
+        }
+
+        $data = [
+            'waktu_pk' => $today,
+            'metode_id' => $request->metode_id,
+            'hasil_id' => $request->hasil_id,
+            'sapi_id' => $request->sapi_id,
+            'peternak_id' => $peternak->id,
+            'pendamping_id' => $peternak->pendamping_id,
+            'tsr_id' => $peternak->pendamping->tsr_id,
+            'foto' => $imageName
+        ];
+
+        if ($request->id == 0) {
+            $upah = Upah::find(1);
+                    Laporan::create([
+                        'sapi_id' => $request->sapi_id,
+                        'peternak_id' => $peternak->id,
+                        'pendamping_id' => $peternak->pendamping_id,
+                        'tsr_id' => $peternak->pendamping->tsr_id,
+                        'tanggal' => $today, 
+                        'perlakuan' => $upah->detail,
+                        'upah' => $upah->price,
+                        ]);
+        }
+
+        // return $data;
+        $save = $request->id == 0 ? PeriksaKebuntingan::create($data) : PeriksaKebuntingan::find($request->id)->update($data);
         if ($save) {
+
+            $notifikasi = Notifikasi::find($request->notifikasi_id);
+            if ($notifikasi) {
+                $notifikasi->update([
+                    'status' => 'yes'
+                ]);
+            }
+
+            $token = $sapi->peternak->pendamping->user->remember_token;
+            // dd($token);
+            // echo($token.'<br/>');
+            $pesan = 'Terima Kasih, Telah melakukan Periksa Kebuntingan '.$sapi->eartag;
+
+            Constcoba::sendFCM($token, 'MBC', $pesan, "0");
+
             return response()->json([
                 'responsecode' => '1',
-                'responsemsg' => 'Created !',
-                'periksa_kebuntingan' => $data,
+                'responsemsg' => 'Success !',
+                
             ], 201);
 
         } else {
             return response()->json([
                 'responsecode' => '0',
                 'responsemsg' => 'Something Wrong',
-                'periksa_kebuntingan' => $data,
                 
             ], 204);
         }
+    }
+
+    public function handleImageIntervention($res_foto)
+    {
+        $res_foto->store('public/photos');
+        $imageName = $res_foto->hashName();
+        $data['foto'] = $imageName;
+
+        $manager = new ImageManager();
+        $image = $manager->make('storage/photos/'.$imageName)->resize(500,300);
+        $image->save('storage/photos_thumb/'.$imageName);
+
+        return $imageName;
     }
 
     public function show($id)
@@ -86,11 +172,15 @@ class PeriksaKebuntinganController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($id, $userId)
     {
         $delete = PeriksaKebuntingan::find($id)->delete();
 
-        $data = PeriksaKebuntingan::with('sapi')->latest()->get();
+        $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
+        // return $pendampingId;
+        $data = PeriksaKebuntingan::with(['sapi','hasil','metode'])
+        ->where('pendamping_id', $pendampingId)
+        ->latest()->get();
        
         if ($delete) {
             return response()->json([

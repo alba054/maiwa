@@ -5,13 +5,17 @@ namespace App\Http\Livewire;
 use App\Models\Desa;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use App\Models\Pendamping;
+use App\Models\Tsr;
+use App\Models\TsrPendamping;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class Wireuser extends Component
 {
-    public $hak_akses, $name, $email, $password, $selectedItemId, $searchTerm, $tsr_id;
+    public $hak_akses, $name, $email, $password, $selectedItemId, $searchTerm, $tsr_id, $alamat, $no_hp;
+
     protected $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255|unique:users',
@@ -28,6 +32,7 @@ class Wireuser extends Component
 
     public function mount($id)
     {
+        date_default_timezone_set("Asia/Makassar");
         $this->hak_akses = $id;
     }
     public function resultData()
@@ -37,6 +42,8 @@ class Wireuser extends Component
         ->where(function ($query){
             if($this->searchTerm != ""){
                 $query->where('name','like','%'.$this->searchTerm.'%');
+                $query->orwhere('no_hp','like','%'.$this->searchTerm.'%');
+                $query->orwhere('alamat','like','%'.$this->searchTerm.'%');
             }  
         })
         ->get();
@@ -46,6 +53,8 @@ class Wireuser extends Component
     {
         return view('livewire.wireuser',[
             'users' => $this->resultData(),
+            'tsrs' => Tsr::orderBy('id')->get(),
+            'pendampings' => Pendamping::orderBy('id')->get()
         ]);
     }
 
@@ -63,6 +72,10 @@ class Wireuser extends Component
         $this->photo_update = $data->photo;
         $this->name = $data->name;
         $this->email = $data->email;
+        $this->alamat = $data->alamat;
+        $this->no_hp = $data->no_hp;
+
+        $this->tsr_id = Pendamping::where('user_id', $this->selectedItemId)->first()->tsr_id;
         
     }
     
@@ -79,21 +92,46 @@ class Wireuser extends Component
             'email' => 'required|email|max:255|unique:users',
             'password' => 'required|string|min:8',
         ]);
-        if ($this->hak_akses == '3') {
+
+        if ($this->hak_akses == 3) {
             $validateData = array_merge($validateData,[
                 'tsr_id' => 'required',
             ]);
+
+            $data['tsr_id'] = $this->tsr_id;
         }
-
+        
         $data = $this->validate($validateData);
-
         
         $data['password'] = Hash::make($this->password);
         $data['hak_akses'] = $this->hak_akses;
-        $data['alamat'] = 'alamat';
-        $data['no_hp'] = 'no_hp';
+        $data['alamat'] = $this->alamat ? $this->alamat : 'alamat';
+        $data['no_hp'] = $this->no_hp ? $this->no_hp :'no_hp';
         $save = User::create($data);
-        $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
+        if ($save) {
+            $this->isSuccess("Data Berhasil Tersimpan");
+            if ($this->hak_akses == 2) {
+                Tsr::create([
+                        'user_id' => $save->id
+                ]);
+            } else if(($this->hak_akses == 3)) {
+                $pendamping = Pendamping::create([
+                    'user_id' => $save->id,
+                    'tsr_id' => $data['tsr_id']
+                ]);
+
+                TsrPendamping::create([
+                    'pendamping_id' => $pendamping->id,
+                    'tsr_id' => $pendamping->tsr_id,
+                    'date' => now()->format('Y/m/d'),
+                ]);
+            }
+            
+        } else {
+            $this->isError("Data Gagal Tersimpan");
+        }
+        
+       
 
         $this->cleanVars();
 
@@ -106,10 +144,41 @@ class Wireuser extends Component
         $validateData = array_merge($validateData,[
             'name' => 'required',
         ]);
+
+        if ($this->hak_akses == 3) {
+            $validateData = array_merge($validateData,[
+                'tsr_id' => 'required',
+            ]);
+
+            $data['tsr_id'] = $this->tsr_id;
+            
+            $pendamping = Pendamping::where('user_id', $this->selectedItemId)->first();
+
+            $pendamping->update([
+                'tsr_id' => $data['tsr_id']
+            ]);
+
+           
+                TsrPendamping::create([
+                    'pendamping_id' => $pendamping->id,
+                    'tsr_id' => $data['tsr_id'],
+                    'date' => now()->format('Y/m/d'),
+                ]);
+            
+
+            
+        }
+
         $data = $this->validate($validateData);
        
         if($this->password){
             $data['password'] = Hash::make($this->password);
+        }
+        if($this->alamat){
+            $data['alamat'] = $this->alamat;
+        }
+        if($this->no_hp){
+            $data['no_hp'] = $this->no_hp;
         }
         
         $save = User::find($this->selectedItemId)->update($data);
@@ -120,6 +189,27 @@ class Wireuser extends Component
     }
     public function delete()
     {
+        if ($this->hak_akses == 3) {
+
+            $pendamping = Pendamping::where('user_id', $this->selectedItemId)->first();
+            TsrPendamping::where('pendamping_id', $pendamping->id)->delete();
+            $pendamping->delete();
+
+        } else if ($this->hak_akses == 2) {
+
+            $tsr = Tsr::where('user_id', $this->selectedItemId)->first();
+            // dd($tsr->pendampings()->get());
+            foreach ($tsr->pendampings()->get() as $key => $value) {
+
+                TsrPendamping::where('pendamping_id', $value->id)->delete();
+                $pendamping = Pendamping::find($value->id);
+                $pendamping->delete();
+                User::destroy($pendamping->user_id);
+
+
+            }
+            $tsr->delete();
+        }
         
         $delete = User::destroy($this->selectedItemId);
         $delete ? $this->isSuccess("Data Berhasil Terhapus") : $this->isError("Data Gagal Dihapus");
@@ -136,6 +226,9 @@ class Wireuser extends Component
         $this->name = null;
         $this->email = null;
         $this->password = null;
+        $this->alamat = null;
+        $this->no_hp = null;
+        $this->tsr_id = null;
     }
 
     public function triggerConfirm()

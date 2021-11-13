@@ -18,10 +18,10 @@
                      </div>
                      <div class="col-sm-4">
                          <div class="form-group">
-                             <select class="custom-select" wire:model="peternak_id">
-                                 <option value="">Please Choose</option>
-                                 @foreach ($peternaks as $item)
-                                     <option value="{{ $item->id }}"> {{ $item->nama_peternak }} </option>
+                             <select class="custom-select" wire:model="pendampingId">
+                                 <option value="">Pilih Pendamping</option>
+                                 @foreach ($pendampings as $item)
+                                     <option value="{{ $item->id }}"> {{ $item->user->name }} </option>
                                  @endforeach
                              </select>
                          </div>
@@ -40,16 +40,17 @@
                              <thead>
                                  <tr>
                                      <th>#</th>
-                                     <th>Foto Sapi</th>
-                                     <th>Jenis Sapi</th>
-                                     <th>Ertag</th>
-                                     <th>Ertag Induk</th>
+                                     <th>Foto Penampakan Sapi</th>
+                                     <th>Eartag</th>
                                      <th>Nama Sapi</th>
                                      <th>Tgl Lahir</th>
+                                     <th>Umur</th>
                                      <th>Kelamin</th>
-                                     <th>Kondisi Lahir</th>
-                                     <th>Anak Ke</th>
+                                     <th>Jenis Sapi</th>
+                                     <th>Status Sapi</th>
                                      <th>Peternak</th>
+                                     <th>Pendamping</th>
+
                                      <th class="text-right">Aksi</th>
                                  </tr>
                              </thead>
@@ -61,27 +62,43 @@
                                              <img src="{{ url('storage/photos_thumb/' . $item->foto_depan) }}"
                                                  alt="Image" style="height: 30px; width: 30px;">
 
-                                             <img src="{{ url('storage/photos_thumb', $item->foto_belakang) }}"
-                                                 alt="Image" style="height: 30px; width: 30px;"><br />
-
-                                             <img src="{{ url('storage/photos_thumb', $item->foto_kanan) }}"
+                                             <img src="{{ url('storage/photos_thumb', $item->foto_samping) }}"
                                                  alt="Image" style="height: 30px; width: 30px;">
 
-                                             <img src="{{ url('storage/photos_thumb', $item->foto_kiri) }}"
+                                             <img src="{{ url('storage/photos_thumb', $item->foto_peternak) }}"
+                                                 alt="Image" style="height: 30px; width: 30px;">
+
+                                             <img src="{{ url('storage/photos_thumb', $item->foto_rumah) }}"
                                                  alt="Image" style="height: 30px; width: 30px;">
                                          </td>
-                                         <td>{{ $item->jenis_sapi->jenis }}</td>
-                                         <td>{{ $item->ertag }}</td>
-                                         <td>{{ $item->ertag_induk }}</td>
+                                         <td>{{ $item->eartag }}</td>
                                          <td>{{ $item->nama_sapi }}</td>
                                          <td>{{ $item->tanggal_lahir }}</td>
+                                         <td>
+                                             @php
+                                                 date_default_timezone_set('Asia/Makassar');
+                                                 $now = now()->format('Y/m/d');
+                                                 $bday = Carbon\Carbon::parse($item->tanggal_lahir);
+                                                 echo $bday->diffInYears($now) . ' Tahun, ' . $bday->diffInMonths($now) . ' Bulan, ' . $bday->diffInDays($now) . ' Hari';
+                                             @endphp
+                                         </td>
                                          <td>{{ $item->kelamin }}</td>
-                                         <td>{{ $item->kondisi_lahir }}</td>
-                                         <td>{{ $item->anak_ke }}</td>
+                                         <td>{{ $item->jenis_sapi->jenis }}</td>
+                                         <td>{{ $item->status_sapi->status }}</td>
                                          <td>{{ $item->peternak->nama_peternak }}</td>
+                                         <td>{{ $item->peternak->pendamping->user->name }}</td>
+
                                          <td class="text-right">
+                                             @if (strtolower($item->kelamin) == 'betina')
+                                                 <i wire:click="selectedItem({{ $item->id }},'child')"
+                                                     class="fe fe-git-merge f-16 btn btn-warning"
+                                                     style="cursor:pointer"></i>
+                                             @endif
+
+
                                              <i wire:click="selectedItem({{ $item->id }},'update')"
                                                  class="fe fe-edit f-16 btn btn-success" style="cursor:pointer"></i>
+
                                              <i wire:click="selectedItem({{ $item->id }},'delete')"
                                                  class="fe fe-trash-2 f-16 btn btn-danger" style="cursor:pointer"></i>
                                          </td>
@@ -94,6 +111,14 @@
                              There no Data Yet
                          @endif
                      </table>
+                     {{ $datas->links() }}
+                 </div>
+                 <div class="dimmer active" style="height: 5px; margin-top: 0;" wire:loading>
+                     <div class="spinner4">
+                         <div class="bounce1"></div>
+                         <div class="bounce2"></div>
+                         <div class="bounce3"></div>
+                     </div>
                  </div>
              </div>
 

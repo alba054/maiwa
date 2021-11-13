@@ -17840,11 +17840,11 @@ Dimmer
     display: none;
     margin: 0 auto;
     position: absolute;
-    top: 50%;
+    top: 0;
     left: 0;
     right: 0;
-    -webkit-transform: translateY(-50%);
-    transform: translateY(-50%);
+    -webkit-transform: translateY(-10%);
+    transform: translateY(-10%);
 }
 
 .dimmer.active .loader {
@@ -17910,7 +17910,7 @@ Dimmer
 /*End of Spineer3*/
 /*Spineer4*/
 .spinner4 {
-    margin: 100px auto;
+    align-content: center;
     width: 70px;
     text-align: center;
 }

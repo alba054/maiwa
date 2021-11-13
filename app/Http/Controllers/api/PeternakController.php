@@ -3,17 +3,22 @@
 namespace App\Http\Controllers\api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pendamping;
 use App\Models\Peternak;
 use Illuminate\Http\Request;
 
 class PeternakController extends Controller
 {
     
-    public function index()
+    public function index($userId)
     {
         //
-        $data = Peternak::with(['desa','user'])
-        ->orderBy('nama_peternak','ASC')->get();
+        $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
+
+        $data = Peternak::with(['desa','kelompok'])
+        ->orderBy('nama_peternak','ASC')
+        ->where('pendamping_id', $pendampingId)
+        ->get();
         return response()->json([
                 'responsecode' => '1',
                 'responsemsg' => 'Success',

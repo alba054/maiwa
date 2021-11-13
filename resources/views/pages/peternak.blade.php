@@ -15,13 +15,7 @@
                 </li>
             </ol>
         </div>
-        <div class="page-rightheader">
-            <div class="btn btn-list">
-                <a href="#" class="btn btn-info"><i class="fe fe-settings mr-1"></i> General Settings </a>
-                <a href="#" class="btn btn-danger"><i class="fe fe-printer mr-1"></i> Print </a>
-                <a href="#" class="btn btn-warning"><i class="fe fe-shopping-cart mr-1"></i> Buy Now </a>
-            </div>
-        </div>
+
     </div>
     <!--End Page header-->
 @endsection
@@ -33,6 +27,9 @@
     </div>
 @endsection
 @section('js')
+    <script src="{{ asset('assets/plugins/moment/moment.js') }}"></script>
+    <script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js') }}">
+    </script>
     <script>
         window.addEventListener('openModal', event => {
             $("#user-form-modal").modal('show');
@@ -42,6 +39,15 @@
             $("#user-form-modal").modal('hide');
 
         });
+
+        window.addEventListener('openModalSearch', event => {
+            $("#search-form-modal").modal('show');
+
+        });
+        window.addEventListener('closeModalSearch', event => {
+            $("#search-form-modal").modal('hide');
+
+        });
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -49,6 +55,23 @@
                 livewire.emit('forceCloseModal');
             });
 
+
+        });
+    </script>
+    <script>
+        window.addEventListener('cleanTgl', event => {
+            $('#appointmentDateInput').val('');
+        });
+    </script>
+    <script>
+        $('#appointmentDate').datetimepicker({
+            // format: 'L',
+            format: 'YYYY/MM/DD'
+        });
+
+        $('#appointmentDate').on("change.datetimepicker", function(e) {
+            let date = $(this).data('appointmentdate');
+            eval(date).set('tgl_lahir', $('#appointmentDateInput').val());
 
         });
     </script>

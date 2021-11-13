@@ -5,14 +5,18 @@ namespace App\Http\Livewire;
 use App\Models\Desa;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use App\Models\Kelompok;
+use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Wirepeternak extends Component
 {
-    
-    public $selectedItemId, $searchTerm, $userId;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+    public $selectedItemId, $searchTerm, $pendampingId, $tsrId, $desaId, $kecamatanId, $kabupatenId;
 
     protected $listeners = [
         'confirmed',
@@ -21,29 +25,63 @@ class Wirepeternak extends Component
         'isSuccess',
         'isError',
         'refreshParent'=>'$refresh',
+        'formFilter'
     ];
     public function resultData()
     {
-        return Peternak::with('user')
+        $tsrId = $this->tsrId;
+        $kecamatanId = $this->kecamatanId;
+        $kabupatenId = $this->kabupatenId;
+
+        return Peternak::with('pendamping')
         ->orderBy('nama_peternak','ASC')
         ->where(function ($query){
             if($this->searchTerm != ""){
                 $query->where('nama_peternak','like','%'.$this->searchTerm.'%');
+                $query->orWhere('tgl_lahir','like','%'.$this->searchTerm.'%');
+                $query->orWhere('no_hp','like','%'.$this->searchTerm.'%');
             } 
             
-            if($this->userId != null){
-                $query->Where('user_id','like','%'.$this->userId.'%');
+            if($this->pendampingId != null){
+                $query->Where('pendamping_id','like','%'.$this->pendampingId.'%');
+            }
+            if($this->desaId != null){
+                $query->Where('desa_id','like','%'.$this->desaId.'%');
             }
         })
-        ->get();
+        ->whereHas('pendamping', function($q) use($tsrId) {
+            
+            if($tsrId != null){
+                $q->where('tsr_id', $tsrId);
+            }
+            
+        })
+        ->whereHas('desa', function($q) use($kecamatanId) {
+            
+            if($kecamatanId != null){
+                $q->where('kecamatan_id', $kecamatanId);
+            }
+            
+
+            
+        })
+        ->whereHas('desa.kecamatan', function($q) use($kabupatenId) {
+            
+            
+            if($kabupatenId != null){
+                $q->where('kabupaten_id', $kabupatenId);
+            }
+
+            
+        })
+        ->paginate(10);
     }
     public function render()
     {
         
         return view('livewire.wirepeternak',[
             'peternaks' => $this->resultData(),
-            'users' => User::where('hak_akses',2)->get()
-
+            'pendampings' => Pendamping::latest()->get(),
         ]);
     }
 
@@ -51,6 +89,24 @@ class Wirepeternak extends Component
     {
         $this->emit('cleanVars');
         $this->dispatchBrowserEvent('openModal');
+    }
+    public function openSearchModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalSearch');
+    }
+
+    public function formFilter($data)
+    {
+        // dd($data['startDate']);
+
+        $this->pendampingId = $data['pendampingId'];
+        $this->tsrId = $data['tsrId'];
+        $this->desaId = $data['desaId'];
+        $this->kecamatanId = $data['kecamatanId'];
+        $this->kabupatenId = $data['kabupatenId'];
+
+
     }
 
     public function selectemItem($itemId, $action)

@@ -1,4 +1,5 @@
 <div class="modal-content">
+
     <div class="modal-header">
         <h5 class="modal-title">Tambah Perlakuan</h5>
         <button type="button" class="close" data-dismiss="modal">
@@ -14,30 +15,22 @@
                     <select class="custom-select" wire:model="sapi_id">
                         <option value="">Please Choose</option>
                         @foreach ($sapis as $item)
-                            <option value="{{ $item->id }}"> {{ $item->nama_sapi }} </option>
+                            <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
                         @endforeach
                     </select>
                     @error('sapi_id')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-
                 <div class="form-group">
-                    <label>Tanggal Perlakuan<span class="text-danger">*</span></label>
-                    <div wire:ignore class="date" id="appointmentDate" data-target-input="nearest"
-                        data-appointmentdate="@this">
-                        <input type="text" class="form-control datetimepicker-input" data-target="#appointmentDate"
-                            id="appointmentDateInput" data-toggle="datetimepicker" placeholder="Tanggal Perlakuan">
-                    </div>
-                    @error('tgl_perlakuan')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Jenis Obat</label>
-                    <input wire:model="jenis_obat" type="text" class="form-control" placeholder="e.g: Paracetamol">
-                    @error('jenis_obat')
+                    <label class="form-label">Jenis Obat<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="obat_id">
+                        <option value="">Please Choose</option>
+                        @foreach ($obats as $item)
+                            <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                        @endforeach
+                    </select>
+                    @error('obat_id')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
@@ -51,9 +44,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Vaksin</label>
-                    <input wire:model="vaksin" type="text" class="form-control" placeholder="e.g: Silovak">
-                    @error('vaksin')
+                    <label class="form-label">Jenis Vaksin<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="vaksin_id">
+                        <option value="">Please Choose</option>
+                        @foreach ($vaksins as $item)
+                            <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                        @endforeach
+                    </select>
+                    @error('vaksin_id')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
@@ -67,12 +65,18 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Vitamin</label>
-                    <input wire:model="vitamin" type="text" class="form-control" placeholder="e.g: ABC">
-                    @error('vitamin')
+                    <label class="form-label">Jenis Vitamin<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="vitamin_id">
+                        <option value="">Please Choose</option>
+                        @foreach ($vitamins as $item)
+                            <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                        @endforeach
+                    </select>
+                    @error('vaksin_id')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+
 
                 <div class="form-group">
                     <label class="form-label">Dosis Vitamin</label>
@@ -83,9 +87,14 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Hormon</label>
-                    <input wire:model="hormon" type="text" class="form-control" placeholder="e.g: ABC">
-                    @error('hormon')
+                    <label class="form-label">Jenis Hormon<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="hormon_id">
+                        <option value="">Please Choose</option>
+                        @foreach ($hormons as $item)
+                            <option value="{{ $item->id }}"> {{ $item->name }} </option>
+                        @endforeach
+                    </select>
+                    @error('hormon_id')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
@@ -105,6 +114,18 @@
                     @error('ket_perlakuan')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
+                </div>
+
+                <div class="form-group">
+                    <label>Foto Perlakuan<span class="text-danger">*</span></label>
+                    <input class="form-control" type="file" id="formFile" wire:model="foto">
+                    @error('foto')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+
+                    @if ($foto)
+                        <img src="{{ $foto->temporaryUrl() }}" class="mt-2">
+                    @endif
                 </div>
 
 

@@ -35,18 +35,43 @@
                          <small class="mt-2 text-danger">{{ $message }}</small>
                      @enderror
                  </div>
-
                  <div class="form-group">
-                     <label class="form-label">Pilih TSR</label>
-                     <select class="custom-select" wire:model="tsr_id">
-                         <option value="">Silahkan pilih pendamping</option>
-                         @foreach ($users as $item)
-                             <option value="{{ $item->id }}"> {{ $item->name }} </option>
-                         @endforeach
-                     </select>
-                     @error('tsr_id')
+                     <label class="form-label">No Hp</label>
+                     <input wire:model="no_hp" type="number" class="form-control" placeholder="e.g: 08123456789">
+                     @error('no_hp')
                          <small class="mt-2 text-danger">{{ $message }}</small>
                      @enderror
+                 </div>
+                 <div class="form-group">
+                     <label class="form-label">Alamat</label>
+                     <input wire:model="alamat" type="text" class="form-control"
+                         placeholder="e.g: Jl. Perintis Kemerdekaan">
+                     @error('alamat')
+                         <small class="mt-2 text-danger">{{ $message }}</small>
+                     @enderror
+                 </div>
+                 @if ($hak_akses == '3')
+                     <div class="form-group">
+                         <label class="form-label">Pilih TSR</label>
+                         <select class="custom-select" wire:model="tsr_id">
+                             <option value="">Pilih TSR</option>
+                             @foreach ($tsrs as $item)
+                                 <option value="{{ $item->id }}"> {{ $item->user->name }} </option>
+                             @endforeach
+                         </select>
+                         @error('tsr_id')
+                             <small class="mt-2 text-danger">{{ $message }}</small>
+                         @enderror
+                     </div>
+                 @endif
+
+
+                 <div class="dimmer active" style="height: 5px; margin-top: 0;" wire:loading>
+                     <div class="spinner4">
+                         <div class="bounce1"></div>
+                         <div class="bounce2"></div>
+                         <div class="bounce3"></div>
+                     </div>
                  </div>
 
              </div>
@@ -84,6 +109,11 @@
                                      <th>Fullname</th>
                                      <th>Email</th>
                                      <th>Hak Akses</th>
+                                     <th>No Hp</th>
+                                     <th>Alamat</th>
+                                     @if ($hak_akses == 3)
+                                         <th>TSR</th>
+                                     @endif
                                      <th class="text-right">Aksi</th>
                                  </tr>
                              </thead>
@@ -93,9 +123,15 @@
                                          <th>{{ $loop->iteration }}</th>
                                          <td>{{ $item->name }}</td>
                                          <td>{{ $item->email }}</td>
-                                         <td>{{ $item->hak_akses == '1' ? ($item->hak_akses == '1' ? 'Admin' : 'Pendamping') : ($item->hak_akses == '2' ? 'Pendamping' : 'Peternak') }}
-                                         </td>
+                                         <td>{{ $item->hak_akses == '1' ? ($item->hak_akses == '1' ? 'Admin' : 'TSR') : ($item->hak_akses == '2' ? 'TSR' : 'Pendamping') }}
 
+                                         </td>
+                                         <td>{{ $item->no_hp }}</td>
+                                         <td>{{ $item->alamat }}</td>
+                                         @if ($hak_akses == 3)
+                                             <td>{{ $pendampings->where('user_id', $item->id)->first()->tsr->user->name }}
+                                             </td>
+                                         @endif
                                          <td class="text-right">
                                              <i wire:click="selectemItem({{ $item->id }},'update')"
                                                  class="fe fe-edit f-16 btn btn-success" style="cursor:

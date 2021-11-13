@@ -11,11 +11,16 @@ class AuthController extends Controller
     //
     public function login(Request $request)     
     {
+
+        // return $request;
         $hasher = app()->make('hash');
         $email = $request->email;
         $password = $request->password;
 
-        $login = User::where(['email'=> $email, 'hak_akses'=>'2'])->first();
+        $login = User::where(['email'=> $email])
+        ->where('hak_akses', '!=', 1)
+        // ->orwhere('hak_akses', 3)
+        ->first();
 
         if(!$login){
 

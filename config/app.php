@@ -162,6 +162,8 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
+
         /*
          * Package Service Providers...
          */
@@ -178,6 +180,10 @@ return [
         Intervention\Image\ImageServiceProvider::class,
 
         App\Providers\ConstCobaProvider::class,
+
+        Barryvdh\DomPDF\ServiceProvider::class,
+
+
 
         
 
@@ -237,6 +243,9 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
 
         'Constcoba' => App\Helper\ConstcobaFacade::class,
+
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
         
         
     ],

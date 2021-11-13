@@ -11,7 +11,7 @@ use Livewire\Component;
 class WireMonInsiminasiBuatan extends Component
 {
     public $selectedItemId, $waktu_ib, $dosis_ib, $strow_id, $sapi_id;
-    public $startDate, $endDate, $sapiId, $userId, $searchTerm, $strowId;
+    public $startDate, $endDate, $sapiId, $userId, $searchTerm, $strowId, $peternakId, $pendampingId, $tsrId;
 
 
      protected $rules = [
@@ -29,6 +29,7 @@ class WireMonInsiminasiBuatan extends Component
         'isSuccess',
         'isError',
         'refreshParent'=>'$refresh',
+        'formFilter'
     ];
 
     public function mount()
@@ -38,7 +39,30 @@ class WireMonInsiminasiBuatan extends Component
         $this->endDate = now()->format('Y/m/d');
 
     }
+    public function openSearchModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalSearch');
+    }
+    public function openAddModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalAdd');
+    }
 
+    public function formFilter($data)
+    {
+        // dd($data['startDate']);
+
+        $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
+        $this->endDate = $data['endDate'] == null ? $this->endDate : $data['endDate'];
+        $this->sapiId = $data['sapiId'];
+        $this->peternakId = $data['peternakId'];
+        $this->pendampingId = $data['pendampingId'];
+        $this->tsrId = $data['tsrId'];
+
+
+    }
     public function resultData()
     {
         // dd("start ".$this->startDate.", end ".$this->endDate);
@@ -51,22 +75,25 @@ class WireMonInsiminasiBuatan extends Component
             //     $query->orWhere('hasil','like','%'.$this->searchTerm.'%');
                 
             // }
-            if($this->sapiId != null){
-                $query->Where('sapi_id','like','%'.$this->sapiId.'%');
-            }
+            
             if($this->strowId != null){
                 $query->Where('strow_id','like','%'.$this->strowId.'%');
             }
-            // if($this->statusId != null){
-            //     $query->Where('status','like','%'.$this->statusId.'%');
-            // }
+            if($this->sapiId != null){
+                $query->Where('sapi_id','like','%'.$this->sapiId.'%');
+            }
+            if($this->peternakId != null){
+                $query->Where('peternak_id','like','%'.$this->peternakId.'%');
+            }
+            if($this->pendampingId != null){
+                $query->Where('pendamping_id',$this->pendampingId);
+            }
+            if($this->tsrId != null){
+                $query->Where('tsr_id','like','%'.$this->tsrId.'%');
+            }
             
         })
-        ->whereHas('sapi.peternak', function($q) use($haha) {
-            if($haha != null){
-                $q->where('user_id', $haha);
-            }
-        })
+        
         ->WhereBetween('waktu_ib',[$this->startDate, $this->endDate])
         ->get();
     }
@@ -83,7 +110,14 @@ class WireMonInsiminasiBuatan extends Component
     }
     public function selectedItem($itemId, $action){
         $this->selectedItemId = $itemId;
-        $action == 'delete' ? $this->triggerConfirm() : $this->edit(); 
+        if($action == 'delete'){
+            $this->triggerConfirm();
+        }else if ($action == 'export') {
+            return redirect()->to('/export/pkb/3/'.$itemId);
+        }else{
+            $this->emit('getModelId',$this->selectedItemId);
+            $this->dispatchBrowserEvent('openModalAdd');
+        } 
     }
     public function edit(){
         $data = InsiminasiBuatan::find($this->selectedItemId);
@@ -135,6 +169,7 @@ class WireMonInsiminasiBuatan extends Component
         $this->strow_id = null;
         $this->waktu_ib = null;
         $this->dosis_ib = null;
+        $this->foto = null;
 
     }
 

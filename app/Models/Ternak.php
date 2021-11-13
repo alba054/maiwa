@@ -10,6 +10,11 @@ class Ternak extends Model
     use HasFactory;
     protected $guarded = [];
 
+    protected $casts = [ 
+        'sapi_id' => 'integer', 
+        'peternak_id' => 'integer',
+        ];
+
     public function peternak()  
     {
         return $this->belongsTo(Peternak::class);

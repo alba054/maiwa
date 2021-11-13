@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Livewire;
-
 use App\Models\Sapi;
 use App\Models\Strow;
 use Livewire\Component;

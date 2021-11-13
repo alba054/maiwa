@@ -14,18 +14,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Pilih Sapi<span class="text-danger">*</span></label>
-                    <select class="custom-select" wire:model="sapi_id">
-                        <option value="">Please Choose</option>
-                        @foreach ($sapis as $item)
-                            <option value="{{ $item->id }}"> {{ $item->nama_sapi }} </option>
-                        @endforeach
-                    </select>
-                    @error('sapi_id')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="form-group">
                     <label class="form-label">Status Sapi<span class="text-danger">*</span></label>
                     <input wire:model="status" type="text" class="form-control" placeholder="e.g: Sapi Asep">
                     @error('status')
@@ -39,9 +27,16 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+                <div class="dimmer active" style="height: 5px; margin-top: 0;" wire:loading>
+                    <div class="spinner4">
+                        <div class="bounce1"></div>
+                        <div class="bounce2"></div>
+                        <div class="bounce3"></div>
+                    </div>
+                </div>
             </div>
             <div class="card-footer text-right">
-                <button wire:click="save" class="btn btn-primary">Submit</button>
+                <button wire:click="save" class="btn btn-outline-primary">Submit</button>
             </div>
         </div>
     </div>
@@ -56,20 +51,10 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
 
                     </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <select class="custom-select" wire:model="sapiId">
-                                <option value="">Please Choose</option>
-                                @foreach ($sapis as $item)
-                                    <option value="{{ $item->id }}"> {{ $item->ertag }} </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-6">
                         <div class="form-group">
                             <input wire:model="searchTerm" type="search" class="form-control" placeholder="Search…"
                                 aria-label="Search">
@@ -83,7 +68,6 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Sapi</th>
                                     <th>Status</th>
                                     <th>Keterangan Status</th>
                                     <th class="text-right">Aksi</th>
@@ -93,15 +77,16 @@
                                 @foreach ($statussapis as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->sapi->nama_sapi }}</td>
                                         <td>{{ $item->status }}</td>
                                         <td>{{ $item->ket_status }}</td>
 
                                         <td class="text-right">
                                             <i wire:click="selectedItem({{ $item->id }},'update')"
-                                                class="fe fe-edit f-16 btn btn-success" style="cursor:pointer"></i>
+                                                class="fe fe-edit f-16 btn btn-outline-success"
+                                                style="cursor:pointer"></i>
                                             <i wire:click="selectedItem({{ $item->id }},'delete')"
-                                                class="fe fe-trash-2 f-16 btn btn-danger" style="cursor:pointer"></i>
+                                                class="fe fe-trash-2 f-16 btn btn-outline-danger"
+                                                style="cursor:pointer"></i>
                                         </td>
                                     </tr>
                                 @endforeach

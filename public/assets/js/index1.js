@@ -4,7 +4,7 @@ $(function(e){
 	/* E-chart */
 	var chartdata = [
 		{
-			name: 'Total Units Sold',
+			name: 'Data Panen',
 			type: 'line',
 			smooth:true,
 			data: [8, 5, 15, 10, 10, 8, 9, 12, 5, 15, 10, 10, 8, 16],
@@ -13,15 +13,16 @@ $(function(e){
 						color: new echarts.graphic.LinearGradient(
 							0, 0, 0, 1,
 							[
-								{offset: 0, color: '#fd6f82'},
-								{offset: 1, color: '#fb1c52'}
+								{offset: 0, color: '#ecb403'},
+								{offset: 1, color: '#ecb403'}
 							]
 						)
 				}
 			},
 		},
+		
 		{
-			name: 'Total Sales',
+			name: 'Data Kelahiran',
 			symbolSize:20,
 			barWidth: 20,
 			type: 'bar',
@@ -33,6 +34,25 @@ $(function(e){
 							[
 								{offset: 0, color: '#705ec8'},
 								{offset: 1, color: '#20c2fa'}
+
+							]
+						)
+				}
+			},
+		},
+		{
+			name: 'Data Kematian',
+			symbolSize:20,
+			barWidth: 20,
+			type: 'bar',
+			data: [3, 7, 9, 2, 7, 11, 9, 3, 7, 9, 2, 2, 1, 5],
+			itemStyle: {
+				normal: { barBorderRadius: [50 ,50, 0 ,0],
+						color: new echarts.graphic.LinearGradient(
+							0, 0, 0, 1,
+							[
+								{offset: 0, color: '#fd6f82'},
+								{offset: 1, color: '#fb1c52'}
 
 							]
 						)

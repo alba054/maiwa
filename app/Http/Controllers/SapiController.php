@@ -46,7 +46,9 @@ class SapiController extends Controller
      */
     public function show(Sapi $sapi)
     {
-        //
+        return view('pages.detail-sapi',[
+            'sapi' => $sapi
+        ]);
     }
 
     /**

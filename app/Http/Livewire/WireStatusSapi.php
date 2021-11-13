@@ -8,16 +8,15 @@ use Livewire\Component;
 
 class WireStatusSapi extends Component
 {
-    public $sapi_id, $status, $ket_status, $selectedItemId, $searchTerm, $sapiId;
+    public $status, $ket_status, $selectedItemId, $searchTerm, $sapiId;
 
     protected $rules = [
-        'sapi_id' => 'required',
         'status' => 'required',
         'ket_status' => 'required',
     ];
     protected $messages = [
-        'email.required' => 'this field is required.',
-        'name.required' => 'this field is required.',  
+        'status.required' => 'this field is required.',
+        'ket_status.required' => 'this field is required.',  
     ];
     protected $listeners =[
         'delete',
@@ -26,15 +25,11 @@ class WireStatusSapi extends Component
 
     public function resultData()
     {
-        return StatusSapi::with('sapi')->orderBy('sapi_id')
+        return StatusSapi::orderBy('status', 'ASC')
          ->where(function ($query){
             if($this->searchTerm != ""){
                 $query->where('status','like','%'.$this->searchTerm.'%');
                 $query->orWhere('ket_status','like','%'.$this->searchTerm.'%');  
-            }
-
-            if($this->sapiId != null){
-                $query->Where('sapi_id','like','%'.$this->sapiId.'%');
             }
         })
         ->get();
@@ -43,7 +38,6 @@ class WireStatusSapi extends Component
     {
         return view('livewire.wire-status-sapi',[
             'statussapis' => $this->resultData(),
-            'sapis' => Sapi::orderBy('nama_sapi')->get()
         ]);
     }
 
@@ -57,7 +51,6 @@ class WireStatusSapi extends Component
     public function edit()
     {
         $data = StatusSapi::find($this->selectedItemId);
-        $this->sapi_id = $data->sapi_id;
         $this->status = $data->status;
         $this->ket_status = $data->ket_status;
         
@@ -86,7 +79,6 @@ class WireStatusSapi extends Component
         $this->resetValidation();
 
         $this->selectedItemId = null;
-        $this->sapi_id = null;
         $this->status = null;
         $this->ket_status = null;
 

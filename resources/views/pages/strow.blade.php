@@ -16,13 +16,7 @@
                 </li>
             </ol>
         </div>
-        <div class="page-rightheader">
-            <div class="btn btn-list">
-                <a href="#" class="btn btn-info"><i class="fe fe-settings mr-1"></i> General Settings </a>
-                <a href="#" class="btn btn-danger"><i class="fe fe-printer mr-1"></i> Print </a>
-                <a href="#" class="btn btn-warning"><i class="fe fe-shopping-cart mr-1"></i> Buy Now </a>
-            </div>
-        </div>
+
     </div>
     <!--End Page header-->
 @endsection

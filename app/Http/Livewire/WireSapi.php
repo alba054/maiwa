@@ -2,14 +2,19 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\Sapi;
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithPagination;
+
 
 class WireSapi extends Component
 {
-    public $selectedItemId, $searchTerm, $peternak_id;
+    use WithPagination;
+    protected $paginationTheme = 'bootstrap';
+    public $selectedItemId, $searchTerm, $peternak_id, $pendampingId;
     protected $listeners = [
         'confirmed',
         'cancelled',
@@ -22,27 +27,29 @@ class WireSapi extends Component
 
     public function resultData()
     {
-        return Sapi::with(['jenis_sapi','peternak'])
-        ->orderBy('nama_sapi','ASC')
+        return Sapi::with(['jenis_sapi','peternak','status_sapi'])
+        ->latest()
         ->where(function ($query){
             if($this->searchTerm != ""){
-                $query->where('ertag','like','%'.$this->searchTerm.'%');
+                $query->where('eartag','like','%'.$this->searchTerm.'%');
                 $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');   
                 $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');   
+                 
             }
 
-            if($this->peternak_id != null){
-                $query->Where('peternak_id','like','%'.$this->peternak_id.'%');
+            if($this->pendampingId != null){
+                $query->Where('pendamping_id','like','%'.$this->pendampingId.'%');
             }
         })
-        ->get();
+        ->paginate(10);
     }
     public function render()
     {
         // dd($this->resultData());
         return view('livewire.wire-sapi',[
             'datas' => $this->resultData(),
-            'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get()
+            'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get(),
+            'pendampings' => Pendamping::orderBy('user_id','ASC')->get()
         ]);
     }
 
@@ -52,6 +59,9 @@ class WireSapi extends Component
 
         if($action == 'delete'){
             $this->triggerConfirm();
+        } else if($action == 'child'){
+            $this->emit('getCreateChild',$this->selectedItemId);
+            $this->dispatchBrowserEvent('openModal');
         }else{
             $this->emit('getModelId',$this->selectedItemId);
             $this->dispatchBrowserEvent('openModal');
@@ -69,20 +79,23 @@ class WireSapi extends Component
         $data->perlakuan()->delete();
         $data->notifikasi()->delete();
         $data->straw()->delete();
-        $data->statussapi()->delete();
+        $data->laporans()->delete();
+        $data->peternak_sapis()->delete();
+        // $data->statussapi()->delete();
 
         $delete = Sapi::destroy($this->selectedItemId);
         
-        if(Storage::exists($path.$data->photo_depan)){
+        if(Storage::exists($path.$data->foto_depan)){
             Storage::delete([
-                $path.$data->photo_depan,
-                $path.$data->photo_belakang,
-                $path.$data->photo_kanan,
-                $path.$data->photo_kiri,
-                $path_thumb.$data->photo_depan,
-                $path_thumb.$data->photo_belakang,
-                $path_thumb.$data->photo_kanan,
-                $path_thumb.$data->photo_kiri,
+                $path.$data->foto_depan,
+                $path.$data->foto_samping,
+                $path.$data->foto_peternak,
+                $path.$data->foto_rumah,
+
+                $path_thumb.$data->foto_depan,
+                $path_thumb.$data->foto_samping,
+                $path_thumb.$data->foto_peternak,
+                $path_thumb.$data->foto_rumah,
             ]);
             
         }

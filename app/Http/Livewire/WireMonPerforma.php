@@ -9,7 +9,7 @@ use Livewire\Component;
 class WireMonPerforma extends Component
 {
     public $selectedItemId, $tanggal_performa, $tinggi_badan, $berat_badan, $panjang_badan, $lingkar_dada, $bsc, $sapi_id;
-    public $startDate, $endDate, $sapiId, $userId, $searchTerm;
+    public $startDate, $endDate, $sapiId, $userId, $searchTerm, $peternakId, $pendampingId, $tsrId, $bscId;
 
      protected $rules = [
         'tinggi_badan' => 'required',
@@ -30,6 +30,7 @@ class WireMonPerforma extends Component
         'isSuccess',
         'isError',
         'refreshParent'=>'$refresh',
+        'formFilter'
     ];
 
     public function mount()
@@ -40,31 +41,54 @@ class WireMonPerforma extends Component
 
     }
 
+    public function formFilter($data)
+    {
+        // dd($data['startDate']);
+
+        $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
+        $this->endDate = $data['endDate'] == null ? $this->endDate : $data['endDate'];
+        
+        $this->bscId = $data['bscId'];
+        $this->sapiId = $data['sapiId'];
+        $this->peternakId = $data['peternakId'];
+        $this->pendampingId = $data['pendampingId'];
+        $this->tsrId = $data['tsrId'];
+
+
+    }
+
     public function resultData()
     {
         // dd("start ".$this->startDate.", end ".$this->endDate);
 
         $haha = $this->userId;
-        return Performa::with('sapi')
+        return Performa::with(['sapi','peternak'])
         ->where(function ($query){
             // if($this->searchTerm != ""){
             //     $query->where('metode','like','%'.$this->searchTerm.'%');
             //     $query->orWhere('hasil','like','%'.$this->searchTerm.'%');
                 
             // }
+            
             if($this->sapiId != null){
                 $query->Where('sapi_id','like','%'.$this->sapiId.'%');
             }
-            // if($this->statusId != null){
-            //     $query->Where('status','like','%'.$this->statusId.'%');
-            // }
+            if($this->peternakId != null){
+                $query->Where('peternak_id','like','%'.$this->peternakId.'%');
+            }
+            if($this->pendampingId != null){
+                $query->Where('pendamping_id',$this->pendampingId);
+            }
+            if($this->tsrId != null){
+                $query->Where('tsr_id','like','%'.$this->tsrId.'%');
+            }
+            
+            if($this->bscId != null){
+                $query->Where('bsc','like','%'.$this->bscId.'%');
+            }
             
         })
-        ->whereHas('sapi.peternak', function($q) use($haha) {
-            if($haha != null){
-                $q->where('user_id', $haha);
-            }
-        })
+        
         ->WhereBetween('tanggal_performa',[$this->startDate, $this->endDate])
         ->get();
     }
@@ -77,9 +101,28 @@ class WireMonPerforma extends Component
             'users' => User::where('hak_akses',2)->get()
         ]);
     }
+
+    public function openSearchModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalSearch');
+    }
+    public function openAddModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalAdd');
+    }
+
     public function selectedItem($itemId, $action){
         $this->selectedItemId = $itemId;
-        $action == 'delete' ? $this->triggerConfirm() : $this->edit(); 
+        if($action == 'delete'){
+            $this->triggerConfirm();
+        }else if ($action == 'export') {
+            return redirect()->to('/export/pkb/2/'.$itemId);
+        }else{
+            $this->emit('getModelId',$this->selectedItemId);
+            $this->dispatchBrowserEvent('openModalAdd');
+        }
     }
     public function edit(){
         $data = Performa::find($this->selectedItemId);

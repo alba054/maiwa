@@ -12,17 +12,11 @@
                 <li class="breadcrumb-item"><a href="{{ url('/') }}"><i
                             class="fe fe-layers mr-2 fs-14"></i>Monitoring</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="#">Performa</a>
+                <li class="breadcrumb-item active" aria-current="page"><a href="#">Performa (Recording)</a>
                 </li>
             </ol>
         </div>
-        <div class="page-rightheader">
-            <div class="btn btn-list">
-                <a href="#" class="btn btn-info"><i class="fe fe-settings mr-1"></i> General Settings </a>
-                <a href="#" class="btn btn-danger"><i class="fe fe-printer mr-1"></i> Print </a>
-                <a href="#" class="btn btn-warning"><i class="fe fe-shopping-cart mr-1"></i> Buy Now </a>
-            </div>
-        </div>
+
     </div>
     <!--End Page header-->
 @endsection
@@ -51,7 +45,31 @@
             $("#user-form-modal").on('hidden.bs.modal', function() {
                 livewire.emit('forceCloseModal');
             });
+            $("#add-form-modal").on('hidden.bs.modal', function() {
+                livewire.emit('forceCloseModal');
+            });
 
+
+        });
+    </script>
+
+    <script>
+        window.addEventListener('openModalSearch', event => {
+            $("#search-form-modal").modal('show');
+
+        });
+        window.addEventListener('closeModalSearch', event => {
+            $("#search-form-modal").modal('hide');
+
+        });
+    </script>
+    <script>
+        window.addEventListener('openModalAdd', event => {
+            $("#add-form-modal").modal('show');
+
+        });
+        window.addEventListener('closeModalAdd', event => {
+            $("#add-form-modal").modal('hide');
 
         });
     </script>
