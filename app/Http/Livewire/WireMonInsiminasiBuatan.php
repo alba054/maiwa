@@ -6,13 +6,18 @@ use App\Models\InsiminasiBuatan;
 use App\Models\Sapi;
 use App\Models\Strow;
 use App\Models\User;
+use Carbon\Carbon;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireMonInsiminasiBuatan extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $waktu_ib, $dosis_ib, $strow_id, $sapi_id;
     public $startDate, $endDate, $sapiId, $userId, $searchTerm, $strowId, $peternakId, $pendampingId, $tsrId;
 
+    public $datax = array(), $dataLabel = array();
 
      protected $rules = [
         'dosis_ib' => 'required',
@@ -35,7 +40,10 @@ class WireMonInsiminasiBuatan extends Component
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
-        $this->startDate = now()->subDays(30)->format('Y/m/d');
+        $filterTahun = Carbon::now()->year;
+        $monthStart = '01';
+        $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
+        // $this->startDate = now()->subDays(30)->format('Y/m/d');
         $this->endDate = now()->format('Y/m/d');
 
     }
@@ -98,8 +106,28 @@ class WireMonInsiminasiBuatan extends Component
         ->get();
     }
 
+    public function groupData()
+    {
+        $data =  InsiminasiBuatan::with('sapi')
+        ->whereYear('waktu_ib', now()->format('Y'))
+        ->orderBy('waktu_ib')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->waktu_ib)->format('m');
+        });
+
+        foreach ($data as $key => $value) {            
+
+            array_push($this->datax, count($value));
+            array_push($this->dataLabel, 'Bulan ke - '.$key);
+        }
+
+      
+    }
+
     public function render()
     {
+        $this->groupData();
         return view('livewire.wire-mon-insiminasi-buatan',[
             'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
             'strows' => Strow::orderBy('kode_batch','ASC')->get(),

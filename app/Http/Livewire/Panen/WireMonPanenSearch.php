@@ -10,6 +10,7 @@ use Livewire\Component;
 
 class WireMonPanenSearch extends Component
 {
+    
     public $startDate, $endDate, $sapiId, $peternakId, $pendampingId, $tsrId, $ketPanen, $frekPanen;
 
     public function render()

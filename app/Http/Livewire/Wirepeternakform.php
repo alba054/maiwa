@@ -10,10 +10,13 @@ use App\Models\Pendamping;
 use App\Models\PendampingPeternak;
 use App\Models\Peternak;
 use App\Models\User;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wirepeternakform extends Component
 {
+    use LivewireAlert;
+
     public $desa_id, $kecamatan_id, $kabupaten_id, $nama_peternak, $no_hp, $tgl_lahir,  $jumlah_anggota, $luas_lahan, $kelompok_id, $pendamping_id, $selectedItemId;
 
     protected $rules = [

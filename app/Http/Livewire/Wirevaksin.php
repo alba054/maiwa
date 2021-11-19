@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\Vaksin;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wirevaksin extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $name, $detail, $searchTerm;
     protected $rules = [
         'name' => 'required|string|max:255',

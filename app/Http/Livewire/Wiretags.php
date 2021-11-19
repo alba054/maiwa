@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\Tag;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wiretags extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $name, $searchTerm;
     protected $rules = [
         'name' => 'required|string|max:255',

@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\Vitamin;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wirevitamin extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $name, $detail, $searchTerm;
     protected $rules = [
         'name' => 'required|string|max:255',

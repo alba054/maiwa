@@ -14,7 +14,7 @@ class Constcoba{
     const nilai_anti_biotik = array(21,25);
     const nilai_obat_cacing = array(3,6,18,21,25);
     const nilai_recording = array(6,21);
-    const nilai_birahi = array(2);
+    const nilai_birahi = array(25);
     const nilai_panen = array(18,24);
 
     static public function sendFCM($token, $title, $body, $role)

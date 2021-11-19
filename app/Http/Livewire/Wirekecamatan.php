@@ -4,12 +4,14 @@ namespace App\Http\Livewire;
 
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Wirekecamatan extends Component
 {
     use WithPagination;
+    use LivewireAlert;
     protected $paginationTheme = 'bootstrap';
     
     public $selectedItemId, $name, $searchTerm, $kabupaten_id;

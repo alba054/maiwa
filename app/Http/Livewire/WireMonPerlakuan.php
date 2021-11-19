@@ -9,12 +9,17 @@ use App\Models\Sapi;
 use App\Models\User;
 use App\Models\Vaksin;
 use App\Models\Vitamin;
+use Carbon\Carbon;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireMonPerlakuan extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId;
     public $startDate, $endDate, $sapiId, $peternakId, $pendampingId, $tsrId, $obatId, $vitaminId, $vaksinId, $hormonId;
+    public $datax = array(), $dataLabel = array();
 
 
     protected $listeners = [
@@ -100,8 +105,28 @@ class WireMonPerlakuan extends Component
         ->WhereBetween('tgl_perlakuan',[$this->startDate, $this->endDate])
         ->get();
     }
+
+    public function groupData()
+    {
+        $data =  Perlakuan::with('sapi')
+        ->whereYear('tgl_perlakuan', now()->format('Y'))
+        ->orderBy('tgl_perlakuan')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tgl_perlakuan)->format('m');
+        });
+
+        foreach ($data as $key => $value) {            
+
+            array_push($this->datax, count($value));
+            array_push($this->dataLabel, 'Bulan ke - '.$key);
+        }
+
+      
+    }
     public function render()
     {
+        $this->groupData();
         return view('livewire.wire-mon-perlakuan',[
             'perlakuans' => $this->resultData(),
             'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),

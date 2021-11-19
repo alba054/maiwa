@@ -10,18 +10,21 @@ use App\Models\PeternakSapi;
 use App\Models\Sapi;
 use App\Models\Upah;
 use Intervention\Image\ImageManager;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class WireFormPkb extends Component
 {
     use WithFileUploads;
-    public $foto, $selectedItemId, $metode_id, $hasil_id, $sapi_id, $waktu_pk;
+    use LivewireAlert;
+    public $foto, $selectedItemId, $metode_id, $hasil_id, $sapi_id, $waktu_pk, $status;
     protected $rules = [
         'metode_id' => 'required',
         'hasil_id' => 'required',
         'sapi_id' => 'required',
         'foto' => 'required',
+        'status' => 'required',
 
     ];
     protected $messages = [
@@ -55,6 +58,7 @@ class WireFormPkb extends Component
     }
 
     public function save(){
+        // dd($this->status);
         $this->selectedItemId ?   $this->update() : $this->store();    
     }
 
@@ -111,6 +115,7 @@ class WireFormPkb extends Component
             'metode_id' => 'required',
             'hasil_id' => 'required',
             'sapi_id' => 'required',
+            'status' => 'required',
         ]);
 
         $data = $this->validate($validateData);
@@ -131,6 +136,7 @@ class WireFormPkb extends Component
        $this->hasil_id = $data->hasil_id;
        $this->sapi_id = $data->sapi_id;
        $this->waktu_pk = $data->waktu_pk;
+       $this->status = $data->status;
 
      }
 
@@ -142,6 +148,7 @@ class WireFormPkb extends Component
        $this->hasil_id = null;
        $this->sapi_id = null;
        $this->waktu_pk = null;
+       $this->status = null;
     }
    
    public function forceCloseModal()

@@ -9,12 +9,14 @@ use App\Models\Sapi;
 use App\Models\Strow;
 use App\Models\Upah;
 use Intervention\Image\ImageManager;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class WireFormIbAdd extends Component
 {
     use WithFileUploads;
+    use LivewireAlert;
     public $selectedItemId, $tinggi_badan, $berat_badan, $panjang_badan, $lingkar_dada, $bsc, $sapi_id;
     public $date, $foto;
     protected $rules = [

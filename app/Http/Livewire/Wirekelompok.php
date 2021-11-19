@@ -4,10 +4,12 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use App\Models\Kelompok;
-
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class Wirekelompok extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $name, $searchTerm;
     protected $rules = [
         'name' => 'required|string|max:255',

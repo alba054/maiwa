@@ -29,6 +29,7 @@ class CreatePeriksaKebuntingansTable extends Migration
             $table->foreign('tsr_id')->references('id')->on('tsrs');
             
             $table->string('waktu_pk');
+            $table->boolean('status');
             
             $table->unsignedBigInteger('metode_id')->nullable();
             $table->foreign('metode_id')->references('id')->on('metodes');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\PopulasiSapiExport;
 use App\Models\Laporan;
 use App\Models\Notifikasi;
 use App\Models\Pendamping;
@@ -10,13 +11,18 @@ use App\Models\Sapi;
 use App\Models\Tsr;
 use App\Models\User;
 use Carbon\Carbon;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 use SebastianBergmann\Environment\Console;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class Wirehome extends Component
 {
     use WithPagination;
+    use LivewireAlert;
+    
     protected $paginationTheme = 'bootstrap';
 
     public $data = [2,4,6];
@@ -32,7 +38,13 @@ class Wirehome extends Component
     {
         return Sapi::with(['jenis_sapi','peternak','status_sapi'])
         ->latest()
-        ->paginate(10);
+        ->get();
+        // ->paginate(10);
+    }
+    public function exportToExcel()
+    {
+        return Excel::download(new PopulasiSapiExport($this->sapiData()), 'populasisapi.xlsx');
+
     }
     public function render()
     {

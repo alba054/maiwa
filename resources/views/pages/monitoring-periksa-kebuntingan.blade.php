@@ -2,23 +2,6 @@
 @section('css')
 @endsection
 @section('page-header')
-    <!--Page header-->
-    <div class="page-header">
-        <div class="page-leftheader">
-            <h4 class="page-title mb-0">
-                Periksa Kebuntingan
-            </h4>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url('/') }}"><i
-                            class="fe fe-layers mr-2 fs-14"></i>Monitoring</a>
-                </li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="#">Periksa Kebuntingan</a>
-                </li>
-            </ol>
-        </div>
-
-    </div>
-    <!--End Page header-->
 @endsection
 @section('content')
     @livewire('wire-mon-periksa-kebuntingan')
@@ -30,6 +13,9 @@
     <script src="{{ asset('assets/plugins/moment/moment.js') }}"></script>
     <script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js') }}">
     </script>
+
+    <!--INTERNAL ECharts js-->
+    <script src="{{ URL::asset('assets/plugins/echarts/echarts.js') }}"></script>
 
     <script>
         window.addEventListener('openModal', event => {
@@ -54,6 +40,14 @@
         });
         window.addEventListener('closeModalAdd', event => {
             $("#add-form-modal").modal('hide');
+
+        });
+        window.addEventListener('openModalGrafik', event => {
+            $("#grafik-modal").modal('show');
+
+        });
+        window.addEventListener('closeModalGrafik', event => {
+            $("#grafik-modal").modal('hide');
 
         });
     </script>
@@ -104,4 +98,7 @@
             eval(date).set('endDate', $('#appointmentDateEndInput').val());
         });
     </script>
+
+    @stack('script')
+
 @endsection

@@ -9,12 +9,15 @@ use App\Models\Kelompok;
 use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\User;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Wirepeternak extends Component
 {
     use WithPagination;
+    use LivewireAlert;
+
     protected $paginationTheme = 'bootstrap';
     public $selectedItemId, $searchTerm, $pendampingId, $tsrId, $desaId, $kecamatanId, $kabupatenId;
 

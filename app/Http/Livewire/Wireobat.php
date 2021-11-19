@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\Obat;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wireobat extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $name, $detail, $searchTerm;
     protected $rules = [
         'name' => 'required|string|max:255',

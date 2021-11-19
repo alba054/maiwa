@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\Upah;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireUpah extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $status, $detail, $price, $searchTerm;
     protected $rules = [
         'status' => 'required',

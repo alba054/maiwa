@@ -4,16 +4,21 @@ namespace App\Http\Livewire;
 use App\Models\Performa;
 use App\Models\Sapi;
 use App\Models\User;
+use Carbon\Carbon;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireMonPerforma extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $tanggal_performa, $tinggi_badan, $berat_badan, $panjang_badan, $lingkar_dada, $bsc, $sapi_id;
     public $startDate, $endDate, $sapiId, $userId, $searchTerm, $peternakId, $pendampingId, $tsrId, $bscId;
+    public $datax = array(), $dataLabel = array();
 
      protected $rules = [
         'tinggi_badan' => 'required',
-        'berat_badan' => 'required',
+        'berat_badan' => 'nullable',
         'panjang_badan' => 'required',
         'lingkar_dada' => 'required',
         'bsc' => 'required',
@@ -36,7 +41,12 @@ class WireMonPerforma extends Component
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
-        $this->startDate = now()->subDays(30)->format('Y/m/d');
+
+        $filterTahun = Carbon::now()->year;
+        $monthStart = '01';
+        $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
+        // dd($this->startDate);
+        // $this->startDate = now()->subDays(30)->format('Y/m/d');
         $this->endDate = now()->format('Y/m/d');
 
     }
@@ -92,9 +102,28 @@ class WireMonPerforma extends Component
         ->WhereBetween('tanggal_performa',[$this->startDate, $this->endDate])
         ->get();
     }
+    public function groupData()
+    {
+        $data =  Performa::with('sapi')
+        ->whereYear('tanggal_performa', now()->format('Y'))
+        ->orderBy('tanggal_performa')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tanggal_performa)->format('m');
+        });
+
+        foreach ($data as $key => $value) {            
+
+            array_push($this->datax, count($value));
+            array_push($this->dataLabel, 'Bulan ke - '.$key);
+        }
+
+      
+    }
 
     public function render()
     {
+        $this->groupData();
         return view('livewire.wire-mon-performa',[
             'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
             'perfromas' => $this->resultData(),

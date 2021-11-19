@@ -22,7 +22,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Berat Badan<span class="text-danger">*</span></label>
+                    <label class="form-label">Berat Badan<span class="text-muted"> (optional)</span></label>
                     <input wire:model="berat_badan" type="number" class="form-control" placeholder="e.g: 100KG">
                     @error('berat_badan')
                         <small class="mt-2 text-danger">{{ $message }}</small>

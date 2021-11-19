@@ -67,5 +67,14 @@ class Sapi extends Model
     {
         return $this->hasMany(PeternakSapi::class);
     }
+
+    public function anaks()
+    {
+        return $this->hasMany(IndukAnak::class, 'induk_id')->with('sapi');
+    }
+    public function induk()
+    {
+        return $this->hasOne(IndukAnak::class, 'anak_id')->with('induk');
+    }
     
 }

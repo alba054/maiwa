@@ -26,7 +26,7 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'index']);
-    Route::get('/sapi/{sapi}', [App\Http\Controllers\SapiController::class, 'show'])->name('sapi.show');
+    Route::get('/sapi/{sapi:eartag}', [App\Http\Controllers\SapiController::class, 'show'])->name('sapi.show');
     Route::get('/pages/{page}', [App\Http\Controllers\AdminController::class, 'index']);
     
     Route::get('/export/pkb/{statusNo}/{id}', [App\Http\Controllers\ExportStrukController::class, 'ExportPKB']);

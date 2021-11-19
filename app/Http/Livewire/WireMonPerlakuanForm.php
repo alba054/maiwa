@@ -12,12 +12,15 @@ use App\Models\Upah;
 use App\Models\Vaksin;
 use App\Models\Vitamin;
 use Intervention\Image\ImageManager;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class WireMonPerlakuanForm extends Component
 {
     use WithFileUploads;
+    use LivewireAlert;
+
     public $selectedItemId, $sapi_id, $tgl_perlakuan, $obat_id, $dosis_obat, $vaksin_id, $dosis_vaksin, $vitamin_id, $dosis_vitamin, $hormon_id, $dosis_hormon, $ket_perlakuan;
     public $foto, $date;
     protected $rules = [

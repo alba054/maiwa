@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 
 use App\Models\Metode;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wiremetode extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $metode, $searchTerm;
     protected $rules = [
         'metode' => 'required|string|max:255',

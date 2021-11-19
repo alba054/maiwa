@@ -3,11 +3,15 @@
 namespace App\Http\Livewire\Panen;
 
 use App\Models\Panen;
+use Carbon\Carbon;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireMonPanen extends Component
 {
+    use LivewireAlert;
     public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate, $frekPanen, $ketPanen;
+    public $datax = array(), $dataLabel = array();
 
     protected $listeners = [
         'confirmed',
@@ -23,7 +27,11 @@ class WireMonPanen extends Component
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
-        $this->startDate = now()->subDays(30)->format('Y/m/d');
+        // $this->startDate = now()->subDays(30)->format('Y/m/d');
+
+        $filterTahun = Carbon::now()->year;
+        $monthStart = '01';
+        $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
         $this->endDate = now()->format('Y/m/d');
 
     }
@@ -73,8 +81,28 @@ class WireMonPanen extends Component
         ->WhereBetween('tgl_panen',[$this->startDate, $this->endDate])
         ->get();
     }
+
+    public function groupData()
+    {
+        $data =  Panen::with('sapi')
+        ->whereYear('tgl_panen', now()->format('Y'))
+        ->orderBy('tgl_panen')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tgl_panen)->format('m');
+        });
+
+        foreach ($data as $key => $value) {            
+
+            array_push($this->datax, count($value));
+            array_push($this->dataLabel, 'Bulan ke - '.$key);
+        }
+
+      
+    }
     public function render()
     {
+        $this->groupData();
         return view('livewire.panen.wire-mon-panen',[
             'datas' => $this->resultData(),
         ]);

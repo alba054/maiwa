@@ -241,7 +241,7 @@
                         <a href="{{ url('/' . ($page = '#')) }}" class="option-dots" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal fs-20"></i></a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="{{ url('/' . ($page = '#')) }}">Today</a>
+                            <span wire:click="exportToExcel" class="dropdown-item">Export To Excel</span>
                             <a class="dropdown-item" href="{{ url('/' . ($page = '#')) }}">Last Week</a>
                             <a class="dropdown-item" href="{{ url('/' . ($page = '#')) }}">Last Month</a>
                             <a class="dropdown-item" href="{{ url('/' . ($page = '#')) }}">Last Year</a>
@@ -255,16 +255,39 @@
                             @if (count($sapis) != 0)
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Eartag</th>
-                                        <th>Nama Sapi</th>
-                                        <th>Tgl Lahir</th>
-                                        <th>Umur</th>
-                                        <th>Kelamin</th>
-                                        <th>Jenis Sapi</th>
-                                        <th>Status Sapi</th>
-                                        <th>Peternak</th>
-                                        <th>Pendamping</th>
+                                        <th rowspan="2">#</th>
+                                        <th rowspan="2">Eartag</th>
+                                        <th rowspan="2">Nama Sapi</th>
+                                        <th rowspan="2">Tgl Lahir</th>
+                                        <th rowspan="2">Umur</th>
+                                        <th rowspan="2">Kelamin</th>
+                                        <th rowspan="2">Jenis Sapi</th>
+                                        <th rowspan="2">Status Sapi</th>
+                                        <th rowspan="2">Peternak</th>
+                                        <th rowspan="2">Pendamping</th>
+                                        <th colspan="2">IB</th>
+                                        <th colspan="3">PKB</th>
+                                        <th colspan="2">Performa</th>
+                                        <th colspan="2">Perlakuan</th>
+                                        <th colspan="3">Panen</th>
+                                    </tr>
+                                    <tr>
+                                        <th>tanggal</th>
+                                        <th>strow</th>
+
+                                        <th>tanggal</th>
+                                        <th>metode</th>
+                                        <th>hasil</th>
+
+                                        <th>tanggal</th>
+                                        <th>keterangan</th>
+
+                                        <th>tanggal</th>
+                                        <th>keterangan</th>
+
+                                        <th>tanggal</th>
+                                        <th>frekuensi</th>
+                                        <th>keterangan</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -272,7 +295,8 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
 
-                                            <td><a href="{{ route('sapi.show', $item) }}">{{ $item->eartag }}</a>
+                                            <td><a
+                                                    href="{{ route('sapi.show', $item->eartag) }}">{{ $item->eartag }}</a>
                                             </td>
                                             <td>{{ $item->nama_sapi }}</td>
                                             <td>{{ $item->tanggal_lahir }}</td>
@@ -289,6 +313,31 @@
                                             <td>{{ $item->status_sapi->status }}</td>
                                             <td>{{ $item->peternak->nama_peternak }}</td>
                                             <td>{{ $item->peternak->pendamping->user->name }}</td>
+                                            <td>{{ $item->ib->last() ? $item->ib->last()->waktu_ib : '-' }}
+                                            </td>
+                                            <td>{{ $item->ib->last() ? $item->ib->last()->strow->kode_batch : '-' }}
+                                            </td>
+                                            <td>{{ $item->pkb->last() ? $item->pkb->last()->waktu_pk : '-' }}
+                                            </td>
+                                            <td>{{ $item->pkb->last() ? $item->pkb->last()->metode->metode : '-' }}
+                                            </td>
+                                            <td>{{ $item->pkb->last() ? $item->pkb->last()->hasil->hasil : '-' }}
+                                            </td>
+                                            <td>{{ $item->performa->last() ? $item->performa->last()->tanggal_performa : '-' }}
+                                            </td>
+                                            <td>{{ $item->performa->last() ? $item->performa->last()->bsc : '-' }}
+                                            </td>
+                                            <td>{{ $item->perlakuan->last() ? $item->perlakuan->last()->tgl_perlakuan : '-' }}
+                                            </td>
+                                            <td>{{ $item->perlakuan->last() ? $item->perlakuan->last()->ket_perlakuan : '-' }}
+                                            </td>
+
+                                            <td>{{ $item->panens->last() ? $item->panens->last()->tgl_panen : '-' }}
+                                            </td>
+                                            <td>{{ $item->panens->last() ? $item->panens->last()->frek_panen : '-' }}
+                                            </td>
+                                            <td>{{ $item->panens->last() ? $item->panens->last()->ket_panen : '-' }}
+                                            </td>
 
 
                                         </tr>
@@ -300,7 +349,7 @@
                                 There no Data Yet
                             @endif
                         </table>
-                        {{ $sapis->links() }}
+                        {{-- {{ $sapis->links() }} --}}
 
                     </div>
 

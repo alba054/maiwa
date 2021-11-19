@@ -11,15 +11,18 @@ use App\Models\PeternakSapi;
 use App\Models\Sapi;
 use App\Models\Tsr;
 use App\Models\User;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Intervention\Image\ImageManager;
-
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class WireMonPeriksaKebuntingan extends Component
 {
-    public $selectedItemId, $startDate, $endDate, $searchTerm, $sapiId, $peternakId, $pendampingId, $tsrId, $userId, $metodeId, $hasilId;
+    use LivewireAlert;
 
+    public $selectedItemId, $startDate, $endDate, $searchTerm, $sapiId, $peternakId, $pendampingId, $tsrId, $userId, $metodeId, $hasilId;
+    public $datax = array(), $dataLabel = array();
      protected $rules = [
         'metode_id' => 'required',
         'hasil_id' => 'required',
@@ -46,7 +49,10 @@ class WireMonPeriksaKebuntingan extends Component
     {
         date_default_timezone_set("Asia/Makassar");
         $today = date('Y/m/d');
-        $this->startDate = now()->subDays(30)->format('Y/m/d');
+        $filterTahun = Carbon::now()->year;
+        $monthStart = '01';
+        $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
+        // $this->startDate = now()->subDays(30)->format('Y/m/d');
         $this->endDate = now()->format('Y/m/d');
         $this->waktu_pk = $today;
 
@@ -122,10 +128,32 @@ class WireMonPeriksaKebuntingan extends Component
         ->WhereBetween('waktu_pk',[$this->startDate, $this->endDate])
         ->get();
     }
+
+    public function groupData()
+    {
+        $data =  PeriksaKebuntingan::with('sapi')
+        ->whereYear('waktu_pk', now()->format('Y'))
+        ->orderBy('waktu_pk')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->waktu_pk)->format('m');
+        });
+
+        foreach ($data as $key => $value) {            
+
+            array_push($this->datax, count($value));
+            array_push($this->dataLabel, 'Bulan ke - '.$key);
+        }
+
+      
+    }
     public function render()
     {
+        // $this->groupData();
+
         return view('livewire.wire-mon-periksa-kebuntingan',[
             'periksa_kebuntingans' => $this->resultData(),
+            'grafiks' => $this->groupData(),
             'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
             'pendampings' => Pendamping::orderBy('id','ASC')->get(),
             'tsrs' => Tsr::orderBy('id','ASC')->get(),
@@ -144,6 +172,11 @@ class WireMonPeriksaKebuntingan extends Component
     {
         $this->emit('cleanVars');
         $this->dispatchBrowserEvent('openModalAdd');
+    }
+    public function openAddGrafik()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalGrafik');
     }
 
     public function selectedItem($itemId, $action)

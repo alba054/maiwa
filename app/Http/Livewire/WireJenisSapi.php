@@ -2,10 +2,13 @@
 
 namespace App\Http\Livewire;
 use App\Models\JenisSapi;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireJenisSapi extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $jenis, $ket_jenis, $searchTerm;
     protected $rules = [
         'jenis' => 'required|string|max:255',

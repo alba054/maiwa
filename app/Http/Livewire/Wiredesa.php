@@ -5,12 +5,14 @@ namespace App\Http\Livewire;
 use App\Models\Desa;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Wiredesa extends Component
 {
     use WithPagination;
+    use LivewireAlert;
     protected $paginationTheme = 'bootstrap';
     public $selectedItemId, $name, $searchTerm, $kecamatan_id;
 

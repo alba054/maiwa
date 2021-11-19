@@ -7,12 +7,15 @@ use App\Models\PendampingPeternak;
 use App\Models\Peternak;
 use App\Models\Tsr;
 use App\Models\TsrPendamping;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class WirePendampingPeternak extends Component
 {
     use WithPagination;
+    use LivewireAlert;
+
     protected $paginationTheme = 'bootstrap';
     public $peternak_id, $pendamping_id, $date, $selectedItemId, $searchTerm, $tsrId, $pendampingId, $peternakId;
 

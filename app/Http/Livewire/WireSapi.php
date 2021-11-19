@@ -7,12 +7,15 @@ use App\Models\Peternak;
 use App\Models\Sapi;
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\WithPagination;
 
 
 class WireSapi extends Component
 {
     use WithPagination;
+    use LivewireAlert;
+
     protected $paginationTheme = 'bootstrap';
     public $selectedItemId, $searchTerm, $peternak_id, $pendampingId;
     protected $listeners = [

@@ -8,10 +8,13 @@ use App\Models\Kecamatan;
 use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\Tsr;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wirepeternaksearch extends Component
 {
+    use LivewireAlert;
+
     public $pendampingId, $tsrId, $desaId, $kecamatanId, $kabupatenId;
     public function render()
     {

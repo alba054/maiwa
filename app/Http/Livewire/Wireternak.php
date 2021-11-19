@@ -5,10 +5,13 @@ namespace App\Http\Livewire;
 use App\Models\Peternak;
 use App\Models\Sapi;
 use App\Models\Ternak;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wireternak extends Component
 {
+    use LivewireAlert;
+
     public $selectedItemId, $tgl_mulai, $peternak_id, $sapi_id;
 
      protected $rules = [

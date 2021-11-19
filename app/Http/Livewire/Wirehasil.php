@@ -3,10 +3,12 @@
 namespace App\Http\Livewire;
 
 use App\Models\Hasil;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wirehasil extends Component
 {
+    use LivewireAlert;
     public $selectedItemId, $hasil, $searchTerm;
     protected $rules = [
         'hasil' => 'required|string|max:255',

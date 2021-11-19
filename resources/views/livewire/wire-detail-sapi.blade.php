@@ -258,6 +258,51 @@
                 </div>
             </div>
         </div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Data Keturunan</h3>
+            </div>
+            <div class="card-body">
+
+
+                @if ($sapi->induk != null)
+                    <a href="{{ route('sapi.show', $sapi->induk->induk->eartag) }}">EARTAG INDUK
+                        {{ $sapi->induk->induk->eartag }}</a>
+                @endif
+
+
+                <div class="table-responsive">
+                    <table class="table table-hover card-table table-vcenter text-nowrap">
+
+                        @if (count($sapi->anaks) != 0)
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Eartag Anak</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($sapi->anaks as $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+
+                                            <a href="{{ route('sapi.show', $item->sapi->eartag) }}">
+                                                {{ $item->sapi->eartag }}</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        @else
+                            There no Data Yet
+                        @endif
+
+
+
+                    </table>
+                </div>
+            </div>
+        </div>
 
 
     </div>

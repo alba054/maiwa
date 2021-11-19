@@ -51,6 +51,25 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+
+                <div class="form-group">
+                    <div class="form-label">Status IB/Kawin Alam</div>
+                    <div>
+                        <label class="custom-switch">
+                            <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input"
+                                wire:model="status">
+                            <span class="custom-switch-indicator"></span>
+                            <span class="custom-switch-description">Bunting dengan IB ?</span>
+                        </label>
+                    </div>
+
+                    @error('status')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+
+                </div>
+
+
                 <div class="form-group">
                     <label>Foto Perlakuan<span class="text-danger">*</span></label>
                     <input class="form-control" type="file" id="formFile" wire:model="foto">

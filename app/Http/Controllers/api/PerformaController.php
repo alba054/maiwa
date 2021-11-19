@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Laporan;
 use App\Models\Pendamping;
 use App\Models\Performa;
-use App\Models\PeternakSapi;
+use App\Models\Peternak;
+use App\Models\Sapi;
 use App\Models\Tsr;
 use App\Models\Upah;
 use App\Models\User;
@@ -15,6 +16,7 @@ use Intervention\Image\ImageManager;
 
 class PerformaController extends Controller
 {
+    
     
     public function index($userId)
     {
@@ -50,7 +52,8 @@ class PerformaController extends Controller
         date_default_timezone_set("Asia/Makassar");
         $today = date('Y/m/d');
 
-        $user = PeternakSapi::orderBy('id','DESC')->where('sapi_id', $request->sapi_id)->first();
+        $sapi = Sapi::find($request->sapi_id);
+        $peternak = Peternak::find($sapi->peternak_id);
        
         $image = $request->image;
         $imageName = $request->foto;
@@ -68,9 +71,9 @@ class PerformaController extends Controller
             'lingkar_dada' => $request->lingkar_dada,
             'bsc' => $request->bsc,
             'sapi_id' => $request->sapi_id,
-            'peternak_id' => $user->peternak_id,
-            'pendamping_id' => $user->pendamping_id,
-            'tsr_id' => $user->tsr_id,
+            'peternak_id' => $peternak->id,
+            'pendamping_id' => $peternak->pendamping_id,
+            'tsr_id' => $peternak->pendamping->tsr_id,
             'foto' => $imageName
         ];
 
@@ -78,9 +81,9 @@ class PerformaController extends Controller
             $upah = Upah::find(2);
                     Laporan::create([
                         'sapi_id' => $request->sapi_id,
-                        'peternak_id' => $user->peternak_id, 
-                        'pendamping_id' => $user->pendamping_id, 
-                        'tsr_id' => $user->tsr_id, 
+                        'peternak_id' => $peternak->id,
+                        'pendamping_id' => $peternak->pendamping_id,
+                        'tsr_id' => $peternak->pendamping->tsr_id,
                         'tanggal' => $today, 
                         'perlakuan' => $upah->detail,
                         'upah' => $upah->price,
@@ -175,5 +178,19 @@ class PerformaController extends Controller
                 
             ], 204);
         }
+    }
+
+    public function isSuccess($msg)
+    {
+        $this->alert('success', $msg, [
+            'position' =>  'top-end', 
+            'timer' =>  3000,  
+            'toast' =>  true, 
+            'text' =>  '', 
+            'confirmButtonText' =>  'Ok', 
+            'cancelButtonText' =>  'Cancel', 
+            'showCancelButton' =>  false, 
+            'showConfirmButton' =>  false, 
+      ]);
     }
 }

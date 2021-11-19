@@ -12,11 +12,14 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Helper\Constcoba;
 use App\Models\PeternakSapi;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 
 class WireSapiForm extends Component
 {
     protected $notif = array ();
     use WithFileUploads;
+    use LivewireAlert;
+
     public $selectedItemId, $jenis_sapi_id, $eartag_induk, $nama_sapi,  $tanggal_lahir, $kelamin, $kondisi_lahir, $anak_ke, $eartag, $foto_depan, $foto_samping, $foto_peternak, $foto_rumah, $status_sapi_id, $peternak_id;
     public $uniqNo, $f = 1;
 
@@ -222,8 +225,11 @@ class WireSapiForm extends Component
         // $this->notif($sapi->tanggal_lahir, $anti_biotik, Constcoba::BIOTIK, 'Pendamping', $sapi);
         // $this->notif($sapi->tanggal_lahir, $obat_cacing, Constcoba::CACING, 'Pendamping', $sapi);
         $this->notif($sapi->tanggal_lahir, $recording, Constcoba::RECORDING, "2", $sapi);
-        $this->notif($sapi->tanggal_lahir, $birahi, Constcoba::BIRAHI, "0", $sapi);
         $this->notif($sapi->tanggal_lahir, $panen, Constcoba::PANEN, "5", $sapi);
+
+        if ($sapi->kelamin == "Betina") {
+            $this->notif($sapi->tanggal_lahir, $birahi, Constcoba::BIRAHI, "0", $sapi);
+        }
 
         sort($this->notif);
         // dd($this->notif);

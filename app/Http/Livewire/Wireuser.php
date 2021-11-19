@@ -10,10 +10,13 @@ use App\Models\Tsr;
 use App\Models\TsrPendamping;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class Wireuser extends Component
 {
+    use LivewireAlert;
+
     public $hak_akses, $name, $email, $password, $selectedItemId, $searchTerm, $tsr_id, $alamat, $no_hp;
 
     protected $rules = [

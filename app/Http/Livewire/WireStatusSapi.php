@@ -4,10 +4,13 @@ namespace App\Http\Livewire;
 
 use App\Models\Sapi;
 use App\Models\StatusSapi;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireStatusSapi extends Component
 {
+    use LivewireAlert;
+
     public $status, $ket_status, $selectedItemId, $searchTerm, $sapiId;
 
     protected $rules = [

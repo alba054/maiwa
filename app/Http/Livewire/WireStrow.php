@@ -3,10 +3,13 @@
 namespace App\Http\Livewire;
 use App\Models\Sapi;
 use App\Models\Strow;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 
 class WireStrow extends Component
 {
+    use LivewireAlert;
+
     public $sapi_id, $kode_batch, $batch, $selectedItemId, $searchTerm, $sapiId;
 
     protected $rules = [

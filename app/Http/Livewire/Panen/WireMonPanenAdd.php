@@ -8,12 +8,14 @@ use App\Models\Peternak;
 use App\Models\Sapi;
 use App\Models\Upah;
 use Intervention\Image\ImageManager;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class WireMonPanenAdd extends Component
 {
     use WithFileUploads;
+    use LivewireAlert;
     public $foto, $date, $selectedItemId, $frek_panen, $ket_panen, $sapi_id;
 
     protected $rules = [
