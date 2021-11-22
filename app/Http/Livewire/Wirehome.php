@@ -26,6 +26,9 @@ class Wirehome extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $data = [2,4,6];
+    public $dataxUpah = array(), $dataLabelUpah = array();
+    public $dataxJantan = array(), $dataxBetina = array(), $dataLabelKelamin = ['01','02', '03', '04','05','06','07','08','09','10','11','12'];
+
 
     public function mount()
     {
@@ -55,7 +58,8 @@ class Wirehome extends Component
         // ->WhereBetween('tanggal', [now()->format('Y-m-d'), now()->addDays(30)->format('Y-m-d') ])
         // ->get();
 
-        
+        $this->groupUpah();
+        $this->groupKelamin();
 
         return view('livewire.wirehome',[
             'laporans' => Laporan::latest()->get(),
@@ -65,6 +69,60 @@ class Wirehome extends Component
             'countSapi' => count(Sapi::all()),
             'sapis' => $this->sapiData(),
         ]);
+    }
+
+    public function groupUpah()
+    {
+        $data =  Laporan::whereYear('tanggal', now()->format('Y'))
+        ->orderBy('tanggal')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tanggal)->format('m');
+        });
+
+        foreach ($data as $key => $value) {            
+
+            array_push($this->dataxUpah, count($value));
+            array_push($this->dataLabelUpah, $key);
+        }
+    }
+    public function groupKelamin()
+    {
+        $dataJantan =  Sapi::where('kelamin', 'Jantan')
+        ->whereYear('tanggal_lahir', now()->format('Y'))
+        ->orderBy('tanggal_lahir')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tanggal_lahir)->format('m');
+        });
+
+        $dataBetina =  Sapi::where('kelamin', 'Betina')
+        ->whereYear('tanggal_lahir', now()->format('Y'))
+        ->orderBy('tanggal_lahir')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tanggal_lahir)->format('m');
+        });
+
+        foreach ($this->dataLabelKelamin as $key => $valueLabel) {
+            if ($dataJantan->has($valueLabel)) {
+                $jantan = $dataJantan[$valueLabel];
+                array_push($this->dataxJantan, count($jantan));
+            }else{
+                array_push($this->dataxJantan, 0);
+
+            }
+            if ($dataBetina->has($valueLabel)) {
+                $betina = $dataBetina[$valueLabel];
+                array_push($this->dataxBetina, count($betina));
+            }else{
+                array_push($this->dataxBetina, 0);
+
+            }
+            
+        }
+        
+       
     }
 
     public function isSuccess($msg)

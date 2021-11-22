@@ -1,7 +1,8 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        var data = @this.data;
-        console.log(data);
+        var data = @this.dataxUpah;
+        var dataLabel = @this.dataLabelUpah;
+        console.log(dataLabel);
 
         /* E-chart */
         var chartdata = [
@@ -10,9 +11,7 @@
                 name: 'Data Kinerja',
                 type: 'line',
                 smooth: true,
-                data: [8000, 5000, 15000, 10000, 10000, 8000, 9000, 12000, 5000, 15000, 10000, 10000, 8000,
-                    16000
-                ],
+                data: data,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],
@@ -44,9 +43,7 @@
                 left: '40',
             },
             xAxis: {
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov',
-                    'Dec'
-                ],
+                data: dataLabel,
                 axisLine: {
                     lineStyle: {
                         color: 'rgba(67, 87, 133, .09)'

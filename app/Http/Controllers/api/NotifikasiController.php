@@ -30,7 +30,8 @@ class NotifikasiController extends Controller
                 
             })
             // ->WhereBetween('tanggal', [now()->subdays(7)->format('Y-m-d'), now()->format('Y-m-d')])
-            ->where('tanggal', '>=', now()->format('Y-m-d'))
+            // ->where('tanggal', '<=', now()->format('Y-m-d'))
+            // ->where('status', 'no')
             ->get();
         }else{
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
@@ -38,8 +39,9 @@ class NotifikasiController extends Controller
             $data = Notifikasi::with(['sapi'])
             ->orderBy('tanggal', 'ASC')
             ->where('tsr_id',$tsrId)
-            ->where('tanggal', '>=', now()->format('Y-m-d'))
+            // ->where('tanggal', '<=', now()->format('Y-m-d'))
             // ->WhereBetween('tanggal', [now()->subdays(7)->format('Y-m-d'), now()->format('Y-m-d')])
+            // ->where('status', 'no')
             ->get();
         }
         

@@ -66,6 +66,22 @@ class SapiController extends Controller
         // $today = date('Y/m/d');
 
         $eartagInduk = $request->eartag_induk;
+
+        $induk = Sapi::where('eartag', $eartagInduk)->first();
+
+        if ($induk) {
+            Notifikasi::create([
+                'sapi_id' => $induk->id,
+                'tanggal' => now()->adddays(60)->format('Y-m-d'),
+                'pesan' => "Cek Birahi",
+                'role' => '0',
+                'status' => 'no',
+                'keterangan' => "0,0"
+            ]);
+            
+        }
+        
+
         $eartagIndukExplode = explode("-", $eartagInduk);
 
 
@@ -222,7 +238,8 @@ class SapiController extends Controller
                 'sapi_id' => $sapi->id,
                 'tanggal' => date('Y-m-d', strtotime($tgl)),
                 'pesan' => $teks,
-                'role' => $role
+                'role' => $role,
+                'keterangan' => "0,0"
             ]);
         }
     }

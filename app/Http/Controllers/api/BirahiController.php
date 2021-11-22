@@ -16,95 +16,118 @@ class BirahiController extends Controller
         
         $result = $request->result;
         $notif_id = $request->notif_id;
-        $notif = Notifikasi::find($notif_id);
-
-        
-        $keterangan = $notif->keterangan+1;
+        $notif = Notifikasi::find($notif_id);        
         $sapi = Sapi::find($notif->sapi_id);
 
+        $token = $sapi->peternak->pendamping->user->remember_token;
+
+
+        $keterangan = $notif->keterangan;
+        $tanggal = $notif->tanggal;
+
+        $ketExp =  explode(",", $keterangan);
+        // return $ketExp;
+        // return now()->adddays(21)->format('Y-m-d');
+
+        if ($ketExp[0] <= "3") {
+            
+            if ($ketExp[0] == "0") {
         
-        if ($notif->keterangan < 3) {
-            if ($result == "yes") {
-               
-               
-                $this->createNotif($notif->sapi_id, "Insiminasi Buatan", "3", $keterangan );
+                if ($result == "no") {
+                    $pesan = 'Harap Kembali Melakukan Cek birahi keesokan hari pada sapi '.$sapi->eartag;
+                    Constcoba::sendFCM($token, 'MBC', $pesan, "0");
+    
+                } else {
+                    $notif->update([
+                        'tanggal' => now()->format('Y-m-d'),
+                        'pesan' => "Cek Birahi Telah dilakukan",
+                        'status' => "yes"
+                    ]);
 
-                $token = $sapi->peternak->pendamping->user->remember_token;
-            
-                $pesan = 'Insiminasi Buatan pada sapi '.$sapi->eartag;
-                Constcoba::sendFCM($token, 'MBC', $pesan, "3");
-
-
-                $notif->update([
-                    'sapi_id' => $notif->sapi_id,
-                    'tanggal' => now()->format('Y-m-d'),
-                    'pesan' => "Cek Birahi Telah dilakukan",
-                    'keterangan' => $keterangan,
-                    'role' => "0",
-                    'status' => "yes"
-                ]);
-
-            }else{
-
-                $notif->update([
-                    'sapi_id' => $notif->sapi_id,
-                    'tanggal' => now()->adddays(1)->format('Y-m-d'),
-                    'pesan' => "Cek Birahi",
-                    'keterangan' => $keterangan,
-                    'role' => "0"
-                ]);
-
-                $token = $sapi->peternak->pendamping->user->remember_token;
-            
-                $pesan = 'Harap Kembali Melakukan Cek birahi keesokan hari pada sapi '.$sapi->eartag;
-                Constcoba::sendFCM($token, 'MBC', $pesan, "3");
-
-            }
-        }else{
-            if ($result == "yes") {
+                    $this->createNotif($notif->sapi_id, "Cek Birahi", "0", "1,1", now()->adddays(19)->format('Y-m-d') );
+                    $pesan = 'Harap Kembali Melakukan Cek birahi 21 hari kemudian pada sapi '.$sapi->eartag;
+                    Constcoba::sendFCM($token, 'MBC', $pesan, "0");
+                }
                 
-                $keterangan = $notif->keterangan+1;
                 
-                $this->createNotif($notif->sapi_id, "Insiminasi Buatan", "3", $keterangan );
-
-                $token = $sapi->peternak->pendamping->user->remember_token;
-            
-                $pesan = 'Harap segera Melakukan Insiminasi Buatan pada sapi '.$sapi->eartag;
-                Constcoba::sendFCM($token, 'MBC', $pesan, "3");
-
-
-                $notif->update([
-                    'sapi_id' => $notif->sapi_id,
-                    'tanggal' => now()->format('Y-m-d'),
-                    'pesan' => "Cek Birahi Telah dilakukan",
-                    'keterangan' => $keterangan,
-                    'role' => "0",
-                    'status' => "yes"
-                ]);
-
             } else {
-            
+                
+                
+                // $keterangan = $notif->keterangan+1;
+                $ketExp =  explode(",", $keterangan);
+                $ketIB = $ketExp[0];
+                $ketFrek = $ketExp[1];
 
-                $this->createNotif($notif->sapi_id, "Periksa Kebuntingan", "1", $keterangan );
+                if ($result == "yes") {
+                    $keterangan = $ketFrek + 1;
 
-                $token = $sapi->peternak->pendamping->user->remember_token;
-            
-                $pesan = 'Periksa Kebuntingan pada sapi '.$sapi->eartag;
-                Constcoba::sendFCM($token, 'MBC', $pesan, "1");
-
-
-                $notif->update([
-                    'sapi_id' => $notif->sapi_id,
-                    'tanggal' => now()->format('Y-m-d'),
-                    'pesan' => "Cek Birahi Telah dilakukan",
-                    'keterangan' => $notif->keterangan+1,
-                    'role' => "0",
-                    'status' => "yes"
-                ]);
-
+                    $this->createNotif($notif->sapi_id, "Insiminasi Buatan", "3", $ketIB .','.$keterangan, now()->format('Y-m-d') );
+        
+                    
+                    $pesan = 'Insiminasi Buatan pada sapi '.$sapi->eartag;
+                    Constcoba::sendFCM($token, 'MBC', $pesan, "3");
+    
+                    $notif->update([
+                        'sapi_id' => $notif->sapi_id,
+                        'tanggal' => now()->format('Y-m-d'),
+                        'pesan' => "Cek Birahi Telah dilakukan",
+                        'role' => "0",
+                        'status' => "yes"
+                    ]);
+                }else {
+                    if ($ketFrek < 3) {
+                        $keterangan = $ketFrek + 1;
+                        $notif->update([
+                            'sapi_id' => $notif->sapi_id,
+                            'tanggal' => now()->adddays(1)->format('Y-m-d'),
+                            'pesan' => "Cek Birahi",
+                            'keterangan' => $ketIB .','.$keterangan,
+                            'role' => "0"
+                        ]);
+        
+                        $token = $sapi->peternak->pendamping->user->remember_token;
+                    
+                        $pesan = 'Harap Kembali Melakukan Cek birahi keesokan hari pada sapi '.$sapi->eartag;
+                        Constcoba::sendFCM($token, 'MBC', $pesan, "0");
+                    }else {
+                        $this->createNotif($notif->sapi_id, "Periksa Kebuntingan", "1", "0,0", now()->adddays(69)->format('Y-m-d') );
+        
+                        $token = $sapi->peternak->pendamping->user->remember_token;
+                    
+                        $pesan = 'Periksa Kebuntingan pada sapi '.$sapi->eartag;
+                        Constcoba::sendFCM($token, 'MBC', $pesan, "1");
+        
+        
+                        $notif->update([
+                            'sapi_id' => $notif->sapi_id,
+                            'tanggal' => now()->format('Y-m-d'),
+                            'pesan' => "Cek Birahi Telah dilakukan",
+                            'role' => "0",
+                            'status' => "yes"
+                        ]);
+                    }
+                }
+                
+    
             }
-        }
 
+        } else {
+
+            $notif->update([
+                'sapi_id' => $notif->sapi_id,
+                'tanggal' => now()->format('Y-m-d'),
+                'pesan' => "Cek Birahi Telah dilakukan",
+                'role' => "0",
+                'status' => "yes"
+            ]);
+            
+            $pesan = 'Harap Segera Menghubungi Dokter sapi '.$sapi->eartag;
+            Constcoba::sendFCM($token, 'MBC', $pesan, "10");
+            $this->createNotif($notif->sapi_id, "Segera Hubungi Dokter", "10", "0", now()->format('Y-m-d') );
+
+        }
+        
+        
         return response()->json([
             'responsecode' => '0',
             'responsemsg' => 'success',
@@ -113,11 +136,11 @@ class BirahiController extends Controller
         
     }
 
-    public function createNotif($sapi_id, $pesan, $role, $keterangan)
+    public function createNotif($sapi_id, $pesan, $role, $keterangan, $tanggal)
     {
         Notifikasi::create([
             'sapi_id' => $sapi_id,
-            'tanggal' => now()->format('Y-m-d'),
+            'tanggal' => $tanggal,
             'pesan' => $pesan,
             'keterangan' => $keterangan,
             'role' => $role

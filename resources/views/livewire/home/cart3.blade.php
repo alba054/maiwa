@@ -1,7 +1,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        var data = @this.data;
-        console.log(data);
+        var dataJantan = @this.dataxJantan;
+        var dataBetina = @this.dataxBetina;
+        var dataLabel = @this.dataLabelKelamin;
+        console.log(dataLabel);
 
         /* E-chart */
         var chartdata = [
@@ -12,7 +14,7 @@
                 symbolSize: 20,
                 barWidth: 10,
                 type: 'bar',
-                data: [23, 17, 19, 22, 17, 11, 19, 20, 17, 19, 25, 17, 11, 19],
+                data: dataJantan,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],
@@ -37,7 +39,7 @@
                 symbolSize: 20,
                 barWidth: 10,
                 type: 'bar',
-                data: [3, 7, 9, 2, 7, 11, 9, 3, 7, 9, 2, 2, 1, 5],
+                data: dataBetina,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],
@@ -68,9 +70,7 @@
                 left: '25',
             },
             xAxis: {
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov',
-                    'Dec'
-                ],
+                data: dataLabel,
                 axisLine: {
                     lineStyle: {
                         color: 'rgba(67, 87, 133, .09)'

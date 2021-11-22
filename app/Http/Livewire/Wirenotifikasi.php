@@ -5,34 +5,60 @@ namespace App\Http\Livewire;
 use App\Models\Notifikasi;
 use Livewire\Component;
 use App\Helper\Constcoba;
-
+use Carbon\Carbon;
 
 class Wirenotifikasi extends Component
 {
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
-        // dd(now()->adddays(1)->format('Y-m-d'));
+
+        $now = now()->format('Y-m-d');
+        
         
         $data = Notifikasi::with(['sapi'])
         ->orderBy('tanggal', 'ASC')
         // ->whereDate('tanggal',now()->subdays(1)->format('Y-m-d'))
         ->where('status','no')
-        ->WhereBetween('tanggal', [now()->subdays(1)->format('Y-m-d'), now()->format('Y-m-d')])
+        // ->WhereBetween('tanggal', [now()->subdays(1)->format('Y-m-d'), now()->format('Y-m-d')])
         ->get();
-        // dd($data);
         // return $data;
         // echo(now()->format('Y-m-d'));
 
+        $array_tanggal = [];
         foreach ($data as $key => $value) {
             $token = $value->sapi->peternak->pendamping->user->remember_token;
+
+            if ($value->role == "0" && $value->tanggal <= now()->format('Y-m-d')) {
+                $bday = Carbon::parse($value->tanggal);
+                $diff = fmod($bday->diffInDays($now), 7);
+
+                // dd($diff);
+                array_push($array_tanggal, $value->pesan);
+
+                if ($diff == 0.0) {
+                    
+                    $pesan = $value->pesan.' ke Sapi '.$value->sapi->eartag;
+                    $this->sendFCM($token, 'MBC', $pesan);
+
+                }
+            }else {
+                if ($value->tanggal <= now()->format('Y-m-d') && $value->tanggal >= now()->subdays(1)->format('Y-m-d')) {
+                    array_push($array_tanggal, $value->pesan);
+                    $pesan = $value->pesan.' ke Sapi '.$value->sapi->eartag;
+                    $this->sendFCM($token, 'MBC', $pesan);
+                }
+            }
+            
             // dd($token);
             // echo($token.'<br/>');
-            $pesan = $value->pesan.' ke Sapi '.$value->sapi->eartag;
+            //
 
-            $this->sendFCM($token, 'MBC', $pesan);
+            
             // Constcoba::sendFCM($token, 'MBC', $pesan, $value->role.','.$value->sapi->peternak->pendamping->user->id);
         }
+        // dd($array_tanggal);
+
     }
     public function render()
     {

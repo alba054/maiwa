@@ -26,8 +26,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('send:notif')->hourly();
-        $schedule->command('send:notif')->daily();
-        // $schedule->command('send:notif')->everyMinute();
+        // $schedule->command('send:notif')->daily();
+        $schedule->command('send:notif')->everyMinute();
     }
 
     /**

@@ -65,7 +65,11 @@ class InsiminasiBuatanController extends Controller
             $imageName = $this->handleImageIntervention($request->image);
         }
 
-        $dosis_ib = count(InsiminasiBuatan::where('sapi_id', $sapi_id)->get()) + 1;
+        $notifikasi = Notifikasi::find($request->notifikasi_id);
+        $ketExp =  explode(",", $notifikasi->keterangan);
+        $ketIB = $ketExp[0];
+        $ketFrek = $ketExp[1];
+        $dosis_ib = $ketIB;
 
         $data = [
             'waktu_ib' => $waktu_ib,
@@ -99,12 +103,21 @@ class InsiminasiBuatanController extends Controller
             // dd($token);
             // echo($token.'<br/>');
 
-            $notifikasi = Notifikasi::find($request->notifikasi_id);
+            
             if ($notifikasi) {
                 $notifikasi->update([
-                    'status' => 'yes'
+                    'status' => 'yes',
+                    'pesan' => "Cek Birahi Telah Dilakukan",
                 ]);
             }
+
+            Notifikasi::create([
+                'sapi_id' => $sapi_id,
+                'tanggal' => now()->adddays(21)->format('Y-m-d'),
+                'pesan' => "Cek Birahi",
+                'keterangan' => $ketIB + 1 .',1',
+                'role' => "0"
+            ]);
 
             $pesan = 'Terima Kasih, Telah melakukan Insiminasi Buatan '.$sapi->eartag;
 

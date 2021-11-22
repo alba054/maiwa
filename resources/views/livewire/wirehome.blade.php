@@ -164,7 +164,7 @@
                             <h3 class="mb-0 fs-20 number-font1">{{ $countPendamping }} Orang</h3>
 
                         </div>
-                        <div class="col-xl-3 col-6 ">
+                        <div class="col-xl-6 col-6 ">
                             <p class=" mb-1">Total Upah Kinerja</p>
                             <h3 class="mb-0 fs-20 number-font1">Rp. {{ number_format($laporans->sum('upah')) }}</h3>
 
@@ -263,6 +263,7 @@
                                         <th rowspan="2">Kelamin</th>
                                         <th rowspan="2">Jenis Sapi</th>
                                         <th rowspan="2">Status Sapi</th>
+                                        <th rowspan="2">Jumlah Anak</th>
                                         <th rowspan="2">Peternak</th>
                                         <th rowspan="2">Pendamping</th>
                                         <th colspan="2">IB</th>
@@ -311,6 +312,7 @@
                                             <td>{{ $item->kelamin }}</td>
                                             <td>{{ $item->jenis_sapi->jenis }}</td>
                                             <td>{{ $item->status_sapi->status }}</td>
+                                            <td>{{ count($item->anaks) }}</td>
                                             <td>{{ $item->peternak->nama_peternak }}</td>
                                             <td>{{ $item->peternak->pendamping->user->name }}</td>
                                             <td>{{ $item->ib->last() ? $item->ib->last()->waktu_ib : '-' }}

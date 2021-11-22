@@ -37,6 +37,7 @@ class WireSapi extends Component
                 $query->where('eartag','like','%'.$this->searchTerm.'%');
                 $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');   
                 $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');   
+                $query->orWhere('tanggal_lahir','like','%'.$this->searchTerm.'%');   
                  
             }
 

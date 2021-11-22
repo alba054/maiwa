@@ -42,7 +42,7 @@
                                          <th>Berat Badan</th>
                                          <th>Panjang Badan</th>
                                          <th>Lingkar Dada</th>
-                                         <th>BSC</th>
+                                         <th>BCS</th>
                                          <th>Sapi</th>
                                          <th>Peternak</th>
                                          <th>Pendamping</th>

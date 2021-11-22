@@ -4,6 +4,7 @@ namespace App\Http\Controllers\api;
 
 use App\Helper\Constcoba;
 use App\Http\Controllers\Controller;
+use App\Models\Hasil;
 use App\Models\Laporan;
 use App\Models\Notifikasi;
 use App\Models\Pendamping;
@@ -69,6 +70,7 @@ class PeriksaKebuntinganController extends Controller
         $data = [
             'waktu_pk' => $today,
             'metode_id' => $request->metode_id,
+            'status' => $request->status,
             'hasil_id' => $request->hasil_id,
             'sapi_id' => $request->sapi_id,
             'peternak_id' => $peternak->id,
@@ -94,19 +96,50 @@ class PeriksaKebuntinganController extends Controller
         $save = $request->id == 0 ? PeriksaKebuntingan::create($data) : PeriksaKebuntingan::find($request->id)->update($data);
         if ($save) {
 
+            $token = $sapi->peternak->pendamping->user->remember_token;
+
+            $pesan = 'Terima Kasih, Telah melakukan Periksa Kebuntingan '.$sapi->eartag;
+            Constcoba::sendFCM($token, 'MBC', $pesan, "0");
+
             $notifikasi = Notifikasi::find($request->notifikasi_id);
+            $hasil = Hasil::find($request->hasil_id);
+
             if ($notifikasi) {
                 $notifikasi->update([
-                    'status' => 'yes'
+                    'status' => 'yes',
+                    'pesan' => 'Cek Birahi Telah Dilakukan'
                 ]);
             }
 
-            $token = $sapi->peternak->pendamping->user->remember_token;
+            if ($hasil->hasil == "Bunting") {
+                Notifikasi::create([
+                    'sapi_id' => $request->sapi_id,
+                    'tanggal' => now()->adddays(180)->format('Y-m-d'),
+                    'pesan' => "Cek Kelahiran",
+                    'keterangan' => "0,0",
+                    'role' => "10"
+                ]);
+
+                $pesan = "Enam Bulan Akan Melahirkan";
+                Constcoba::sendFCM($token, 'MBC', $pesan, "10");
+
+            } else {
+                $pesan = 'Harap Segera Menghubungi Dokter sapi '.$sapi->eartag;
+                Constcoba::sendFCM($token, 'MBC', $pesan, "10");
+
+                Notifikasi::create([
+                    'sapi_id' => $request->sapi_id,
+                    'tanggal' => now()->format('Y-m-d'),
+                    'pesan' => "Harap segera hubungi Dokter",
+                    'keterangan' => "0,0",
+                    'role' => "10"
+                ]);
+            }
+            
+
             // dd($token);
             // echo($token.'<br/>');
-            $pesan = 'Terima Kasih, Telah melakukan Periksa Kebuntingan '.$sapi->eartag;
-
-            Constcoba::sendFCM($token, 'MBC', $pesan, "0");
+            
 
             return response()->json([
                 'responsecode' => '1',

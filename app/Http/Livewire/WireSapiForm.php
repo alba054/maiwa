@@ -246,7 +246,9 @@ class WireSapiForm extends Component
                 'sapi_id' => $sapi->id,
                 'tanggal' => date('Y-m-d', strtotime($tgl)),
                 'pesan' => $teks,
-                'role' => $role
+                'role' => $role,
+                'keterangan' => "0,0"
+
             ]);
         }
     }
