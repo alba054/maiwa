@@ -37,7 +37,7 @@ class WireMonPanenAdd extends Component
     public function render()
     {
         return view('livewire.panen.wire-mon-panen-add',[
-            'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
+            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
         ]);
     }
 

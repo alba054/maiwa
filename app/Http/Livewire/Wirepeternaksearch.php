@@ -55,7 +55,7 @@ class Wirepeternaksearch extends Component
             'kecamatanId' => $this->kecamatanId,
             'kabupatenId' => $this->kabupatenId,
         ];
-        $this->emit('formFilter',$data);
-        $this->dispatchBrowserEvent('closeModalSearch');
+        // $this->emit('formFilter',$data);
+        // $this->dispatchBrowserEvent('closeModalSearch');
     }
 }

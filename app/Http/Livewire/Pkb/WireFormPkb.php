@@ -45,7 +45,7 @@ class WireFormPkb extends Component
         return view('livewire.pkb.wire-form-pkb',[
             'metodes' => Metode::orderBy('metode','ASC')->get(),
             'hasils' => Hasil::orderBy('hasil','ASC')->get(),
-            'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
+            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
             
         ]);
     }

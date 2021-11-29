@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\PeternakExport;
 use App\Models\Desa;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
@@ -12,6 +13,7 @@ use App\Models\User;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Wirepeternak extends Component
 {
@@ -79,6 +81,13 @@ class Wirepeternak extends Component
         })
         ->paginate(10);
     }
+
+    public function exportToExcel()
+    {
+        return Excel::download(new PeternakExport($this->resultData()), 'peternak.xlsx');
+
+    }
+
     public function render()
     {
         

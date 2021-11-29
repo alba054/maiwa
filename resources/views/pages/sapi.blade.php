@@ -39,10 +39,21 @@
             $("#user-form-modal").modal('hide');
 
         });
+        window.addEventListener('openModalSearch', event => {
+            $("#search-form-modal").modal('show');
+
+        });
+        window.addEventListener('closeModalSearch', event => {
+            $("#search-form-modal").modal('hide');
+
+        });
     </script>
     <script type="text/javascript">
         $(document).ready(function() {
             $("#user-form-modal").on('hidden.bs.modal', function() {
+                livewire.emit('forceCloseModal');
+            });
+            $("#search-form-modal").on('hidden.bs.modal', function() {
                 livewire.emit('forceCloseModal');
             });
         });

@@ -14,6 +14,7 @@ class Panen extends Model
         'peternak_id' => 'integer',
         'pendamping_id' => 'integer',
         'tsr_id' => 'integer',
+        'status' => 'integer',
         ];
     public function sapi()  
     {

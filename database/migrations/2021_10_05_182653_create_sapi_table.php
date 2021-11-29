@@ -26,6 +26,7 @@ class CreateSapiTable extends Migration
             $table->string('kelamin');
             $table->string('kondisi_lahir');
             $table->string('anak_ke');
+            $table->string('generasi');
             
             $table->string('foto_depan');
             $table->string('foto_samping');

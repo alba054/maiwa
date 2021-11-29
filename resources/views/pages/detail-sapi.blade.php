@@ -6,12 +6,14 @@
     <div class="page-header">
         <div class="page-leftheader">
             <h4 class="page-title mb-0">
-                Detail Sapi {{ $sapi->eartag }}
+                Detail Sapi
+                {{ 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag }}
             </h4>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ url('/') }}"><i class="fe fe-layers mr-2 fs-14"></i>Sapi</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page"><a href="#">Detail Sapi {{ $sapi->eartag }}</a>
+                <li class="breadcrumb-item active" aria-current="page"><a href="#">Detail Sapi
+                        {{ 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag }}</a>
                 </li>
             </ol>
         </div>

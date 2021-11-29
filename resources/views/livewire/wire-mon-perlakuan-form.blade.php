@@ -15,7 +15,9 @@
                     <select class="custom-select" wire:model="sapi_id">
                         <option value="">Please Choose</option>
                         @foreach ($sapis as $item)
-                            <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
+                            <option value="{{ $item->id }}">
+                                {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                            </option>
                         @endforeach
                     </select>
                     @error('sapi_id')
@@ -135,7 +137,7 @@
     <div class="modal-footer">
         <div class="row">
             <div class="col d-flex justify-content-end">
-                <button wire:click="save" class="btn btn-primary" type="submit">Save Changes</button>
+                <button wire:click="save" class="btn btn-outline-primary" type="submit">Save Changes</button>
             </div>
         </div>
     </div>

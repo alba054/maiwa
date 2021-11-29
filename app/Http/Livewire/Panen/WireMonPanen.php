@@ -2,16 +2,26 @@
 
 namespace App\Http\Livewire\Panen;
 
+use App\Exports\PanenExport;
 use App\Models\Panen;
 use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WireMonPanen extends Component
 {
     use LivewireAlert;
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
+
     public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate, $frekPanen, $ketPanen;
     public $datax = array(), $dataLabel = array();
+
+    public $rows = "10";
+    public $yearNow;
 
     protected $listeners = [
         'confirmed',
@@ -33,6 +43,8 @@ class WireMonPanen extends Component
         $monthStart = '01';
         $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
         $this->endDate = now()->format('Y/m/d');
+        $this->yearNow = $filterTahun;
+
 
     }
     public function openSearchModal()
@@ -45,6 +57,12 @@ class WireMonPanen extends Component
         $this->emit('cleanVars');
         $this->dispatchBrowserEvent('openModalAdd');
     }
+    public function exportToExcel()
+    {
+        return Excel::download(new PanenExport($this->resultData()), 'Panen.xlsx');
+
+    }
+
 
     public function resultData()
     {
@@ -77,15 +95,16 @@ class WireMonPanen extends Component
             }
             
         })
-        
+        ->where('status', 0)
         ->WhereBetween('tgl_panen',[$this->startDate, $this->endDate])
-        ->get();
+        ->paginate($this->rows);
     }
 
     public function groupData()
     {
         $data =  Panen::with('sapi')
         ->whereYear('tgl_panen', now()->format('Y'))
+        ->where('status',0)
         ->orderBy('tgl_panen')
         ->get()
         ->groupBy(function($val) {

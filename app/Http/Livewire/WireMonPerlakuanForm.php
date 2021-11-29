@@ -53,7 +53,7 @@ class WireMonPerlakuanForm extends Component
     public function render()
     {
         return view('livewire.wire-mon-perlakuan-form',[
-            'sapis' => Sapi::orderBy('nama_sapi')->get(),
+            'sapis' => Sapi::orderBy('generasi')->get(),
             'obats' => Obat::orderBy('name')->get(),
             'vaksins' => Vaksin::orderBy('name')->get(),
             'vitamins' => Vitamin::orderBy('name')->get(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\PkbExport;
 use App\Models\Hasil;
 use App\Models\Metode;
 use App\Models\Pendamping;
@@ -16,13 +17,22 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Intervention\Image\ImageManager;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WireMonPeriksaKebuntingan extends Component
 {
     use LivewireAlert;
+    use WithPagination;
+
+
+    protected $paginationTheme = 'bootstrap';
 
     public $selectedItemId, $startDate, $endDate, $searchTerm, $sapiId, $peternakId, $pendampingId, $tsrId, $userId, $metodeId, $hasilId;
     public $datax = array(), $dataLabel = array();
+    public $rows = "10";
+    public $yearNow;
+
      protected $rules = [
         'metode_id' => 'required',
         'hasil_id' => 'required',
@@ -55,13 +65,14 @@ class WireMonPeriksaKebuntingan extends Component
         // $this->startDate = now()->subDays(30)->format('Y/m/d');
         $this->endDate = now()->format('Y/m/d');
         $this->waktu_pk = $today;
+        $this->yearNow = $filterTahun;
 
     }
     public function formFilter($data)
     {
         // dd($data['startDate']);
 
-        $this->startDate = $data['startDate'] == null ? $this->waktu_pk : $data['startDate'];
+        $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
         $this->endDate = $data['endDate'] == null ? $this->waktu_pk : $data['endDate'];
         
         $this->metodeId = $data['metodeId'];
@@ -126,7 +137,13 @@ class WireMonPeriksaKebuntingan extends Component
         //     }
         // })
         ->WhereBetween('waktu_pk',[$this->startDate, $this->endDate])
-        ->get();
+        ->paginate($this->rows);
+    }
+
+    public function exportToExcel()
+    {
+        return Excel::download(new PkbExport($this->resultData()), 'Periksa Kebuntingan.xlsx');
+
     }
 
     public function groupData()

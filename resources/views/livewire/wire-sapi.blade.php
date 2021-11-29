@@ -1,7 +1,11 @@
  <div class="row">
-     <div class="col-6 mb-4">
-         <button wire:click="create" class="btn btn-primary"><i class="fe fe-plus"></i>
+     <div class="col-12 mb-4">
+         <button wire:click="create" class="btn btn-outline-primary"><i class="fe fe-plus"></i>
              Tambahkan Sapi</button>
+         <button wire:click="openSearchModal" class="btn btn-outline-primary"><i class="fe fe-search"></i>
+             Filter Pencarian</button>
+         <button wire:click="exportToExcel" class="btn btn-outline-success"><i class="fe fe-printer"></i>
+             Export to Excel</button>
      </div>
      <div class="col-xl-12 col-lg-12">
          <div class="card">
@@ -71,7 +75,12 @@
                                              <img src="{{ url('storage/photos_thumb', $item->foto_rumah) }}"
                                                  alt="Image" style="height: 30px; width: 30px;">
                                          </td>
-                                         <td>{{ $item->eartag }}</td>
+                                         <td>
+                                             <a href="{{ route('sapi.show', $item->eartag) }}">
+
+                                                 {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                                             </a>
+                                         </td>
                                          <td>{{ $item->nama_sapi }}</td>
                                          <td>{{ $item->tanggal_lahir }}</td>
                                          <td>
@@ -122,6 +131,13 @@
                  </div>
              </div>
 
+         </div>
+     </div>
+
+     <!-- User Form Modal -->
+     <div class="modal fade" role="dialog" tabindex="-1" id="search-form-modal">
+         <div class="modal-dialog" role="document">
+             @livewire('wirepeternaksearch')
          </div>
      </div>
 

@@ -20,8 +20,9 @@ class WireSapiForm extends Component
     use WithFileUploads;
     use LivewireAlert;
 
-    public $selectedItemId, $jenis_sapi_id, $eartag_induk, $nama_sapi,  $tanggal_lahir, $kelamin, $kondisi_lahir, $anak_ke, $eartag, $foto_depan, $foto_samping, $foto_peternak, $foto_rumah, $status_sapi_id, $peternak_id;
-    public $uniqNo, $f = 1;
+    public $selectedItemId, $jenis_sapi_id, $eartag_induk, $nama_sapi,  $tanggal_lahir, $kelamin, $kondisi_lahir, $anak_ke, $generasi, $eartag, $foto_depan, $foto_samping, $foto_peternak, $foto_rumah, $status_sapi_id, $peternak_id;
+    public $uniqNo, $f = 0;
+    public $modelId;
 
     protected $rules = [
         'jenis_sapi_id' => 'required',
@@ -33,6 +34,7 @@ class WireSapiForm extends Component
         'kelamin' => 'required',
         'kondisi_lahir' => 'required',
         'anak_ke' => 'required',
+        'generasi' => 'required',
         'eartag' => 'required',
         'foto_depan' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         'foto_samping' => 'required|image|mimes:jpg,jpeg,png|max:2048',
@@ -49,6 +51,7 @@ class WireSapiForm extends Component
         'kelamin.required' => 'this field is required',
         'kondisi_lahir.required' => 'this field is required',
         'anak_ke.required' => 'this field is required',
+        'generasi.required' => 'this field is required',
         'eartag.required' => 'this field is required',
         'foto_depan.required' => 'this field is required',
         'foto_samping.required' => 'this field is required',
@@ -66,29 +69,27 @@ class WireSapiForm extends Component
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
-        
        
     }
     public function render()
     {
-        $sapi = Sapi::all();
-        if (count($sapi) > 0) {
-            
-            $latestSapi = Sapi::latest()->first()->eartag;
-            $eartagLastSapi = explode("-", $latestSapi);
-
-
-            $this->uniqNo = $eartagLastSapi[3] +1 ;
-            
-            $uniq = sprintf("%'03d", $this->uniqNo);
-            if (!$this->selectedItemId) {
-                $this->eartag = 'MBC-F'.$this->f.'.'.$this->anak_ke.'-'.$this->eartag_induk.'-'.$uniq;
-            }
-        }else{
-            $this->eartag = 'MBC-F0.000-000-001';
-        }
         
 
+        $sapi = Sapi::all();
+        if (!$this->selectedItemId) {
+            if (count($sapi) > 0) {
+                $this->eartag = $sapi->last()->eartag + 1;
+            }else{
+                $this->eartag = 'MBC-F0.0-0-001';
+            }
+        }
+        
+           if (!$this->modelId && !$this->selectedItemId) {
+            $this->anak_ke = 0;
+            $this->generasi = "F".$this->f;
+            $this->eartag_induk = "0";
+           }
+        
         return view('livewire.wire-sapi-form',[
             'jenis_sapis' => JenisSapi::orderBy('jenis','ASC')->get(),
             'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get(),
@@ -114,6 +115,7 @@ class WireSapiForm extends Component
             'nama_sapi' => 'required',
             'kelamin' => 'required',
             'kondisi_lahir' => 'required',
+            'generasi' => 'required',
             'anak_ke' => 'required',
             'eartag' => 'required',
             
@@ -266,17 +268,29 @@ class WireSapiForm extends Component
         $this->kelamin = $model->kelamin;
         $this->kondisi_lahir = $model->kondisi_lahir;
         $this->anak_ke = $model->anak_ke;
+        $this->generasi = $model->generasi;
      }
 
      public function getCreateChild($modelId)
      {
-            $model = Sapi::find($modelId)->eartag;
-            $eartag = explode('-',$model);
-            $this->eartag_induk = $eartag[3];
+            $this->modelId = $modelId;
+            $model = Sapi::find($modelId);
+            $generasi = $model->generasi;
 
-            // dd($eartag[1]);
-            $subs = substr($eartag[1],1,1);
-            $this->f = $subs+1;
+            $this->eartag_induk = $model->eartag;
+
+            $subs = substr($generasi,1,strlen($generasi));
+            $this->generasi = "F".$subs+1;
+
+            $anakKe = Sapi::where('eartag_induk', $model->eartag)->get();
+            // dd(count($anakKe));
+            $this->anak_ke = count($anakKe)+1;
+
+            $latest = Sapi::orderBy('id')->get();
+            $this->eartag = $latest->last()->eartag + 1;
+            // $subs = substr($eartag[1],1,1);
+            // $this->f = $subs+1;
+            // $this->generasi = $this->f;
 
 
      }
@@ -293,11 +307,13 @@ class WireSapiForm extends Component
         $this->kelamin = null;
         $this->kondisi_lahir = null;
         $this->anak_ke = null;
+        $this->generasi = null;
         $this->foto_depan = null;
         $this->foto_samping = null;
         $this->foto_rumah = null;
         $this->foto_peternak = null;
         $this->peternak_id = null;
+        $this->modelId = null;
      }
 
     

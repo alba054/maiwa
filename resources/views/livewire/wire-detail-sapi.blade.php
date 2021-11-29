@@ -29,7 +29,9 @@
                     </div>
                 </div>
                 <a href="{{ url('/' . ($page = '#')) }}" class="mt-4">
-                    <h5 class="font-weight-semibold">{{ $sapi->eartag }}</h5>
+                    <h5 class="font-weight-semibold">
+                        {{ 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag }}
+                    </h5>
                 </a>
                 Nama Sapi {!! $sapi->nama_sapi !!}
                 <div>
@@ -267,7 +269,7 @@
 
                 @if ($sapi->induk != null)
                     <a href="{{ route('sapi.show', $sapi->induk->induk->eartag) }}">EARTAG INDUK
-                        {{ $sapi->induk->induk->eartag }}</a>
+                        {{ 'MBC-' . $sapi->induk->induk->generasi . '.' . $sapi->induk->induk->anak_ke . '-' . $sapi->induk->induk->eartag_induk . '-' . $sapi->induk->induk->eartag }}</a>
                 @endif
 
 
@@ -288,7 +290,7 @@
                                         <td>
 
                                             <a href="{{ route('sapi.show', $item->sapi->eartag) }}">
-                                                {{ $item->sapi->eartag }}</a>
+                                                {{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}</a>
                                         </td>
                                     </tr>
                                 @endforeach

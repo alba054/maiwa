@@ -297,7 +297,7 @@
                                             <td>{{ $loop->iteration }}</td>
 
                                             <td><a
-                                                    href="{{ route('sapi.show', $item->eartag) }}">{{ $item->eartag }}</a>
+                                                    href="{{ route('sapi.show', $item->eartag) }}">{{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}</a>
                                             </td>
                                             <td>{{ $item->nama_sapi }}</td>
                                             <td>{{ $item->tanggal_lahir }}</td>

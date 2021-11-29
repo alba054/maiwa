@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\PerlakuanExport;
 use App\Models\Hormon;
 use App\Models\Obat;
 use App\Models\Perlakuan;
@@ -12,14 +13,21 @@ use App\Models\Vitamin;
 use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WireMonPerlakuan extends Component
 {
     use LivewireAlert;
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
 
     public $selectedItemId;
     public $startDate, $endDate, $sapiId, $peternakId, $pendampingId, $tsrId, $obatId, $vitaminId, $vaksinId, $hormonId;
     public $datax = array(), $dataLabel = array();
+    public $rows = "10";
+    public $yearNow;
 
 
     protected $listeners = [
@@ -35,8 +43,14 @@ class WireMonPerlakuan extends Component
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
-        $this->startDate = now()->subDays(30)->format('Y/m/d');
+        $filterTahun = Carbon::now()->year;
+        $monthStart = '01';
+
+        // $this->startDate = now()->subDays(30)->format('Y/m/d');
+        $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
         $this->endDate = now()->format('Y/m/d');
+
+        $this->yearNow = $filterTahun;
 
     }
     public function openSearchModal()
@@ -44,11 +58,17 @@ class WireMonPerlakuan extends Component
         $this->emit('cleanVars');
         $this->dispatchBrowserEvent('openModalSearch');
     }
+
+    public function exportToExcel()
+    {
+        return Excel::download(new PerlakuanExport($this->resultData()), 'Perlakuan Kesehatan.xlsx');
+
+    }
     public function formFilter($data)
     {
         // dd($data['startDate']);
 
-        $this->startDate = $data['startDate'] == null ? $this->endDate : $data['startDate'];
+        $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
         $this->endDate = $data['endDate'] == null ? $this->endDate : $data['endDate'];
         
         $this->obatId = $data['obatId'];
@@ -103,7 +123,7 @@ class WireMonPerlakuan extends Component
         })
         
         ->WhereBetween('tgl_perlakuan',[$this->startDate, $this->endDate])
-        ->get();
+        ->paginate($this->rows);
     }
 
     public function groupData()

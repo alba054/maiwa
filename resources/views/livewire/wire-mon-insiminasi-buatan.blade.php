@@ -12,11 +12,13 @@
          </div>
          <div class="page-rightheader">
              <div class="btn btn-list">
-                 <button wire:click="openAddModal" class="btn btn-info"><i class="fe fe-plus mr-1"></i>
+                 <button wire:click="openAddModal" class="btn btn-outline-info"><i class="fe fe-plus mr-1"></i>
                      Tambahkan</button>
-                 <button wire:click="openSearchModal" class="btn btn-danger"><i class="fe fe-search mr-1"></i>
+                 <button wire:click="openSearchModal" class="btn btn-outline-danger"><i class="fe fe-search mr-1"></i>
                      Pencarian
                  </button>
+                 <button wire:click="exportToExcel" class="btn btn-outline-success"><i class="fe fe-printer"></i>
+                     Export to Excel</button>
 
              </div>
          </div>
@@ -28,6 +30,18 @@
              <div class="card">
                  <div class="card-header">
                      <div class="card-title">Tabel Insiminasi Buatan</div>
+                     <div class="card-options">
+                         <select class="custom-select" wire:model="rows">
+                             <option value="5">5 Rows</option>
+                             <option value="10">10 Rows</option>
+                             <option value="50">50 Rows</option>
+                             <option value="100">100 Rows</option>
+                             <option value="250">250 Rows</option>
+                             <option value="500">500 Rows</option>
+
+
+                         </select>
+                     </div>
                  </div>
                  <div class="card-body">
                      <div class="table-responsive">
@@ -54,18 +68,21 @@
                                              <td>{{ $item->waktu_ib }}</td>
                                              <td>{{ $item->dosis_ib }}</td>
                                              <td>{{ $item->strow->kode_batch }}</td>
-                                             <td>{{ $item->sapi->eartag }}</td>
+                                             <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
+                                             </td>
                                              <td>{{ $item->peternak->nama_peternak }}</td>
                                              <td>{{ $item->pendamping->user->name }}
                                              </td>
                                              <td>{{ $item->tsr->user->name }}</td>
                                              <td class="text-right">
                                                  <i wire:click="selectedItem({{ $item->id }},'export')"
-                                                     class="fe fe-list f-16 btn btn-warning" style="cursor:pointer"></i>
+                                                     class="fe fe-list f-16 btn btn-outline-warning"
+                                                     style="cursor:pointer"></i>
                                                  <i wire:click="selectedItem({{ $item->id }},'update')"
-                                                     class="fe fe-edit f-16 btn btn-success" style="cursor:pointer"></i>
+                                                     class="fe fe-edit f-16 btn btn-outline-success"
+                                                     style="cursor:pointer"></i>
                                                  <i wire:click="selectedItem({{ $item->id }},'delete')"
-                                                     class="fe fe-trash-2 f-16 btn btn-danger"
+                                                     class="fe fe-trash-2 f-16 btn btn-outline-danger"
                                                      style="cursor:pointer"></i>
                                              </td>
                                          </tr>
@@ -78,6 +95,8 @@
 
 
                          </table>
+                         {{ $insiminasi_buatans->links() }}
+
                      </div>
 
                      <div class="dimmer active" style="height: 5px; margin-top: 0;" wire:loading>
@@ -95,7 +114,7 @@
          <div class="col-xl-12 col-lg-12 col-md-12" wire:ignore>
              <div class="card">
                  <div class="card-header">
-                     <h3 class="card-title">Grafik Insiminasi Buatan</h3>
+                     <h3 class="card-title">Grafik Insiminasi Buatan {{ $yearNow }}</h3>
 
                  </div>
                  <div class="card-body">

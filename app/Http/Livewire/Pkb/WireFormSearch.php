@@ -18,7 +18,7 @@ class WireFormSearch extends Component
     public function render()
     {
         return view('livewire.pkb.wire-form-search',[
-            'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
+            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
             'pendampings' => Pendamping::orderBy('id','ASC')->get(),
             'tsrs' => Tsr::orderBy('id','ASC')->get(),
             'metodes' => Metode::orderBy('metode','ASC')->get(),

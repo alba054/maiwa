@@ -42,8 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('create', [PostController::class, 'store'])->name('posts.store');
         Route::get('{post:slug}', [PostController::class, 'show'])->name('posts.show');
         Route::get('{post:slug}/edit', [PostController::class, 'edit'])->name('posts.edit');
-        Route::put('{post:slug}/edit', [PostController::class, 'update'])->name('posts.update');
-        
+        Route::put('{post:slug}/edit', [PostController::class, 'update'])->name('posts.update'); 
     });
 
     

@@ -15,7 +15,7 @@ class WireFormPerformaSearch extends Component
     public function render()
     {
         return view('livewire.performa.wire-form-performa-search',[
-            'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
+            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
             'pendampings' => Pendamping::orderBy('id','ASC')->get(),
             'tsrs' => Tsr::orderBy('id','ASC')->get(),
             'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get(),

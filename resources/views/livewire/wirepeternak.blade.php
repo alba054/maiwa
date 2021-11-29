@@ -1,10 +1,12 @@
  <div>
 
-     <div class="col-6 mb-4">
+     <div class="col-12 mb-4">
          <button wire:click="create" class="btn btn-outline-primary"><i class="fe fe-plus"></i>
              Tambahkan Peternak Baru</button>
          <button wire:click="openSearchModal" class="btn btn-outline-primary"><i class="fe fe-search"></i>
              Filter Pencarian</button>
+         <button wire:click="exportToExcel" class="btn btn-outline-success"><i class="fe fe-printer"></i>
+             Export to Excel</button>
      </div>
 
      <div class="col-xl-12 col-lg-12">

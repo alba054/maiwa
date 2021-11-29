@@ -45,7 +45,7 @@ class WireFormIbAdd extends Component
     {
         
         return view('livewire.ib.wire-form-ib-add',[
-            'sapis' => Sapi::orderBy('nama_sapi','ASC')->get(),
+            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
             'strows' => Strow::orderBy('kode_batch','ASC')->get(),
         ]);
     }

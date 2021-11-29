@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\SapiExport;
 use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\Sapi;
@@ -9,7 +10,7 @@ use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\WithPagination;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class WireSapi extends Component
 {
@@ -38,6 +39,7 @@ class WireSapi extends Component
                 $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');   
                 $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');   
                 $query->orWhere('tanggal_lahir','like','%'.$this->searchTerm.'%');   
+                $query->orWhere('generasi','like','%'.$this->searchTerm.'%');   
                  
             }
 
@@ -46,6 +48,31 @@ class WireSapi extends Component
             }
         })
         ->paginate(10);
+    }
+    public function exportData()
+    {
+        return Sapi::with(['jenis_sapi','peternak','status_sapi'])
+        ->latest()
+        ->where(function ($query){
+            if($this->searchTerm != ""){
+                $query->where('eartag','like','%'.$this->searchTerm.'%');
+                $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');   
+                $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');   
+                $query->orWhere('tanggal_lahir','like','%'.$this->searchTerm.'%');   
+                $query->orWhere('generasi','like','%'.$this->searchTerm.'%');   
+                 
+            }
+
+            if($this->pendampingId != null){
+                $query->Where('pendamping_id','like','%'.$this->pendampingId.'%');
+            }
+        })
+        ->get();
+    }
+    public function exportToExcel()
+    {
+        return Excel::download(new SapiExport($this->exportData()), 'sapi.xlsx');
+
     }
     public function render()
     {

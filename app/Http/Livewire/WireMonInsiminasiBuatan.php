@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\IBExport;
 use App\Models\InsiminasiBuatan;
 use App\Models\Sapi;
 use App\Models\Strow;
@@ -9,15 +10,22 @@ use App\Models\User;
 use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WireMonInsiminasiBuatan extends Component
 {
     use LivewireAlert;
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
 
     public $selectedItemId, $waktu_ib, $dosis_ib, $strow_id, $sapi_id;
     public $startDate, $endDate, $sapiId, $userId, $searchTerm, $strowId, $peternakId, $pendampingId, $tsrId;
 
     public $datax = array(), $dataLabel = array();
+    public $rows = "10";
+    public $yearNow;
 
      protected $rules = [
         'dosis_ib' => 'required',
@@ -45,6 +53,8 @@ class WireMonInsiminasiBuatan extends Component
         $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
         // $this->startDate = now()->subDays(30)->format('Y/m/d');
         $this->endDate = now()->format('Y/m/d');
+        $this->yearNow = $filterTahun;
+
 
     }
     public function openSearchModal()
@@ -57,6 +67,12 @@ class WireMonInsiminasiBuatan extends Component
         $this->emit('cleanVars');
         $this->dispatchBrowserEvent('openModalAdd');
     }
+    public function exportToExcel()
+    {
+        return Excel::download(new IBExport($this->resultData()), 'Insiminasi Buatan.xlsx');
+
+    }
+
 
     public function formFilter($data)
     {
@@ -103,7 +119,7 @@ class WireMonInsiminasiBuatan extends Component
         })
         
         ->WhereBetween('waktu_ib',[$this->startDate, $this->endDate])
-        ->get();
+        ->paginate($this->rows);
     }
 
     public function groupData()

@@ -58,9 +58,16 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Anak Ke -<span class="text-danger">*</span></label>
+                    <label class="form-label">Anak Ke <span class="text-danger">*</span></label>
                     <input wire:model="anak_ke" type="number" class="form-control" placeholder="e.g: 10">
                     @error('anak_ke')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Generasi Ke <span class="text-danger">*</span></label>
+                    <input wire:model="generasi" type="text" class="form-control" placeholder="e.g: F10">
+                    @error('generasi')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
@@ -86,16 +93,39 @@
                     @enderror
                 </div>
 
+
                 <div class="form-group">
                     <label class="form-label">Jenis Kelamin<span class="text-danger">*</span></label>
-                    <input wire:model="kelamin" type="text" class="form-control" placeholder="e.g: Jantan/Betina">
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1"
+                            wire:model="kelamin" value="Jantan">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Jantan
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2"
+                            wire:model="kelamin" value="Betina">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Betina
+                        </label>
+                    </div>
                     @error('kelamin')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
+
                 <div class="form-group">
                     <label class="form-label">Kondisi Lahir<span class="text-danger">*</span></label>
-                    <input wire:model="kondisi_lahir" type="text" class="form-control" placeholder="e.g: Aman">
+
+                    <select class="custom-select" wire:model="kondisi_lahir">
+                        <option value="">Pilih Kondisi Lahir</option>
+                        <option value="Normal">Normal</option>
+                        <option value="Mati">Mati</option>
+                        <option value="Operasi Sesar">Operasi Sesar</option>
+
+                    </select>
                     @error('kondisi_lahir')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror

@@ -12,11 +12,13 @@
         </div>
         <div class="page-rightheader">
             <div class="btn btn-list">
-                <button wire:click="create" class="btn btn-info"><i class="fe fe-plus mr-1"></i>
+                <button wire:click="create" class="btn btn-outline-info"><i class="fe fe-plus mr-1"></i>
                     Tambahkan</button>
-                <button wire:click="openSearchModal" class="btn btn-danger"><i class="fe fe-search mr-1"></i>
+                <button wire:click="openSearchModal" class="btn btn-outline-danger"><i class="fe fe-search mr-1"></i>
                     Pencarian
                 </button>
+                <button wire:click="exportToExcel" class="btn btn-outline-success"><i class="fe fe-printer"></i>
+                    Export to Excel</button>
 
             </div>
         </div>
@@ -66,7 +68,8 @@
                                     @foreach ($perlakuans as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->sapi->eartag }}</td>
+                                            <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
+                                            </td>
                                             <td>{{ $item->tgl_perlakuan }}</td>
                                             <td>{{ $item->obat->name }}</td>
                                             <td>{{ $item->dosis_obat }}</td>
@@ -84,11 +87,13 @@
 
                                             <td class="text-right">
                                                 <i wire:click="selectedItem({{ $item->id }},'export')"
-                                                    class="fe fe-list f-16 btn btn-warning" style="cursor:pointer"></i>
+                                                    class="fe fe-list f-16 btn btn-outline-warning"
+                                                    style="cursor:pointer"></i>
                                                 <i wire:click="selectedItem({{ $item->id }},'update')"
-                                                    class="fe fe-edit f-16 btn btn-success" style="cursor:pointer"></i>
+                                                    class="fe fe-edit f-16 btn btn-outline-success"
+                                                    style="cursor:pointer"></i>
                                                 <i wire:click="selectedItem({{ $item->id }},'delete')"
-                                                    class="fe fe-trash-2 f-16 btn btn-danger"
+                                                    class="fe fe-trash-2 f-16 btn btn-outline-danger"
                                                     style="cursor:pointer"></i>
                                             </td>
                                         </tr>
@@ -102,6 +107,7 @@
 
 
                         </table>
+                        {{ $perlakuans->links() }}
                     </div>
 
                     <div class="dimmer active" style="height: 5px; margin-top: 0;" wire:loading>
@@ -119,7 +125,7 @@
         <div class="col-xl-12 col-lg-12 col-md-12" wire:ignore>
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Grafik Perlakuan Kesehatan</h3>
+                    <h3 class="card-title">Grafik Perlakuan Kesehatan {{ $yearNow }}</h3>
 
                 </div>
                 <div class="card-body">

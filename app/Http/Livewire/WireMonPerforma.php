@@ -1,20 +1,28 @@
 <?php
 namespace App\Http\Livewire;
 
+use App\Exports\PerformaExport;
 use App\Models\Performa;
 use App\Models\Sapi;
 use App\Models\User;
 use Carbon\Carbon;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
 
 class WireMonPerforma extends Component
 {
     use LivewireAlert;
+    use WithPagination;
+
+    protected $paginationTheme = 'bootstrap';
 
     public $selectedItemId, $tanggal_performa, $tinggi_badan, $berat_badan, $panjang_badan, $lingkar_dada, $bsc, $sapi_id;
     public $startDate, $endDate, $sapiId, $userId, $searchTerm, $peternakId, $pendampingId, $tsrId, $bscId;
     public $datax = array(), $dataLabel = array();
+
+    public $rows = "10";
 
      protected $rules = [
         'tinggi_badan' => 'required',
@@ -100,7 +108,7 @@ class WireMonPerforma extends Component
         })
         
         ->WhereBetween('tanggal_performa',[$this->startDate, $this->endDate])
-        ->get();
+        ->paginate($this->rows);
     }
     public function groupData()
     {
@@ -119,6 +127,11 @@ class WireMonPerforma extends Component
         }
 
       
+    }
+    public function exportToExcel()
+    {
+        return Excel::download(new PerformaExport($this->resultData()), 'Performa(Recording).xlsx');
+
     }
 
     public function render()
