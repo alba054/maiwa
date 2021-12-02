@@ -20,7 +20,6 @@ class MatiExport implements FromView, ShouldAutoSize, WithEvents
         $this->rows = count($resultData)+2;
 
     }
-
     public function view(): View
     {
         setlocale(LC_TIME, 'id_ID');

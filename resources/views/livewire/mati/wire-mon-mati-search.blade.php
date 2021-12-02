@@ -33,6 +33,18 @@
                     @endforeach
                 </select>
             </div>
+
+            <div class="form-group">
+                <select class="custom-select" wire:model="keterangan">
+                    <option value="">Pilih Keterangan</option>
+                    @foreach ($keterangans as $item)
+                        <option value="{{ $item['keterangan'] }}">
+                            {{ $item['keterangan'] }}
+                        </option>
+                    @endforeach
+                </select>
+
+            </div>
             <div class="form-group">
                 <select class="custom-select" wire:model="peternakId">
                     <option value="">Pilih Peternak</option>

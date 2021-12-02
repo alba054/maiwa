@@ -15,6 +15,6 @@ class Strow extends Model
         ];
     public function sapi()  
     {
-        return $this->belongsTo(Sapi::class)->with(['status_sapi','jenis_sapi']);
+        return $this->belongsTo(Sapi::class)->with(['peternak','jenis_sapi']);
     }
 }

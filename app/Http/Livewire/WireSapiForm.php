@@ -6,11 +6,11 @@ use App\Models\JenisSapi;
 use App\Models\Notifikasi;
 use App\Models\Peternak;
 use App\Models\Sapi;
-use App\Models\StatusSapi;
 use Intervention\Image\ImageManager;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Helper\Constcoba;
+use App\Models\IndukAnak;
 use App\Models\PeternakSapi;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 
@@ -20,13 +20,14 @@ class WireSapiForm extends Component
     use WithFileUploads;
     use LivewireAlert;
 
-    public $selectedItemId, $jenis_sapi_id, $eartag_induk, $nama_sapi,  $tanggal_lahir, $kelamin, $kondisi_lahir, $anak_ke, $generasi, $eartag, $foto_depan, $foto_samping, $foto_peternak, $foto_rumah, $status_sapi_id, $peternak_id;
+    public $selectedItemId, $jenis_sapi_id, $eartag_induk, $nama_sapi,  $tanggal_lahir, $kelamin, $kondisi_lahir, $anak_ke, $generasi, $eartag, $foto_depan, $foto_samping, $foto_peternak, $foto_rumah,  $peternak_id;
     public $uniqNo, $f = 0;
     public $modelId;
 
+    public $indukId;
+
     protected $rules = [
         'jenis_sapi_id' => 'required',
-        'status_sapi_id' => 'required',
         'peternak_id' => 'required',
         'eartag_induk' => 'required',
         'nama_sapi' => 'required',
@@ -44,7 +45,6 @@ class WireSapiForm extends Component
     protected $messages = [
         'jenis_sapi_id.required' => 'this field is required',
         'peternak_id.required' => 'this field is required',
-        'status_sapi_id.required' => 'this field is required',
         'eartag_induk.required' => 'this field is required',
         'nama_sapi.required' => 'this field is required',
         'tanggal_lahir.required' => 'this field is required',
@@ -80,7 +80,7 @@ class WireSapiForm extends Component
             if (count($sapi) > 0) {
                 $this->eartag = $sapi->last()->eartag + 1;
             }else{
-                $this->eartag = 'MBC-F0.0-0-001';
+                $this->eartag = '1';
             }
         }
         
@@ -93,7 +93,6 @@ class WireSapiForm extends Component
         return view('livewire.wire-sapi-form',[
             'jenis_sapis' => JenisSapi::orderBy('jenis','ASC')->get(),
             'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get(),
-            'status_sapis' => StatusSapi::orderBy('status','ASC')->get(),
         ]);
     }
 
@@ -110,7 +109,6 @@ class WireSapiForm extends Component
         $validateData = array_merge($validateData,[
             'jenis_sapi_id' => 'required',
             'peternak_id' => 'required',
-            'status_sapi_id' => 'required',
             'eartag_induk' => 'required',
             'nama_sapi' => 'required',
             'kelamin' => 'required',
@@ -202,6 +200,13 @@ class WireSapiForm extends Component
 
         ]);
 
+        if ($this->indukId) {
+            IndukAnak::create([
+            'induk_id' => $this->indukId,
+            'anak_id' => $sapi->id,
+            ]);
+        }
+
         $save ? $this->emit('isSuccess',"Berhasil") : $this->emit('isError',"Terjadi kesalahan");
         // dd($save);
 
@@ -260,7 +265,6 @@ class WireSapiForm extends Component
         $this->selectedItemId = $modelId;
         $model = Sapi::find($this->selectedItemId);
         $this->jenis_sapi_id = $model->jenis_sapi_id;
-        $this->status_sapi_id = $model->status_sapi_id;
         $this->peternak_id = $model->peternak_id;
         $this->eartag = $model->eartag;
         $this->eartag_induk = $model->eartag_induk;
@@ -277,7 +281,10 @@ class WireSapiForm extends Component
             $model = Sapi::find($modelId);
             $generasi = $model->generasi;
 
+            // dd($model->id);
+
             $this->eartag_induk = $model->eartag;
+            $this->peternak_id = $model->peternak_id;
 
             $subs = substr($generasi,1,strlen($generasi));
             $this->generasi = "F".$subs+1;
@@ -288,6 +295,8 @@ class WireSapiForm extends Component
 
             $latest = Sapi::orderBy('id')->get();
             $this->eartag = $latest->last()->eartag + 1;
+
+            $this->indukId = $model->id;
             // $subs = substr($eartag[1],1,1);
             // $this->f = $subs+1;
             // $this->generasi = $this->f;
@@ -298,7 +307,6 @@ class WireSapiForm extends Component
     public function cleanVars()
      {
         $this->jenis_sapi_id = null;
-        $this->status_sapi_id = null;
         $this->selectedItemId = null;
         $this->jenis_sapi_id = null;
         $this->eartag = null;
@@ -314,6 +322,7 @@ class WireSapiForm extends Component
         $this->foto_peternak = null;
         $this->peternak_id = null;
         $this->modelId = null;
+        $this->indukId = null;
      }
 
     

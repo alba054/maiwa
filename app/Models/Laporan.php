@@ -19,12 +19,11 @@ class Laporan extends Model
         'user_id' => 'integer',
         'peternak_id' => 'integer',
         'sapi_id' => 'integer',
-        
         ];
         
     public function sapi()  
     {
-        return $this->belongsTo(Sapi::class)->with(['status_sapi','jenis_sapi']);
+        return $this->belongsTo(Sapi::class)->with(['peternak','jenis_sapi']);
     }
 
     public function peternak()  

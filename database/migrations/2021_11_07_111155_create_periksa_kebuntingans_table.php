@@ -30,6 +30,7 @@ class CreatePeriksaKebuntingansTable extends Migration
             
             $table->string('waktu_pk');
             $table->boolean('status');
+            $table->boolean('reproduksi');
             
             $table->unsignedBigInteger('metode_id')->nullable();
             $table->foreign('metode_id')->references('id')->on('metodes');

@@ -10,9 +10,21 @@
      <div class="col-xl-12 col-lg-12">
          <div class="card">
              <div class="card-header">
-                 <div class="col">
-                     <div class="card-title">Tabel Sapi</div>
+
+                 <div class="card-title">Tabel Sapi</div>
+                 <div class="card-options">
+                     <select class="custom-select" wire:model="rows">
+                         <option value="5">5 Rows</option>
+                         <option value="10">10 Rows</option>
+                         <option value="50">50 Rows</option>
+                         <option value="100">100 Rows</option>
+                         <option value="250">250 Rows</option>
+                         <option value="500">500 Rows</option>
+
+
+                     </select>
                  </div>
+
 
              </div>
              <div class="card-body">
@@ -21,14 +33,7 @@
 
                      </div>
                      <div class="col-sm-4">
-                         <div class="form-group">
-                             <select class="custom-select" wire:model="pendampingId">
-                                 <option value="">Pilih Pendamping</option>
-                                 @foreach ($pendampings as $item)
-                                     <option value="{{ $item->id }}"> {{ $item->user->name }} </option>
-                                 @endforeach
-                             </select>
-                         </div>
+
                      </div>
                      <div class="col-sm-4">
                          <div class="form-group">
@@ -51,7 +56,6 @@
                                      <th>Umur</th>
                                      <th>Kelamin</th>
                                      <th>Jenis Sapi</th>
-                                     <th>Status Sapi</th>
                                      <th>Peternak</th>
                                      <th>Pendamping</th>
 
@@ -93,7 +97,6 @@
                                          </td>
                                          <td>{{ $item->kelamin }}</td>
                                          <td>{{ $item->jenis_sapi->jenis }}</td>
-                                         <td>{{ $item->status_sapi->status }}</td>
                                          <td>{{ $item->peternak->nama_peternak }}</td>
                                          <td>{{ $item->peternak->pendamping->user->name }}</td>
 
@@ -137,7 +140,7 @@
      <!-- User Form Modal -->
      <div class="modal fade" role="dialog" tabindex="-1" id="search-form-modal">
          <div class="modal-dialog" role="document">
-             @livewire('wirepeternaksearch')
+             @livewire('wire-sapi-search')
          </div>
      </div>
 

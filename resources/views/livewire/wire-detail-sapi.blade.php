@@ -38,10 +38,6 @@
                     Jenis Sapi {!! $sapi->jenis_sapi->jenis !!}
 
                 </div>
-                <div>
-                    Status Sapi {!! $sapi->status_sapi->status . ' , ' . $sapi->status_sapi->ket_status !!}
-
-                </div>
 
             </div>
         </div>

@@ -3,9 +3,11 @@
 namespace App\Http\Livewire;
 
 use App\Exports\SapiExport;
+use App\Helper\Constcoba;
 use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\Sapi;
+use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -18,7 +20,12 @@ class WireSapi extends Component
     use LivewireAlert;
 
     protected $paginationTheme = 'bootstrap';
-    public $selectedItemId, $searchTerm, $peternak_id, $pendampingId;
+    public $selectedItemId, $searchTerm, $peternakId, $pendampingId, $tsrId, $sapiId, $jenisSapiId;
+    public $startDate, $endDate;
+
+    public $rows = "10";
+
+
     protected $listeners = [
         'confirmed',
         'cancelled',
@@ -26,16 +33,37 @@ class WireSapi extends Component
         'isSuccess',
         'isError',
         'refreshParent'=>'$refresh',
-        'isUpdate'
+        'isUpdate',
+        'formFilter'
     ];
+
+    public function mount()
+    {
+        date_default_timezone_set("Asia/Makassar");
+
+        $now = now()->format('Y-m-d');
+        $filterTahun = Carbon::now()->year;
+        $monthStart = '01';
+
+        // $this->startDate = now()->subDays(30)->format('Y/m/d');
+        $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
+        $this->endDate = now()->format('Y/m/d');
+
+        // dd(Constcoba::getStatus());
+
+    }
 
     public function resultData()
     {
-        return Sapi::with(['jenis_sapi','peternak','status_sapi'])
+        $penId = $this->pendampingId;
+        $tsrId = $this->tsrId;
+
+        return Sapi::with(['jenis_sapi','peternak'])
         ->latest()
         ->where(function ($query){
             if($this->searchTerm != ""){
                 $query->where('eartag','like','%'.$this->searchTerm.'%');
+                $query->orWhere('eartag_induk','like','%'.$this->searchTerm.'%');   
                 $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');   
                 $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');   
                 $query->orWhere('tanggal_lahir','like','%'.$this->searchTerm.'%');   
@@ -43,35 +71,36 @@ class WireSapi extends Component
                  
             }
 
-            if($this->pendampingId != null){
-                $query->Where('pendamping_id','like','%'.$this->pendampingId.'%');
+            if($this->sapiId != null){
+                $query->Where('id','like','%'.$this->sapiId.'%');
+            }
+            if($this->peternakId != null){
+                $query->Where('peternak_id','like','%'.$this->peternakId.'%');
+            }
+            if($this->jenisSapiId != null){
+                $query->Where('jenis_sapi_id','like','%'.$this->jenisSapiId.'%');
             }
         })
-        ->paginate(10);
-    }
-    public function exportData()
-    {
-        return Sapi::with(['jenis_sapi','peternak','status_sapi'])
-        ->latest()
-        ->where(function ($query){
-            if($this->searchTerm != ""){
-                $query->where('eartag','like','%'.$this->searchTerm.'%');
-                $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');   
-                $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');   
-                $query->orWhere('tanggal_lahir','like','%'.$this->searchTerm.'%');   
-                $query->orWhere('generasi','like','%'.$this->searchTerm.'%');   
-                 
+        ->whereHas('peternak', function($q) use($penId) {
+            if($penId != null){
+                $q->where('pendamping_id', $penId);
             }
+            
+        })
+        ->whereHas('peternak.pendamping', function($q) use($tsrId) {
+            if($tsrId != null){
+                $q->where('tsr_id', $tsrId);
+            }
+            
+        })
+        ->WhereBetween('tanggal_lahir',[$this->startDate, $this->endDate])
 
-            if($this->pendampingId != null){
-                $query->Where('pendamping_id','like','%'.$this->pendampingId.'%');
-            }
-        })
-        ->get();
+        ->paginate($this->rows);
     }
+    
     public function exportToExcel()
     {
-        return Excel::download(new SapiExport($this->exportData()), 'sapi.xlsx');
+        return Excel::download(new SapiExport($this->resultData()), 'sapi.xlsx');
 
     }
     public function render()
@@ -137,6 +166,26 @@ class WireSapi extends Component
     {
         $this->emit('cleanVars');
         $this->dispatchBrowserEvent('openModal');
+    }
+    public function openSearchModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalSearch');
+    }
+
+    public function formFilter($data)
+    {
+        // dd($data);
+
+        $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
+        $this->endDate = $data['endDate'] == null ? $this->endDate : $data['endDate'];
+        $this->sapiId = $data['sapiId'];
+        $this->peternakId = $data['peternakId'];
+        $this->pendampingId = $data['pendampingId'];
+        $this->tsrId = $data['tsrId'];
+        $this->jenisSapiId = $data['jenisSapiId'];
+
+
     }
 
      public function cleanVars()

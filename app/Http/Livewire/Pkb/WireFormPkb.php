@@ -6,6 +6,7 @@ use App\Models\Hasil;
 use App\Models\Laporan;
 use App\Models\Metode;
 use App\Models\PeriksaKebuntingan;
+use App\Models\Peternak;
 use App\Models\PeternakSapi;
 use App\Models\Sapi;
 use App\Models\Upah;
@@ -18,14 +19,14 @@ class WireFormPkb extends Component
 {
     use WithFileUploads;
     use LivewireAlert;
-    public $foto, $selectedItemId, $metode_id, $hasil_id, $sapi_id, $waktu_pk, $status;
+    public $foto, $selectedItemId, $metode_id, $hasil_id, $sapi_id, $waktu_pk, $status , $reproduksi;
     protected $rules = [
         'metode_id' => 'required',
         'hasil_id' => 'required',
         'sapi_id' => 'required',
         'foto' => 'required',
         'status' => 'required',
-
+        'reproduksi' => 'required',
     ];
     protected $messages = [
         
@@ -42,6 +43,7 @@ class WireFormPkb extends Component
 
     public function render()
     {
+        
         return view('livewire.pkb.wire-form-pkb',[
             'metodes' => Metode::orderBy('metode','ASC')->get(),
             'hasils' => Hasil::orderBy('hasil','ASC')->get(),
@@ -55,77 +57,61 @@ class WireFormPkb extends Component
         date_default_timezone_set("Asia/Makassar");
         $today = date('Y/m/d');
         $this->waktu_pk = $today;
+        $this->status = true;
+        $this->reproduksi = true;
+
+        // dd($this->status);
     }
 
     public function save(){
-        // dd($this->status);
-        $this->selectedItemId ?   $this->update() : $this->store();    
-    }
 
-    public function store()
-    {
+        // dd($this->status);
         date_default_timezone_set("Asia/Makassar");
         $today = date('Y/m/d');
 
-        $data = $this->validate();
-        $data['waktu_pk'] = $today;
-
-        $user = PeternakSapi::orderBy('id','DESC')->where('sapi_id', $this->sapi_id)->first();
-        if ($user) {
-            $res_foto = $this->foto;
-            if (!empty($res_foto)){
-                $data['foto'] = $this->handleImageIntervention($res_foto);
-            }
-    
-            $data['peternak_id'] = $user->peternak_id;
-            $data['pendamping_id'] = $user->pendamping_id;
-            $data['tsr_id'] = $user->tsr_id;
-    
-            // dd($data);
-            $save = $this->selectedItemId ? PeriksaKebuntingan::find($this->selectedItemId)->update($data) : PeriksaKebuntingan::create($data);
-            $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
-    
-            $upah = Upah::find(1);
-            Laporan::create([
-               'sapi_id' => $this->sapi_id,
-               'peternak_id' => $data['peternak_id'], 
-               'pendamping_id' => $data['pendamping_id'], 
-               'tsr_id' => $data['tsr_id'], 
-               'tanggal' => $today, 
-               'perlakuan' => $upah->detail,
-               'upah' => $upah->price,
-            ]);
-            
-            $this->emit('refreshParent');
-            $this->dispatchBrowserEvent('closeModalAdd');
-            $this->cleanVars();  
-
-        } else {
-            $this->isError("Belum ada relasi sapi");
-        }
-        
-        
-        
-    }
-    public function update()
-    {
-         $validateData = [];
-        
+        $validateData = [];
         $validateData = array_merge($validateData,[
+            'sapi_id' => 'required',
             'metode_id' => 'required',
             'hasil_id' => 'required',
-            'sapi_id' => 'required',
             'status' => 'required',
+            'reproduksi' => 'required',
         ]);
+
+        if (!$this->selectedItemId) {
+            $validateData = array_merge($validateData,[
+                'foto' => 'required|image|max:1024',
+            ]);
+        }
 
         $data = $this->validate($validateData);
 
-        $save = PeriksaKebuntingan::find($this->selectedItemId)->update($data);
-        $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
+        $sapi = Sapi::find($this->sapi_id);
+        $peternak = Peternak::find($sapi->peternak_id);
 
-        $this->cleanVars();   
+        $data['peternak_id'] = $peternak->id;
+        $data['pendamping_id'] = $peternak->pendamping_id;
+        $data['tsr_id'] = $peternak->pendamping->tsr_id;
+
+        $data['waktu_pk'] = $today;
+
+        $save = $this->selectedItemId ? PeriksaKebuntingan::find($this->selectedItemId)->update($data) : PeriksaKebuntingan::create($data);
+        $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
+        $upah = Upah::find(1);
+        Laporan::create([
+           'sapi_id' => $this->sapi_id,
+           'peternak_id' => $data['peternak_id'], 
+           'pendamping_id' => $data['pendamping_id'], 
+           'tsr_id' => $data['tsr_id'], 
+           'tanggal' => $today, 
+           'perlakuan' => $upah->detail,
+           'upah' => $upah->price,
+        ]);
+        
         $this->emit('refreshParent');
         $this->dispatchBrowserEvent('closeModalAdd');
+        $this->cleanVars();  
+
     }
 
     public function getModelId($modelId)
@@ -137,6 +123,7 @@ class WireFormPkb extends Component
        $this->sapi_id = $data->sapi_id;
        $this->waktu_pk = $data->waktu_pk;
        $this->status = $data->status;
+       $this->reproduksi = $data->reproduksi;
 
      }
 
@@ -148,7 +135,7 @@ class WireFormPkb extends Component
        $this->hasil_id = null;
        $this->sapi_id = null;
        $this->waktu_pk = null;
-       $this->status = null;
+    //    $this->status = null;
     }
    
    public function forceCloseModal()

@@ -10,13 +10,11 @@ class PendampingPeternak extends Model
     use HasFactory;
     protected $guarded = [];
 
-    protected $casts = [ 
-        
+    protected $casts = [         
         'peternak_id' => 'integer',
         'pendamping_id' => 'integer',
         'tsr_id' => 'integer',
-        
-        
+
         ];
 
     public function peternak()  

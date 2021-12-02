@@ -39,7 +39,7 @@ class Wirehome extends Component
 
     public function sapiData()
     {
-        return Sapi::with(['jenis_sapi','peternak','status_sapi'])
+        return Sapi::with(['jenis_sapi','peternak'])
         ->latest()
         ->get();
         // ->paginate(10);

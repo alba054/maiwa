@@ -16,6 +16,21 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label">Pilih Sapi<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="sapi_id">
+                        <option value="">Please Choose</option>
+                        @foreach ($sapis as $item)
+                            <option value="{{ $item->id }}">
+                                {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('sapi_id')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">Pilih Metode<span class="text-danger">*</span></label>
                     <select class="custom-select" wire:model="metode_id">
                         <option value="">Please Choose</option>
@@ -39,37 +54,44 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Pilih Sapi<span class="text-danger">*</span></label>
-                    <select class="custom-select" wire:model="sapi_id">
-                        <option value="">Please Choose</option>
-                        @foreach ($sapis as $item)
-                            <option value="{{ $item->id }}">
-                                {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('sapi_id')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
 
                 <div class="form-group">
-                    <div class="form-label">Status IB/Kawin Alam</div>
+                    <div class="form-label">Reproduksi Normal/Unnormal</div>
                     <div>
                         <label class="custom-switch">
                             <input type="checkbox" name="custom-switch-checkbox" class="custom-switch-input"
-                                wire:model="status">
+                                wire:model="reproduksi">
                             <span class="custom-switch-indicator"></span>
-                            <span class="custom-switch-description">Bunting dengan IB ?</span>
+                            <span class="custom-switch-description">Normal ?</span>
                         </label>
                     </div>
 
-                    @error('status')
+                    @error('reproduksi')
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
 
                 </div>
+
+                @if ($hasil_id == 1)
+                    <div class="form-group">
+                        <div class="form-label">Status IB/Kawin Alam</div>
+                        <div>
+                            <label class="custom-switch">
+                                <input type="checkbox" name="custom-switch-checkbox-status" class="custom-switch-input"
+                                    wire:model="status">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Bunting dengan IB ?</span>
+                            </label>
+                        </div>
+
+                        @error('status')
+                            <small class="mt-2 text-danger">{{ $message }}</small>
+                        @enderror
+
+                    </div>
+                @endif
+
+
 
 
                 <div class="form-group">

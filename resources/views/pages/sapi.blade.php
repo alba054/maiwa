@@ -68,5 +68,23 @@
             let date = $(this).data('appointmentdate');
             eval(date).set('tanggal_lahir', $('#appointmentDateInput').val());
         });
+
+        $('#appointmentDateStart').datetimepicker({
+            // format: 'L',
+            format: 'YYYY/MM/DD'
+        });
+        $('#appointmentDateStart').on("change.datetimepicker", function(e) {
+            let date = $(this).data('appointmentdatestart');
+            eval(date).set('startDate', $('#appointmentDateStartInput').val());
+
+        });
+        $('#appointmentDateEnd').datetimepicker({
+            format: 'YYYY/MM/DD'
+        });
+
+        $('#appointmentDateEnd').on("change.datetimepicker", function(e) {
+            let date = $(this).data('appointmentdateend');
+            eval(date).set('endDate', $('#appointmentDateEndInput').val());
+        });
     </script>
 @endsection

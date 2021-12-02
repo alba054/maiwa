@@ -13,7 +13,6 @@
             <th>Umur</th>
             <th>Kelamin</th>
             <th>Jenis Sapi</th>
-            <th>Status Sapi</th>
             <th>Peternak</th>
             <th>Pendamping</th>
         </tr>
@@ -41,7 +40,6 @@
                 </td>
                 <td>{{ $item->kelamin }}</td>
                 <td>{{ $item->jenis_sapi->jenis }}</td>
-                <td>{{ $item->status_sapi->status }}</td>
                 <td>{{ $item->peternak->nama_peternak }}</td>
                 <td>{{ $item->peternak->pendamping->user->name }}</td>
             </tr>

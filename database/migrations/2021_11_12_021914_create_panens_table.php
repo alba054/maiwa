@@ -28,12 +28,10 @@ class CreatePanensTable extends Migration
             $table->unsignedBigInteger('tsr_id')->nullable();
             $table->foreign('tsr_id')->references('id')->on('tsrs');
 
-            $table->string('frek_panen');
-            $table->string('ket_panen');
-            $table->string('tgl_panen');
+            $table->string('status');
+            $table->string('keterangan');
+            $table->string('tanggal');
             
-            
-
             $table->string('foto');
 
             $table->timestamps();

@@ -54,6 +54,7 @@
                                         <th>#</th>
                                         <th>Waktu</th>
                                         <th>Sapi</th>
+                                        <th>Status</th>
                                         <th>Keterangan</th>
                                         <th>Peternak</th>
                                         <th>Pendamping</th>
@@ -68,7 +69,8 @@
                                             <td>{{ $item->tgl_panen }}</td>
                                             <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
                                             </td>
-                                            <td>{{ $item->ket_panen }}</td>
+                                            <td>{{ $item->status }}</td>
+                                            <td>{{ $item->keterangan }}</td>
 
                                             <td>{{ $item->peternak->nama_peternak }}</td>
                                             <td>{{ $item->pendamping->user->name }}

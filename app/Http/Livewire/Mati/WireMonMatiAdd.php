@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Mati;
 
+use App\Helper\Constcoba;
 use App\Models\Panen;
 use App\Models\Peternak;
 use App\Models\Sapi;
@@ -16,7 +17,7 @@ class WireMonMatiAdd extends Component
     use WithFileUploads;
     use LivewireAlert;
 
-    public $foto, $date, $selectedItemId, $sapi_id;
+    public $foto, $date, $selectedItemId, $sapi_id, $keterangan;
 
     protected $listeners = [
         'cleanVars',
@@ -28,6 +29,8 @@ class WireMonMatiAdd extends Component
     {
         return view('livewire.mati.wire-mon-mati-add',[
             'sapis' => Sapi::orderBy('generasi','ASC')->get(),
+            'keterangans' => Constcoba::getStatus()->where('status','Mati'),
+
         ]);
     }
     public function save()
@@ -36,8 +39,8 @@ class WireMonMatiAdd extends Component
 
         $validateData = [];
         $validateData = array_merge($validateData,[
-            
             'sapi_id' => 'required',
+            'keterangan' => 'required',
         ]);
 
         if (!$this->selectedItemId) {
@@ -48,12 +51,13 @@ class WireMonMatiAdd extends Component
 
         $data = $this->validate($validateData);
 
-        $data['tgl_panen'] = now()->format('Y/m/d');
+        $data['tanggal'] = now()->format('Y/m/d');
+        $data['status'] = 'Mati';
 
         $res_foto = $this->foto;
-            if (!empty($res_foto)){
-                $data['foto'] = $this->handleImageIntervention($res_foto);
-            }
+        if (!empty($res_foto)){
+            $data['foto'] = $this->handleImageIntervention($res_foto);
+        }
     
 
         $sapi = Sapi::find($this->sapi_id);
@@ -62,9 +66,8 @@ class WireMonMatiAdd extends Component
             $data['peternak_id'] = $peternak->id;
             $data['pendamping_id'] = $peternak->pendamping_id;
             $data['tsr_id'] = $peternak->pendamping->tsr_id;
-            $data['frek_panen'] = "0";
-            $data['ket_panen'] = "Mati";
-            $data['status'] = 1;
+            
+            $data['role'] = 1;
 
             $save = $this->selectedItemId ? Panen::find($this->selectedItemId)->update($data) : Panen::create($data);
             
@@ -95,6 +98,7 @@ class WireMonMatiAdd extends Component
         $this->selectedItemId = $modelId;
         $data = Panen::find($modelId);
         $this->sapi_id = $data->sapi_id;
+        $this->keterangan = $data->keterangan;
      }
 
     public function cleanVars()
@@ -102,6 +106,7 @@ class WireMonMatiAdd extends Component
         $this->selectedItemId = null;
         $this->sapi_id = null;
         $this->foto = null;
+        $this->keterangan = null;
     }
    
    public function forceCloseModal()

@@ -8,7 +8,7 @@
             <th>#</th>
             <th>Waktu Panen</th>
             <th>Sapi</th>
-            <th>Panen Ke -</th>
+            <th>Status Panen</th>
             <th>Keterangan Panen</th>
             <th>Peternak</th>
             <th>Pendamping</th>
@@ -21,11 +21,11 @@
         @foreach ($datas as $item)
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $item->tgl_panen }}</td>
+                <td>{{ $item->tanggal }}</td>
                 <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
                 </td>
-                <td>{{ $item->frek_panen }}</td>
-                <td>{{ $item->ket_panen }}</td>
+                <td>{{ $item->status }}</td>
+                <td>{{ $item->keterangan }}</td>
 
                 <td>{{ $item->peternak->nama_peternak }}</td>
                 <td>{{ $item->pendamping->user->name }}

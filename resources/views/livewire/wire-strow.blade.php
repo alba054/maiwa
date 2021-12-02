@@ -18,7 +18,9 @@
                     <select class="custom-select" wire:model="sapi_id">
                         <option value="">Please Choose</option>
                         @foreach ($sapis as $item)
-                            <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
+                            <option value="{{ $item->id }}">
+                                {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                            </option>
                         @endforeach
                     </select>
                     @error('sapi_id')

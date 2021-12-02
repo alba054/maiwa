@@ -17,7 +17,7 @@ class WireMonPanen extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate, $frekPanen, $ketPanen;
+    public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate, $status, $keterangan;
     public $datax = array(), $dataLabel = array();
 
     public $rows = "10";
@@ -87,28 +87,28 @@ class WireMonPanen extends Component
             if($this->tsrId != null){
                 $query->Where('tsr_id','like','%'.$this->tsrId.'%');
             }
-            if($this->frekPanen != null){
-                $query->Where('frek_panen','like','%'.$this->frekPanen.'%');
+            if($this->status != null){
+                $query->Where('status','like','%'.$this->status.'%');
             }
-            if($this->ketPanen != null){
-                $query->Where('ket_panen','like','%'.$this->ketPanen.'%');
+            if($this->keterangan != null){
+                $query->Where('keterangan','like','%'.$this->keterangan.'%');
             }
             
         })
-        ->where('status', 0)
-        ->WhereBetween('tgl_panen',[$this->startDate, $this->endDate])
+        ->where('role', 0)
+        ->WhereBetween('tanggal',[$this->startDate, $this->endDate])
         ->paginate($this->rows);
     }
 
     public function groupData()
     {
         $data =  Panen::with('sapi')
-        ->whereYear('tgl_panen', now()->format('Y'))
-        ->where('status',0)
-        ->orderBy('tgl_panen')
+        ->whereYear('tanggal', now()->format('Y'))
+        ->where('role',0)
+        ->orderBy('tanggal')
         ->get()
         ->groupBy(function($val) {
-            return Carbon::parse($val->tgl_panen)->format('m');
+            return Carbon::parse($val->tanggal)->format('m');
         });
 
         foreach ($data as $key => $value) {            
@@ -136,8 +136,8 @@ class WireMonPanen extends Component
         $this->peternakId = $data['peternakId'];
         $this->pendampingId = $data['pendampingId'];
         $this->tsrId = $data['tsrId'];
-        $this->ketPanen = $data['ketPanen'];
-        $this->frekPanen = $data['frekPanen'];
+        $this->keterangan = $data['keterangan'];
+        $this->status = $data['status'];
 
 
     }

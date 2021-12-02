@@ -13,7 +13,6 @@ class Sapi extends Model
 
     protected $casts = [ 
         'jenis_sapi_id' => 'integer', 
-        'status_sapi_id' => 'integer',
         'peternak_id' => 'integer',
        
         ];
@@ -55,10 +54,7 @@ class Sapi extends Model
     {
         return $this->hasMany(Strow::class);
     }
-    public function status_sapi()
-    {
-        return $this->belongsTo(StatusSapi::class);
-    }
+    
     public function laporans()
     {
         return $this->hasMany(Laporan::class);

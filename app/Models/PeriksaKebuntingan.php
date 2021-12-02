@@ -18,12 +18,14 @@ class PeriksaKebuntingan extends Model
         'tsr_id' => 'integer',
         'metode_id' => 'integer',
         'hasil_id' => 'integer',
+        'status' => 'integer',
+        'reproduksi' => 'integer',
 
         ];
 
     public function sapi()  
     {
-        return $this->belongsTo(Sapi::class)->with(['jenis_sapi','status_sapi']);
+        return $this->belongsTo(Sapi::class)->with(['jenis_sapi','peternak']);
     }
     public function metode()  
     {

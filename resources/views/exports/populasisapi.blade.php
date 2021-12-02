@@ -13,7 +13,6 @@
             <th rowspan="2"><b>UMUR</b></th>
             <th rowspan="2"><b>KELAMIN</b></th>
             <th rowspan="2"><b>JENIS SAPI</b></th>
-            <th rowspan="2"><b>STATUS SAPI</b></th>
             <th rowspan="2"><b>PETERNAK</b></th>
             <th rowspan="2"><b>PENDAMPING</b></th>
             <th colspan="2"><b>IB</b></th>
@@ -62,7 +61,6 @@
                 </td>
                 <td>{{ $item->kelamin }}</td>
                 <td>{{ $item->jenis_sapi->jenis }}</td>
-                <td>{{ $item->status_sapi->status }}</td>
                 <td>{{ $item->peternak->nama_peternak }}</td>
                 <td>{{ $item->peternak->pendamping->user->name }}</td>
                 <td>{{ $item->ib->last() ? $item->ib->last()->waktu_ib : '-' }}

@@ -32,9 +32,10 @@ class CreateSapiTable extends Migration
             $table->string('foto_samping');
             $table->string('foto_peternak');
             $table->string('foto_rumah');
+            // $table->string('status');
 
-            $table->unsignedBigInteger('status_sapi_id')->nullable();
-            $table->foreign('status_sapi_id')->references('id')->on('status_sapis');
+            // $table->unsignedBigInteger('status_sapi_id')->nullable();
+            // $table->foreign('status_sapi_id')->references('id')->on('status_sapis');
 
             $table->unsignedBigInteger('peternak_id')->nullable();
             $table->foreign('peternak_id')->references('id')->on('peternaks');

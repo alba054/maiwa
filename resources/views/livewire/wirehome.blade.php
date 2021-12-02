@@ -287,7 +287,7 @@
                                         <th>keterangan</th>
 
                                         <th>tanggal</th>
-                                        <th>frekuensi</th>
+                                        <th>status</th>
                                         <th>keterangan</th>
                                     </tr>
                                 </thead>
@@ -311,7 +311,8 @@
                                             </td>
                                             <td>{{ $item->kelamin }}</td>
                                             <td>{{ $item->jenis_sapi->jenis }}</td>
-                                            <td>{{ $item->status_sapi->status }}</td>
+                                            <td>{{ count($item->panens) == 0 ? 'Budidaya' : $item->panens->last()->keterangan }}
+                                            </td>
                                             <td>{{ count($item->anaks) }}</td>
                                             <td>{{ $item->peternak->nama_peternak }}</td>
                                             <td>{{ $item->peternak->pendamping->user->name }}</td>
@@ -336,9 +337,9 @@
 
                                             <td>{{ $item->panens->last() ? $item->panens->last()->tgl_panen : '-' }}
                                             </td>
-                                            <td>{{ $item->panens->last() ? $item->panens->last()->frek_panen : '-' }}
+                                            <td>{{ $item->panens->last() ? $item->panens->last()->status : '-' }}
                                             </td>
-                                            <td>{{ $item->panens->last() ? $item->panens->last()->ket_panen : '-' }}
+                                            <td>{{ $item->panens->last() ? $item->panens->last()->keterangan : '-' }}
                                             </td>
 
 

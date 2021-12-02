@@ -24,7 +24,7 @@ class Notifikasi extends Model
         
     public function sapi()  
     {
-        return $this->belongsTo(Sapi::class)->with(['status_sapi','jenis_sapi', 'peternak']);
+        return $this->belongsTo(Sapi::class)->with(['jenis_sapi', 'peternak']);
     }
 
     public function peternak()  

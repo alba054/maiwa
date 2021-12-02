@@ -32,19 +32,6 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Status Sapi<span class="text-danger">*</span></label>
-                    <select class="custom-select" wire:model="status_sapi_id">
-                        <option value="">Please Choose</option>
-                        @foreach ($status_sapis as $item)
-                            <option value="{{ $item->id }}"> {{ $item->status . ' ,  ' . $item->ket_status }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('jenis_sapi_id')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
 
                 <div class="form-group">
                     <label>Tanggal Lahir<span class="text-danger">*</span></label>

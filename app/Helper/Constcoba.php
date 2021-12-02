@@ -16,7 +16,7 @@ class Constcoba{
     const nilai_recording = array(6,21);
     const nilai_birahi = array(25);
     const nilai_panen = array(18,24);
-
+    
     static public function sendFCM($token, $title, $body, $role)
     {
         $SERVER_API_KEY = "AAAAXIxpSbY:APA91bEQ__NawWw36uFJA5BakyFdXYAEoolgzrIPhsfFhF0PzH978EY-FDYGE6Qbqaoqcs3LRRuwjIHX2-LCRwQMKYloWMqPYxhtRxV9E4OH9cR-tjivKq9FdXTpjx9vYtlwwRtQ4suX";
@@ -52,32 +52,45 @@ class Constcoba{
 
         ];
 
-    $dataString = json_encode($data);
+        $dataString = json_encode($data);
 
-    $headers = [
+        $headers = [
 
         'Authorization: key=' . $SERVER_API_KEY,
 
         'Content-Type: application/json',
 
-    ];
+        ];
 
-    $ch = curl_init();
+        $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
 
-    curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POST, true);
 
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
-    $response = curl_exec($ch);
+        $response = curl_exec($ch);
 
     // dd($response);
+    }
+
+    static public function getStatus()
+    {
+        return collect([
+            ['status' => 'Budidaya', 'keterangan' => 'Breeding'],
+            ['status' => 'Jual', 'keterangan' => 'Panen 1'],
+            ['status' => 'Jual', 'keterangan' => 'Panen 2'],
+            ['status' => 'Mati', 'keterangan' => 'Afkir'],
+            ['status' => 'Mati', 'keterangan' => 'Potong Paksa'],
+            ['status' => 'Mati', 'keterangan' => 'Mati/Sakit'],
+            
+        ]);
     }
 }

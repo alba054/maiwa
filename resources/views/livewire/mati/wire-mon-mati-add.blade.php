@@ -30,6 +30,20 @@
                     @enderror
                 </div>
                 <div class="form-group">
+                    <label class="form-label">Keterangan<span class="text-danger">*</span></label>
+                    <select class="custom-select" wire:model="keterangan">
+                        <option value="">Pilih Keterangan</option>
+                        @foreach ($keterangans as $item)
+                            <option value="{{ $item['keterangan'] }}">
+                                {{ $item['keterangan'] }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('keterangan')
+                        <small class="mt-2 text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="form-group">
                     <label>Foto Perlakuan<span class="text-danger">*</span></label>
                     <input class="form-control" type="file" id="formFile" wire:model="foto">
                     @error('foto')

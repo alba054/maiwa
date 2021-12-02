@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class IndukAnak extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     protected $casts = [ 
         'induk_id' => 'integer', 

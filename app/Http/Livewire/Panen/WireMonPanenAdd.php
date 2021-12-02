@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Panen;
 
+use App\Helper\Constcoba;
 use App\Models\Laporan;
 use App\Models\Panen;
 use App\Models\Peternak;
@@ -16,16 +17,15 @@ class WireMonPanenAdd extends Component
 {
     use WithFileUploads;
     use LivewireAlert;
-    public $foto, $date, $selectedItemId, $frek_panen, $ket_panen, $sapi_id;
+    public $foto, $date, $selectedItemId, $status, $keterangan, $sapi_id;
+    public $tanggal_lahir;
 
     protected $rules = [
-        'frek_panen' => 'required',
-        'ket_panen' => 'required',
+        'status' => 'required',
         'sapi_id' => 'required',
     ];
     protected $messages = [
-        'dosis_ib.required' => 'this field is required.',
-        'strow_id.required' => 'this field is required.',
+        'status.required' => 'this field is required.',
         'sapi_id.required' => 'this field is required.',
     ];
 
@@ -34,10 +34,21 @@ class WireMonPanenAdd extends Component
         'getModelId',
         'forceCloseModal',
     ];
+    public function mount()
+    {
+        // dd(Constcoba::getStatus()->where('status','Jual'));
+    }
     public function render()
     {
+       if ($this->sapi_id) {
+           $this->tanggal_lahir = Sapi::find($this->sapi_id)->tanggal_lahir;
+       }else {
+        $this->tanggal_lahir = null;
+           
+       }
         return view('livewire.panen.wire-mon-panen-add',[
             'sapis' => Sapi::orderBy('generasi','ASC')->get(),
+            'keterangans' => Constcoba::getStatus()->where('status','Jual'),
         ]);
     }
 
@@ -47,8 +58,7 @@ class WireMonPanenAdd extends Component
 
         $validateData = [];
         $validateData = array_merge($validateData,[
-            'frek_panen' => 'required',
-            'ket_panen' => 'required',
+            'status' => 'required',
             'sapi_id' => 'required',
         ]);
 
@@ -60,12 +70,19 @@ class WireMonPanenAdd extends Component
 
         $data = $this->validate($validateData);
 
-        $data['tgl_panen'] = now()->format('Y/m/d');
+        $data['tanggal'] = now()->format('Y/m/d');
+
+        
 
         $res_foto = $this->foto;
             if (!empty($res_foto)){
                 $data['foto'] = $this->handleImageIntervention($res_foto);
             }
+
+        if (!$this->selectedItemId) {
+            $count = Panen::where(['role'=> 0, 'sapi_id' => $this->sapi_id])->get();
+            $data['keterangan'] = 'Panen '.count($count) + 1;
+        }
     
 
         $sapi = Sapi::find($this->sapi_id);
@@ -116,8 +133,8 @@ class WireMonPanenAdd extends Component
         $this->selectedItemId = $modelId;
         $data = Panen::find($modelId);
         $this->sapi_id = $data->sapi_id;
-        $this->frek_panen = $data->frek_panen;
-        $this->ket_panen = $data->ket_panen;
+        $this->status = $data->status;
+        $this->keterangan = $data->keterangan;
 
      }
 
@@ -125,8 +142,8 @@ class WireMonPanenAdd extends Component
     {
         $this->selectedItemId = null;
         $this->sapi_id = null;
-        $this->ket_panen = null;
-        $this->frek_panen = null;
+        $this->keterangan = null;
+        $this->status = null;
         $this->foto = null;
     }
    

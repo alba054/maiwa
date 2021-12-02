@@ -43,7 +43,7 @@ class WireStrow extends Component
     }
     public function render(){
         return view('livewire.wire-strow',[
-            'sapis' => Sapi::orderBy('nama_sapi')->get(),
+            'sapis' => Sapi::orderBy('generasi')->get(),
             'strows' => $this->resultData()
         ]);
     }

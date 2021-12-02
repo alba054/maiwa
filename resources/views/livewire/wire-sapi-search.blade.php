@@ -8,6 +8,67 @@
     <div class="modal-body">
         <div class="py-1">
 
+            <div class="form-group">
+                <label>Tanggal Lahir</label>
+                <div wire:ignore class="input-group date mb-2" id="appointmentDateStart" data-target-input="nearest"
+                    data-appointmentdatestart="@this">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#appointmentDateStart"
+                        id="appointmentDateStartInput" data-toggle="datetimepicker" placeholder="Start Date">
+
+                </div>
+                <div wire:ignore class="input-group date" id="appointmentDateEnd" data-target-input="nearest"
+                    data-appointmentdateend="@this">
+                    <input type="text" class="form-control datetimepicker-input" data-target="#appointmentDateEnd"
+                        id="appointmentDateEndInput" data-toggle="datetimepicker" placeholder="Date To">
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <select class="custom-select" wire:model="jenisSapiId">
+                    <option value="">Pilih Jenis Sapi</option>
+                    @foreach ($jenis_sapis as $item)
+                        <option value="{{ $item->id }}"> {{ $item->jenis }} </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <select class="custom-select" wire:model="sapiId">
+                    <option value="">Pilih Sapi</option>
+                    @foreach ($sapis as $item)
+                        <option value="{{ $item->id }}">
+                            {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="custom-select" wire:model="peternakId">
+                    <option value="">Pilih Peternak</option>
+                    @foreach ($peternaks as $item)
+                        <option value="{{ $item->id }}"> {{ $item->nama_peternak }} </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="custom-select" wire:model="pendampingId">
+                    <option value="">Pilih Pendamping</option>
+                    @foreach ($pendampings as $item)
+                        <option value="{{ $item->id }}"> {{ $item->user->name }} </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group">
+                <select class="custom-select" wire:model="tsrId">
+                    <option value="">Pilih TSR</option>
+                    @foreach ($tsrs as $item)
+                        <option value="{{ $item->id }}"> {{ $item->user->name }} </option>
+                    @endforeach
+                </select>
+            </div>
+
+
 
 
         </div>

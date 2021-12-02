@@ -24,24 +24,26 @@
             </div>
 
             <div class="form-group">
-                <label class="form-label">Panen Ke - <span class="text-danger">*</span></label>
-                <select class="custom-select" wire:model="frekPanen">
-                    <option value="">Pilih Panen Ke - </option>
-                    <option value="1"> 1 </option>
-                    <option value="2"> 2 </option>
-
-                </select>
-
-            </div>
-            <div class="form-group">
-                <label class="form-label">Keterangan Panen <span class="text-danger">*</span></label>
-                <select class="custom-select" wire:model="ketPanen">
-                    <option value="">Pilih Keterangan Panen </option>
+                <label class="form-label">Status Panen <span class="text-danger">*</span></label>
+                <select class="custom-select" wire:model="status">
+                    <option value="">Pilih Status Panen </option>
                     <option value="Jual"> Jual </option>
                     <option value="Beli"> Beli </option>
                 </select>
 
             </div>
+
+            <div class="form-group">
+                <label class="form-label">Keterangan Panen <span class="text-danger">*</span></label>
+                <select class="custom-select" wire:model="keterangan">
+                    <option value="">Pilih Keterangan Panen </option>
+                    <option value="Panen 1"> Panen 1 </option>
+                    <option value="Panen 2"> Panen 2 </option>
+
+                </select>
+
+            </div>
+
             <div class="form-group">
                 <select class="custom-select" wire:model="sapiId">
                     <option value="">Pilih Sapi</option>

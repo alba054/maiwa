@@ -14,11 +14,11 @@ class Panen extends Model
         'peternak_id' => 'integer',
         'pendamping_id' => 'integer',
         'tsr_id' => 'integer',
-        'status' => 'integer',
+        'role' => 'integer',
         ];
     public function sapi()  
     {
-        return $this->belongsTo(Sapi::class)->with(['status_sapi','jenis_sapi']);
+        return $this->belongsTo(Sapi::class)->with(['peternak','jenis_sapi']);
     }
     
     public function peternak()  

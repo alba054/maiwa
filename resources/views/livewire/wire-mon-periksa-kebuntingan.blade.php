@@ -74,7 +74,13 @@
                                             <td>{{ $item->waktu_pk }}</td>
                                             <td>{{ $item->metode->metode }}</td>
                                             <td>{{ $item->hasil->hasil }}</td>
-                                            <td>{{ $item->status ? 'IB' : 'Kawin Alam' }}</td>
+                                            @if ($item->hasil_id == 1)
+                                                <td>{{ $item->status ? 'IB' : 'Kawin Alam' }}</td>
+
+                                            @else
+                                                <td>-</td>
+
+                                            @endif
                                             <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
                                             </td>
                                             <td>{{ $item->peternak->nama_peternak }}</td>

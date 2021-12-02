@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Mati;
 
+use App\Helper\Constcoba;
 use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\Sapi;
@@ -10,7 +11,7 @@ use Livewire\Component;
 
 class WireMonMatiSearch extends Component
 {
-    public $startDate, $endDate, $sapiId, $peternakId, $pendampingId, $tsrId, $ketPanen, $frekPanen;
+    public $startDate, $endDate, $sapiId, $peternakId, $pendampingId, $tsrId, $keterangan, $status;
 
     public function render()
     {
@@ -19,6 +20,8 @@ class WireMonMatiSearch extends Component
             'pendampings' => Pendamping::orderBy('id','ASC')->get(),
             'tsrs' => Tsr::orderBy('id','ASC')->get(),
             'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get(),
+            'keterangans' => Constcoba::getStatus()->where('status','Mati'),
+
         ]);
     }
 
@@ -31,6 +34,7 @@ class WireMonMatiSearch extends Component
             'peternakId' => $this->peternakId,
             'pendampingId' => $this->pendampingId,
             'tsrId' => $this->tsrId,
+            'keterangan' => $this->keterangan,
             
         ];
         $this->emit('formFilter',$data);

@@ -11,7 +11,7 @@ use Livewire\Component;
 class WireMonPanenSearch extends Component
 {
     
-    public $startDate, $endDate, $sapiId, $peternakId, $pendampingId, $tsrId, $ketPanen, $frekPanen;
+    public $startDate, $endDate, $sapiId, $peternakId, $pendampingId, $tsrId, $keterangan, $status;
 
     public function render()
     {
@@ -32,8 +32,8 @@ class WireMonPanenSearch extends Component
             'peternakId' => $this->peternakId,
             'pendampingId' => $this->pendampingId,
             'tsrId' => $this->tsrId,
-            'ketPanen' => $this->ketPanen,
-            'frekPanen' => $this->frekPanen,
+            'keterangan' => $this->keterangan,
+            'status' => $this->status,
         ];
         $this->emit('formFilter',$data);
         // $this->emit('refreshParent');

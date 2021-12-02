@@ -16,8 +16,7 @@ class WireMonMati extends Component
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
-
-    public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate;
+    public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate, $keterangan;
     public $datax = array(), $dataLabel = array();
 
     public $rows = "10";
@@ -91,22 +90,25 @@ class WireMonMati extends Component
             if($this->tsrId != null){
                 $query->Where('tsr_id','like','%'.$this->tsrId.'%');
             }
+            if($this->keterangan != null){
+                $query->Where('keterangan','like','%'.$this->keterangan.'%');
+            }
             
         })
-        ->where('status', 1)
-        ->WhereBetween('tgl_panen',[$this->startDate, $this->endDate])
+        ->where('role', 1)
+        ->WhereBetween('tanggal',[$this->startDate, $this->endDate])
         ->paginate($this->rows);
     }
 
     public function groupData()
     {
         $data =  Panen::with('sapi')
-        ->whereYear('tgl_panen', now()->format('Y'))
-        ->where('status',1)
-        ->orderBy('tgl_panen')
+        ->whereYear('tanggal', now()->format('Y'))
+        ->where('role',1)
+        ->orderBy('tanggal')
         ->get()
         ->groupBy(function($val) {
-            return Carbon::parse($val->tgl_panen)->format('m');
+            return Carbon::parse($val->tanggal)->format('m');
         });
 
         foreach ($data as $key => $value) {            
@@ -126,6 +128,7 @@ class WireMonMati extends Component
         $this->peternakId = $data['peternakId'];
         $this->pendampingId = $data['pendampingId'];
         $this->tsrId = $data['tsrId'];
+        $this->keterangan = $data['keterangan'];
     }
     public function selectedItem($itemId, $action){
         $this->selectedItemId = $itemId;
