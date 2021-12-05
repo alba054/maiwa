@@ -83,6 +83,10 @@ class WireFormPkb extends Component
                 'foto' => 'required|image|max:1024',
             ]);
         }
+        $res_foto = $this->foto;
+        if (!empty($res_foto)){
+            $data['foto'] = $this->handleImageIntervention($res_foto);
+        }
 
         $data = $this->validate($validateData);
 

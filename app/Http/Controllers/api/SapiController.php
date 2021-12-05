@@ -8,6 +8,7 @@ use App\Models\Laporan;
 use App\Models\Notifikasi;
 use App\Models\Pendamping;
 use App\Models\Performa;
+use App\Models\PeriksaKebuntingan;
 use App\Models\Peternak;
 use App\Models\PeternakSapi;
 use App\Models\Sapi;
@@ -33,7 +34,7 @@ class SapiController extends Controller
         if ($hak_akses == 3) {
             
             $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
-            $data = Sapi::with(['jenis_sapi','status_sapi', 'peternak'])
+            $data = Sapi::with(['jenis_sapi','peternak'])
             ->whereHas('peternak', function($q) use($pendampingId) {
             
                 if($pendampingId != null){
@@ -45,7 +46,7 @@ class SapiController extends Controller
             ->latest()->get();
         }else{
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
-            $data = Sapi::with(['jenis_sapi','status_sapi'])
+            $data = Sapi::with(['jenis_sapi','peternak'])
             ->where('tsr_id', $tsrId)
             ->latest()->get();
         }
@@ -67,7 +68,23 @@ class SapiController extends Controller
 
         $eartagInduk = $request->eartag_induk;
 
+
         $induk = Sapi::where('eartag', $eartagInduk)->first();
+
+        $latestSapi = Sapi::latest()->first()->eartag;
+
+        $anakKe = count(Sapi::where('eartag_induk', $eartagInduk)->get()) + 1;
+        // return $anakKe;
+
+        $eartag = $latestSapi + 1;
+        $subs = substr($induk->generasi,1,strlen($induk->generasi));
+        $generasi = "F".$subs+1;
+
+        // return $eartag;
+
+        // return $generasi;
+        $peternak = Peternak::find($request->peternak_id);
+
 
         if ($induk) {
             Notifikasi::create([
@@ -78,35 +95,25 @@ class SapiController extends Controller
                 'status' => 'no',
                 'keterangan' => "0,0"
             ]);
+
+            PeriksaKebuntingan::create( [
+                'waktu_pk' => now()->format('Y/m/d'),
+                'metode_id' => '0',
+                'status' => '1',
+                'reproduksi' => '1',
+                'hasil_id' => '0',
+                'sapi_id' => $induk->id,
+                'peternak_id' => $peternak->id,
+                'pendamping_id' => $peternak->pendamping_id,
+                'tsr_id' => $peternak->pendamping->tsr_id,
+                'foto' => 'images'
+            ]);
             
         }
         
-
-        $eartagIndukExplode = explode("-", $eartagInduk);
-
-
-        $latestSapi = Sapi::latest()->first()->eartag;
-        $eartagLastSapi = explode("-", $latestSapi);
-
-
-        $noUniq =  $eartagLastSapi[3] +1 ;
-        // return $noUniq;
-
-        $subs = substr($eartagIndukExplode[1],1,1);
-        $eartagBuilder = [
-            'unik' => sprintf("%'03d", $noUniq),
-            'induk' => $eartagIndukExplode[3],
-            'generasi' => 'F'.$subs+1,
-            // 'anak_ke' =>$request->anak_ke
-        ];
-
-        $anakKe = count(Sapi::where('eartag_induk', $eartagBuilder['induk'])->get()) + 1;
-        // return $anakKe;
-
-        $eartag = 'MBC-'.$eartagBuilder['generasi'].'.'.$anakKe.'-'.$eartagBuilder['induk'].'-'.$eartagBuilder['unik'];
-
-        // return $eartag;
-
+       
+       
+       
         $data = [
             'nama_sapi' => $request->nama_sapi,
             'tanggal_lahir' => now()->format('Y/m/d'),
@@ -114,9 +121,9 @@ class SapiController extends Controller
             'kondisi_lahir' => $request->kondisi_lahir,
             'anak_ke' => $anakKe,
             'eartag' => $eartag,
-            'eartag_induk' => $eartagBuilder['induk'],
+            'eartag_induk' => $eartagInduk,
+            'generasi' => $generasi,
             'jenis_sapi_id' => $request->jenis_sapi_id,
-            'status_sapi_id' => $request->status_sapi_id,
             'foto_depan' => $this->handleImageIntervention($request->foto_depan),
             'foto_samping' => $this->handleImageIntervention($request->foto_samping),
             'foto_peternak' => $this->handleImageIntervention($request->foto_peternak),
@@ -130,7 +137,6 @@ class SapiController extends Controller
         $save = $sapi->save();
 
         
-        $peternak = Peternak::find($request->peternak_id);
        
         PeternakSapi::create([
             'date' => now()->format('Y/m/d'),

@@ -266,19 +266,22 @@
                                         <th rowspan="2">Jumlah Anak</th>
                                         <th rowspan="2">Peternak</th>
                                         <th rowspan="2">Pendamping</th>
+                                        <th colspan="4">PKB</th>
                                         <th colspan="2">IB</th>
-                                        <th colspan="3">PKB</th>
                                         <th colspan="2">Performa</th>
                                         <th colspan="2">Perlakuan</th>
                                         <th colspan="3">Panen</th>
                                     </tr>
                                     <tr>
                                         <th>tanggal</th>
-                                        <th>strow</th>
-
-                                        <th>tanggal</th>
                                         <th>metode</th>
                                         <th>hasil</th>
+                                        <th>Umur</th>
+
+                                        <th>tanggal</th>
+                                        <th>strow</th>
+
+
 
                                         <th>tanggal</th>
                                         <th>keterangan</th>
@@ -316,16 +319,38 @@
                                             <td>{{ count($item->anaks) }}</td>
                                             <td>{{ $item->peternak->nama_peternak }}</td>
                                             <td>{{ $item->peternak->pendamping->user->name }}</td>
-                                            <td>{{ $item->ib->last() ? $item->ib->last()->waktu_ib : '-' }}
-                                            </td>
-                                            <td>{{ $item->ib->last() ? $item->ib->last()->strow->kode_batch : '-' }}
-                                            </td>
+
                                             <td>{{ $item->pkb->last() ? $item->pkb->last()->waktu_pk : '-' }}
                                             </td>
                                             <td>{{ $item->pkb->last() ? $item->pkb->last()->metode->metode : '-' }}
                                             </td>
                                             <td>{{ $item->pkb->last() ? $item->pkb->last()->hasil->hasil : '-' }}
                                             </td>
+                                            <td>
+
+                                                @php
+                                                    if ($item->pkb->last() && $item->pkb->last()->hasil_id == 1) {
+                                                        date_default_timezone_set('Asia/Makassar');
+                                                        $now = now()->format('Y/m/d');
+                                                        $day = Carbon\Carbon::parse($item->pkb->last()->waktu_pk)
+                                                            ->adddays(90)
+                                                            ->format('Y/m/d');
+                                                        $bday = Carbon\Carbon::parse($day);
+                                                        // echo $bday;
+                                                        echo $bday->diffInMonths($now) . ' Bulan/ ' . $bday->diffInDays($now) . ' Hari';
+                                                    } else {
+                                                        echo '-';
+                                                    }
+                                                    
+                                                @endphp
+
+                                            </td>
+
+                                            <td>{{ $item->ib->last() ? $item->ib->last()->waktu_ib : '-' }}
+                                            </td>
+                                            <td>{{ $item->ib->last() ? $item->ib->last()->strow->kode_batch : '-' }}
+                                            </td>
+
                                             <td>{{ $item->performa->last() ? $item->performa->last()->tanggal_performa : '-' }}
                                             </td>
                                             <td>{{ $item->performa->last() ? $item->performa->last()->bsc : '-' }}

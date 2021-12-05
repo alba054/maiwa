@@ -63,12 +63,12 @@ class PanenController extends Controller
             $imageName = $this->handleImageIntervention($request->image);
         }
 
-        $frek_panen = count(Panen::where('sapi_id', $request->sapi_id)->get()) + 1;
+        $keterangan = count(Panen::where(['sapi_id' => $request->sapi_id, 'role' => '0'])->get()) + 1;
 
         $data = [
-            'tgl_panen' => $today,
-            'frek_panen' => $frek_panen,
-            'ket_panen' => $request->ket_panen,
+            'tanggal' => $today,
+            'status' => $request->status,
+            'keterangan' => $keterangan,
             'sapi_id' => $request->sapi_id,
             'peternak_id' => $peternak->id,
             'pendamping_id' => $peternak->pendamping_id,

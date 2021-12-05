@@ -71,6 +71,7 @@ class PeriksaKebuntinganController extends Controller
             'waktu_pk' => $today,
             'metode_id' => $request->metode_id,
             'status' => $request->status,
+            'reproduksi' => $request->reproduksi,
             'hasil_id' => $request->hasil_id,
             'sapi_id' => $request->sapi_id,
             'peternak_id' => $peternak->id,
