@@ -30,10 +30,13 @@ class InsiminasiBuatanController extends Controller
             $data = InsiminasiBuatan::with(['sapi','strow'])
             ->where('pendamping_id', $pendampingId)
             ->latest()->get();
-        }else{
+        } else if ($hak_akses == 2) {
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
             $data = InsiminasiBuatan::with(['sapi','strow'])
             ->where('tsr_id', $tsrId)
+            ->latest()->get();
+        }else {
+            $data = InsiminasiBuatan::with(['sapi','strow'])
             ->latest()->get();
         }
         

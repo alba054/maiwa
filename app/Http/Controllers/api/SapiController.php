@@ -44,10 +44,20 @@ class SapiController extends Controller
             })
             
             ->latest()->get();
-        }else{
+        }else if ($hak_akses == 2){
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
             $data = Sapi::with(['jenis_sapi','peternak'])
-            ->where('tsr_id', $tsrId)
+            ->whereHas('peternak.pendamping', function($q) use($tsrId) {
+            
+                if($tsrId != null){
+                    $q->where('tsr_id', $tsrId);
+                }
+                
+            })
+            ->latest()->get();
+        }else{
+            $data = Sapi::with(['jenis_sapi','peternak'])
+            
             ->latest()->get();
         }
         

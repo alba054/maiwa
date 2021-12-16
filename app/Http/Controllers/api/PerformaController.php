@@ -30,11 +30,14 @@ class PerformaController extends Controller
             $data = Performa::with('sapi')
             ->where('pendamping_id', $pendampingId)
             ->latest()->get();
-        }else{
+        }else if ($hak_akses == 2){
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
         
             $data = Performa::with('sapi')
             ->where('tsr_id', $tsrId)
+            ->latest()->get();
+        }else{
+            $data = Performa::with('sapi')
             ->latest()->get();
         }
         

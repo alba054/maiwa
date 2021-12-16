@@ -314,7 +314,7 @@
                                             </td>
                                             <td>{{ $item->kelamin }}</td>
                                             <td>{{ $item->jenis_sapi->jenis }}</td>
-                                            <td>{{ count($item->panens) == 0 ? 'Budidaya' : $item->panens->last()->keterangan }}
+                                            <td>{{ count($item->panens) == 0 ? 'Budidaya' : $item->panens->last()->status }}
                                             </td>
                                             <td>{{ count($item->anaks) }}</td>
                                             <td>{{ $item->peternak->nama_peternak }}</td>

@@ -10,7 +10,9 @@ class MetodeController extends Controller
 {
     public function index()
     {
-        $data = Metode::orderBy('metode', 'ASC')->get();
+        $data = Metode::orderBy('metode', 'ASC')
+        ->where('id', '!=', 0)
+        ->get();
         return response()->json([
             'responsecode' => '1',
             'responsemsg' => 'Success',

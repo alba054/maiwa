@@ -30,12 +30,15 @@ class PerlakuanController extends Controller
             $data = Perlakuan::with(['sapi','obat','vitamin','vaksin','hormon'])
             ->where('pendamping_id', $pendampingId)
             ->latest()->get();
-        }else{
+        }else if ($hak_akses == 2){
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
             
 
             $data = Perlakuan::with(['sapi','obat','vitamin','vaksin','hormon'])
             ->where('tsr_id', $tsrId)
+            ->latest()->get();
+        }else{
+            $data = Perlakuan::with(['sapi','obat','vitamin','vaksin','hormon'])
             ->latest()->get();
         }
         

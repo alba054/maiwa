@@ -29,12 +29,18 @@ class PanenController extends Controller
 
             $data = Panen::with('sapi')
             ->where('pendamping_id', $pendampingId)
+            ->where('role', 0)
             ->latest()->get();
-        }else{
+        }else if ($hak_akses == 2){
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
         
             $data = Panen::with('sapi')
             ->where('tsr_id', $tsrId)
+            ->where('role', 0)
+            ->latest()->get();
+        } else{
+            $data = Panen::with('sapi')
+            ->where('role', 0)
             ->latest()->get();
         } 
         

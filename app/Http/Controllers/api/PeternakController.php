@@ -5,6 +5,8 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use App\Models\Pendamping;
 use App\Models\Peternak;
+use App\Models\Tsr;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PeternakController extends Controller
@@ -13,12 +15,40 @@ class PeternakController extends Controller
     public function index($userId)
     {
         //
-        $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
+        $data = [];
+        $hak_akses = User::find($userId)->hak_akses;
+        if ($hak_akses == 3) {
+            
+            $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
 
-        $data = Peternak::with(['desa','kelompok'])
-        ->orderBy('nama_peternak','ASC')
-        ->where('pendamping_id', $pendampingId)
-        ->get();
+            $data = Peternak::with(['desa','kelompok'])
+            ->orderBy('nama_peternak','ASC')
+            ->where('pendamping_id', $pendampingId)
+            ->get();
+        }else if ($hak_akses == 2){
+            $tsrId = Tsr::where('user_id', $userId)->first()->id;
+
+            $data = Peternak::with(['desa','kelompok'])
+            ->orderBy('nama_peternak','ASC')
+            ->whereHas('pendamping', function($q) use($tsrId) {
+            
+                if($tsrId != null){
+                    $q->where('tsr_id', $tsrId);
+                }
+                
+            })
+            ->get();
+            
+        }else {
+
+            $data = Peternak::with(['desa','kelompok'])
+            ->orderBy('nama_peternak','ASC')
+            
+            ->get();
+            
+        }
+
+        
         return response()->json([
                 'responsecode' => '1',
                 'responsemsg' => 'Success',

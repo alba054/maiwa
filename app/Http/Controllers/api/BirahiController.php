@@ -22,7 +22,6 @@ class BirahiController extends Controller
 
         $token = $sapi->peternak->pendamping->user->remember_token;
 
-
         $keterangan = $notif->keterangan;
         $tanggal = $request->tanggal;
 
@@ -131,9 +130,8 @@ class BirahiController extends Controller
 
         }
         
-        
         return response()->json([
-            'responsecode' => '0',
+            'responsecode' => '1',
             'responsemsg' => 'success',
         ], 201);
         

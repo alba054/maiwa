@@ -32,11 +32,15 @@ class PeriksaKebuntinganController extends Controller
             $data = PeriksaKebuntingan::with(['sapi','hasil','metode'])
             ->where('pendamping_id', $pendampingId)
             ->latest()->get();
-        }else{
+        }else if ($hak_akses == 2) {
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
         // return $pendampingId;
             $data = PeriksaKebuntingan::with(['sapi','hasil','metode'])
             ->where('tsr_id', $tsrId)
+            ->latest()->get();
+        }else {
+        
+            $data = PeriksaKebuntingan::with(['sapi','hasil','metode'])
             ->latest()->get();
         }
         

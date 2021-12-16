@@ -19,10 +19,11 @@ class LaporanController extends Controller
           
          $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
          $data = Laporan::where('pendamping_id', $pendampingId)->latest()->get();
-      }else{
-          $tsrId = Tsr::where('user_id', $userId)->first()->id;
-          $data = Laporan::where('tsr_id', $tsrId)->latest()->get();
       }
+      // else{
+      //     $tsrId = Tsr::where('user_id', $userId)->first()->id;
+      //     $data = Laporan::where('tsr_id', $tsrId)->latest()->get();
+      // }
       
         
         return response()->json([

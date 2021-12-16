@@ -10,7 +10,9 @@ class HasilController extends Controller
 {
    public function index()
    {
-    $data = Hasil::orderBy('hasil', 'ASC')->get();
+    $data = Hasil::orderBy('hasil', 'ASC')
+    ->where('id', '!=', 0)
+    ->get();
     return response()->json([
         'responsecode' => '1',
         'responsemsg' => 'Success',

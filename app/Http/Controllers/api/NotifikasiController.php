@@ -29,19 +29,35 @@ class NotifikasiController extends Controller
                 }
                 
             })
-            // ->WhereBetween('tanggal', [now()->subdays(7)->format('Y-m-d'), now()->format('Y-m-d')])
-            // ->where('tanggal', '<=', now()->format('Y-m-d'))
-            // ->where('status', 'no')
+            // ->WhereBetween('tanggal', [now()->subdays(7)->format('Y-m-d'), now()->adddays(7)->format('Y-m-d')])
+            ->where('tanggal', '>=', now()->subdays(7)->format('Y-m-d'))
+            ->where('status', 'no')
             ->get();
-        }else{
+        }else if ($hak_akses == 2){
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
         
             $data = Notifikasi::with(['sapi'])
             ->orderBy('tanggal', 'ASC')
-            ->where('tsr_id',$tsrId)
-            // ->where('tanggal', '<=', now()->format('Y-m-d'))
-            // ->WhereBetween('tanggal', [now()->subdays(7)->format('Y-m-d'), now()->format('Y-m-d')])
-            // ->where('status', 'no')
+            ->whereHas('sapi.peternak.pendamping', function($q) use($tsrId) {
+            
+                if($tsrId != null){
+                    $q->where('tsr_id', $tsrId);
+                }
+                
+            })
+            // ->WhereBetween('tanggal', [now()->subdays(7)->format('Y-m-d'), now()->adddays(7)->format('Y-m-d')])
+            ->where('tanggal', '>=', now()->subdays(7)->format('Y-m-d'))
+
+            ->where('status', 'no')
+            ->get();
+        }else {
+        
+            $data = Notifikasi::with(['sapi'])
+            ->orderBy('tanggal', 'ASC')
+            
+            ->where('tanggal', '>=', now()->subdays(7)->format('Y-m-d'))
+
+            ->where('status', 'no')
             ->get();
         }
         

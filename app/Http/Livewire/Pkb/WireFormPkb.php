@@ -83,15 +83,21 @@ class WireFormPkb extends Component
                 'foto' => 'required|image|max:1024',
             ]);
         }
-        $res_foto = $this->foto;
-        if (!empty($res_foto)){
-            $data['foto'] = $this->handleImageIntervention($res_foto);
-        }
+        
 
         $data = $this->validate($validateData);
 
         $sapi = Sapi::find($this->sapi_id);
         $peternak = Peternak::find($sapi->peternak_id);
+
+        $res_foto = $this->foto;
+        if (!empty($res_foto)){
+            $validateData = array_merge($validateData,[
+                'foto' => 'required|image|max:1024',
+            ]);
+            
+            $data['foto'] = $this->handleImageIntervention($res_foto);
+        }
 
         $data['peternak_id'] = $peternak->id;
         $data['pendamping_id'] = $peternak->pendamping_id;
