@@ -78,7 +78,9 @@ class Wireuser extends Component
         $this->alamat = $data->alamat;
         $this->no_hp = $data->no_hp;
 
-        $this->tsr_id = Pendamping::where('user_id', $this->selectedItemId)->first()->tsr_id;
+        if ($this->hak_akses == '3') {
+            $this->tsr_id = Pendamping::where('user_id', $this->selectedItemId)->first()->tsr_id;
+        }
         
     }
     

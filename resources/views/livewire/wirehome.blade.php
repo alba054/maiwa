@@ -59,9 +59,9 @@
         <div class="col-xl-8 col-lg-8 col-md-12" wire:ignore>
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Analisis Sapi</h3>
+                    <h3 class="card-title">Analisis Sapi </h3>
                     <div class="card-options">
-                        <div class="btn-group p-0">
+                        <div class="btn-group p-0" hidden>
                             <button class="btn btn-outline-light btn-sm" type="button">Week</button>
                             <button class="btn btn-light btn-sm" type="button">Month</button>
                             <button class="btn btn-outline-light btn-sm" type="button">Year</button>
@@ -72,28 +72,20 @@
                     <div class="row mb-3">
                         <div class="col-xl-3 col-6">
                             <p class="mb-1">Total Sapi</p>
-                            <h3 class="mb-0 fs-20 number-font1">52,618</h3>
-                            <p class="fs-12 text-muted"><span class="text-danger mr-1"><i
-                                        class="fe fe-arrow-down"></i>0.9%</span>this month</p>
+                            <h3 class="mb-0 fs-20 number-font1">{{ $countSapi . ' Ekor' }}</h3>
+
                         </div>
                         <div class="col-xl-3 col-6 ">
-                            <p class=" mb-1">Total Data Kelahiran</p>
-                            <h3 class="mb-0 fs-20 number-font1">56,197</h3>
-                            <p class="fs-12 text-muted"><span class="text-success mr-1"><i
-                                        class="fe fe-arrow-up"></i>0.15%</span>this month</p>
+                            <p class=" mb-1">Total Data Panen</p>
+                            <h3 class="mb-0 fs-20 number-font1">{{ $countKematian . ' Ekor' }}</h3>
+
                         </div>
                         <div class="col-xl-3 col-6">
                             <p class=" mb-1">Total Data Kematian</p>
-                            <h3 class="mb-0 fs-20 number-font1">13,876</h3>
-                            <p class="fs-12 text-muted"><span class="text-danger mr-1"><i
-                                        class="fe fe-arrow-down"></i>0.8%</span>this month</p>
+                            <h3 class="mb-0 fs-20 number-font1">{{ $countPanen . ' Ekor' }}</h3>
+
                         </div>
-                        {{-- <div class="col-xl-3 col-6">
-                            <p class=" mb-1">Maximum Units Sold</p>
-                            <h3 class="mb-0 fs-20 number-font1">5,876</h3>
-                            <p class="fs-12 text-muted"><span class="text-success mr-1"><i
-                                        class="fe fe-arrow-up"></i>0.06%</span>this month</p>
-                        </div> --}}
+
                     </div>
                     <div id="echart1" class="chart-tasks chart-dropshadow text-center"></div>
                     <div class="text-center mt-2">

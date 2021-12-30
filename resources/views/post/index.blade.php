@@ -131,7 +131,6 @@
 
                 var data = $(this).attr('data-id');
 
-
                 Swal.fire({
                     title: 'Yakin ?',
                     text: "Anda akan menghapus data ini !",

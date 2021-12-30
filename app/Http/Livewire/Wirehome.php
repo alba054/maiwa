@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\Exports\PopulasiSapiExport;
 use App\Models\Laporan;
 use App\Models\Notifikasi;
+use App\Models\Panen;
 use App\Models\Pendamping;
 use App\Models\Peternak;
 use App\Models\Sapi;
@@ -27,8 +28,8 @@ class Wirehome extends Component
 
     public $data = [2,4,6];
     public $dataxUpah = array(), $dataLabelUpah = array();
+    public $dataxkelahiran = array(), $dataxkematian = array(), $dataxpanen = array();
     public $dataxJantan = array(), $dataxBetina = array(), $dataLabelKelamin = ['01','02', '03', '04','05','06','07','08','09','10','11','12'];
-
 
     public function mount()
     {
@@ -60,6 +61,15 @@ class Wirehome extends Component
 
         $this->groupUpah();
         $this->groupKelamin();
+        $this->groupSapi();
+
+        $kematian = Panen::where('role', '1')
+        ->whereYear('tanggal', now()->format('Y'))
+        ->get();
+        $panen = Panen::where('role', '0')
+        ->whereYear('tanggal', now()->format('Y'))
+        ->get();
+        
 
         return view('livewire.wirehome',[
             'laporans' => Laporan::latest()->get(),
@@ -67,6 +77,8 @@ class Wirehome extends Component
             'countPeternak' => count(Peternak::all()),
             'countTsr' => count(Tsr::all()),
             'countSapi' => count(Sapi::all()),
+            'countKematian' => count($kematian),
+            'countPanen' => count($panen),
             'sapis' => $this->sapiData(),
         ]);
     }
@@ -118,11 +130,60 @@ class Wirehome extends Component
             }else{
                 array_push($this->dataxBetina, 0);
 
+            }   
+        }
+    }
+
+    public function groupSapi()
+    {
+        $dataKelahiran =  Sapi::whereYear('tanggal_lahir', now()->format('Y'))
+        ->orderBy('tanggal_lahir')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tanggal_lahir)->format('m');
+        });
+        $dataKematian =  Panen::where('role', '1')
+        ->whereYear('tanggal', now()->format('Y'))
+        ->orderBy('tanggal')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tanggal)->format('m');
+        });
+        $dataPanen =  Panen::where('role', '0')
+        ->whereYear('tanggal', now()->format('Y'))
+        ->orderBy('tanggal')
+        ->get()
+        ->groupBy(function($val) {
+            return Carbon::parse($val->tanggal)->format('m');
+        });
+
+        
+
+        foreach ($this->dataLabelKelamin as $key => $valueLabel) {
+            if ($dataKelahiran->has($valueLabel)) {
+                $jantan = $dataKelahiran[$valueLabel];
+                array_push($this->dataxkelahiran, count($jantan));
+            }else{
+                array_push($this->dataxkelahiran, 0);
+
+            }
+
+            if ($dataKematian->has($valueLabel)) {
+                $kematian = $dataKematian[$valueLabel];
+                array_push($this->dataxkematian, count($kematian));
+            }else{
+                array_push($this->dataxkematian, 0);
+
+            }
+            if ($dataPanen->has($valueLabel)) {
+                $panen = $dataPanen[$valueLabel];
+                array_push($this->dataxpanen, count($panen));
+            }else{
+                array_push($this->dataxpanen, 0);
+
             }
             
         }
-        
-       
     }
 
     public function isSuccess($msg)

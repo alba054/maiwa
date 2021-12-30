@@ -1,7 +1,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
-        var data = @this.data;
-        console.log(data);
+        var dataKelahiran = @this.dataxkelahiran;
+        var dataKematian = @this.dataxkematian;
+        var dataPanen = @this.dataxpanen;
+        console.log(dataKelahiran);
 
         /* E-chart */
         var chartdata = [
@@ -10,7 +12,7 @@
                 name: 'Data Panen',
                 type: 'line',
                 smooth: true,
-                data: [8, 5, 15, 10, 10, 8, 9, 12, 5, 15, 10, 10, 8, 16],
+                data: dataPanen,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],
@@ -35,7 +37,7 @@
                 symbolSize: 20,
                 barWidth: 20,
                 type: 'bar',
-                data: [23, 17, 19, 22, 17, 11, 19, 20, 17, 19, 25, 17, 11, 19],
+                data: dataKelahiran,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],
@@ -60,7 +62,7 @@
                 symbolSize: 20,
                 barWidth: 20,
                 type: 'bar',
-                data: [3, 7, 9, 2, 7, 11, 9, 3, 7, 9, 2, 2, 1, 5],
+                data: dataKematian,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],

@@ -45,6 +45,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('{post:slug}/edit', [PostController::class, 'update'])->name('posts.update'); 
     });
 
+    Route::get('/download', function () {
+        return response()->download(storage_path('app/public/apk/mbc.apk'));
+    });
+
     
 });
 
