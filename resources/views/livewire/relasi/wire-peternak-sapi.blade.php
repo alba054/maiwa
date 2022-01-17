@@ -32,7 +32,9 @@
                     <select class="custom-select" wire:model="sapi_id">
                         <option value="">Please Choose</option>
                         @foreach ($sapis as $item)
-                            <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
+                            <option value="{{ $item->id }}">
+                                {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                            </option>
                         @endforeach
                     </select>
                     @error('sapi_id')
@@ -68,7 +70,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <select class="custom-select" wire:model="pendampingId">
-                                <option value="">Please Choose</option>
+                                <option value="">Pilih Pendamping</option>
                                 @foreach ($pendampings as $item)
                                     <option value="{{ $item->id }}"> {{ $item->user->name }} </option>
                                 @endforeach
@@ -78,7 +80,7 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <select class="custom-select" wire:model="peternakId">
-                                <option value="">Please Choose</option>
+                                <option value="">Pilih Peternak</option>
                                 @foreach ($peternaks as $item)
                                     <option value="{{ $item->id }}"> {{ $item->nama_peternak }} </option>
                                 @endforeach
@@ -88,9 +90,11 @@
                     <div class="col-sm-4">
                         <div class="form-group">
                             <select class="custom-select" wire:model="sapiId">
-                                <option value="">Please Choose</option>
+                                <option value="">Pilih Sapi</option>
                                 @foreach ($sapis as $item)
-                                    <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
+                                    <option value="{{ $item->id }}">
+                                        {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -119,7 +123,8 @@
                                         <td>{{ $item->tsr->user->name }}</td>
                                         <td>{{ $item->pendamping->user->name }}</td>
                                         <td>{{ $item->peternak->nama_peternak }}</td>
-                                        <td>{{ $item->sapi->eartag }}</td>
+                                        <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
+                                        </td>
 
 
                                         <td class="text-right">

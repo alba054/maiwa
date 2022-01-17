@@ -56,6 +56,7 @@
                                      <th>Umur</th>
                                      <th>Kelamin</th>
                                      <th>Jenis Sapi</th>
+                                     <th>Kondisi Kelahiran</th>
                                      <th>Peternak</th>
                                      <th>Pendamping</th>
 
@@ -97,16 +98,19 @@
                                          </td>
                                          <td>{{ $item->kelamin }}</td>
                                          <td>{{ $item->jenis_sapi->jenis }}</td>
+                                         <td>{{ $item->kondisi_lahir }}</td>
                                          <td>{{ $item->peternak->nama_peternak }}</td>
                                          <td>{{ $item->peternak->pendamping->user->name }}</td>
 
                                          <td class="text-right">
                                              @if (strtolower($item->kelamin) == 'betina')
-                                                 <i wire:click="selectedItem({{ $item->id }},'child')"
-                                                     class="fe fe-git-merge f-16 btn btn-warning"
-                                                     style="cursor:pointer"></i>
-                                             @endif
+                                                 @if ($item->kondisi_lahir != 'Mati')
+                                                     <i wire:click="selectedItem({{ $item->id }},'child')"
+                                                         class="fe fe-git-merge f-16 btn btn-warning"
+                                                         style="cursor:pointer"></i>
+                                                 @endif
 
+                                             @endif
 
                                              <i wire:click="selectedItem({{ $item->id }},'update')"
                                                  class="fe fe-edit f-16 btn btn-success" style="cursor:pointer"></i>

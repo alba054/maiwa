@@ -31,18 +31,24 @@ class Wirehome extends Component
     public $dataxkelahiran = array(), $dataxkematian = array(), $dataxpanen = array();
     public $dataxJantan = array(), $dataxBetina = array(), $dataLabelKelamin = ['01','02', '03', '04','05','06','07','08','09','10','11','12'];
 
+    public $year;
+
     public function mount()
     {
         // $this->sendFCM();
-        // date_default_timezone_set("Asia/Makassar");
+        date_default_timezone_set("Asia/Makassar");
         // dd(now()->format('Y-m-d H:i:s'));
+
+        $this->year = now()->format('Y');
+
     }
 
     public function sapiData()
     {
         return Sapi::with(['jenis_sapi','peternak'])
         ->latest()
-        ->get();
+        ->whereYear('tanggal_lahir', $this->year);
+        
         // ->paginate(10);
     }
     public function exportToExcel()
@@ -64,28 +70,37 @@ class Wirehome extends Component
         $this->groupSapi();
 
         $kematian = Panen::where('role', '1')
-        ->whereYear('tanggal', now()->format('Y'))
+        ->whereYear('tanggal', $this->year)
         ->get();
+
         $panen = Panen::where('role', '0')
-        ->whereYear('tanggal', now()->format('Y'))
+        ->whereYear('tanggal', $this->year)
         ->get();
         
+        $laporans =  Laporan::whereYear('tanggal', $this->year)
+        ->orderBy('tanggal');
+        
 
+        
         return view('livewire.wirehome',[
-            'laporans' => Laporan::latest()->get(),
+            'laporans' => $laporans->get(),
+            'laporansPaginate' => $laporans->paginate(5),
             'countPendamping' => count(Pendamping::all()),
             'countPeternak' => count(Peternak::all()),
             'countTsr' => count(Tsr::all()),
-            'countSapi' => count(Sapi::all()),
+            'countSapi' => count($this->sapiData()->get()),
             'countKematian' => count($kematian),
             'countPanen' => count($panen),
-            'sapis' => $this->sapiData(),
+            'sapis' => $this->sapiData()->paginate(10, ['*'], '1pagination'),
         ]);
     }
 
     public function groupUpah()
     {
-        $data =  Laporan::whereYear('tanggal', now()->format('Y'))
+        $this->dataxUpah = [];
+        $this->dataLabelUpah = [];
+
+        $data =  Laporan::whereYear('tanggal', $this->year)
         ->orderBy('tanggal')
         ->get()
         ->groupBy(function($val) {
@@ -100,8 +115,10 @@ class Wirehome extends Component
     }
     public function groupKelamin()
     {
+        $this->dataxJantan = [];
+        $this->dataxBetina = [];
         $dataJantan =  Sapi::where('kelamin', 'Jantan')
-        ->whereYear('tanggal_lahir', now()->format('Y'))
+        ->whereYear('tanggal_lahir', $this->year)
         ->orderBy('tanggal_lahir')
         ->get()
         ->groupBy(function($val) {
@@ -109,7 +126,7 @@ class Wirehome extends Component
         });
 
         $dataBetina =  Sapi::where('kelamin', 'Betina')
-        ->whereYear('tanggal_lahir', now()->format('Y'))
+        ->whereYear('tanggal_lahir', $this->year)
         ->orderBy('tanggal_lahir')
         ->get()
         ->groupBy(function($val) {
@@ -136,21 +153,25 @@ class Wirehome extends Component
 
     public function groupSapi()
     {
-        $dataKelahiran =  Sapi::whereYear('tanggal_lahir', now()->format('Y'))
-        ->orderBy('tanggal_lahir')
+        $this->dataxkelahiran = [];
+        $this->dataxkematian = [];
+        $this->dataxpanen = [];
+
+        $dataKelahiran =  Sapi::orderBy('tanggal_lahir')
+        ->whereYear('tanggal_lahir', $this->year)
         ->get()
         ->groupBy(function($val) {
             return Carbon::parse($val->tanggal_lahir)->format('m');
         });
         $dataKematian =  Panen::where('role', '1')
-        ->whereYear('tanggal', now()->format('Y'))
+        ->whereYear('tanggal', $this->year)
         ->orderBy('tanggal')
         ->get()
         ->groupBy(function($val) {
             return Carbon::parse($val->tanggal)->format('m');
         });
         $dataPanen =  Panen::where('role', '0')
-        ->whereYear('tanggal', now()->format('Y'))
+        ->whereYear('tanggal', $this->year)
         ->orderBy('tanggal')
         ->get()
         ->groupBy(function($val) {

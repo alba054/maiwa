@@ -19,7 +19,22 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/SimpleLightbox/2.1.0/simpleLightbox.min.css" rel="stylesheet" />
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="{{ asset('assets/home/styles.css?k=' . time()) }}" rel="stylesheet" />
-    <link href="{{ asset('assets/plugins/morriscopy/morris.css') }}" rel=" stylesheet" />
+    {{-- <link href="{{ asset('assets/plugins/morriscopy/morris.css') }}" rel=" stylesheet" /> --}}
+
+    <link rel="icon" href="{{ URL::asset('assets/images/brand/mbc2.png') }}" type="image/x-icon" />
+    <!---Icons css-->
+    <link href="{{ URL::asset('assets/css/icons.css') }}" rel="stylesheet" />
+    <!--Bootstrap css -->
+    {{-- <link href="{{ URL::asset('assets/plugins/bootstrap/css/bootstrap.min.css?k=' . time()) }}" rel="stylesheet"> --}}
+    <!-- Style css -->
+    <link href="{{ URL::asset('assets/css/style.css') }}" rel="stylesheet" />
+    <link href="{{ URL::asset('assets/css/dark.css') }}" rel="stylesheet" />
+    <link href="{{ URL::asset('assets/css/skin-modes.css') }}" rel="stylesheet" />
+
+
+
+    @livewireStyles
+
 </head>
 
 <body id="page-top">
@@ -29,15 +44,19 @@
             <a class="navbar-brand" href="#page-top">
                 <img src="{{ URL::asset('assets/images/brand/mbc2.png') }}" height="30">
                 MBC </a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
+
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse bg-transparent" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0">
                     <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+                    {{-- <li class="nav-item"><a class="nav-link" href="#services">Services</a></li> --}}
                     <li class="nav-item"><a class="nav-link" href="#portfolio">News</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">Statistics</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#statistics">Statistics</a></li>
                     @guest
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
 
@@ -47,28 +66,34 @@
                     @endguest
                 </ul>
             </div>
+
+
         </div>
     </nav>
+
     <!-- Masthead-->
     <header class="masthead">
         <div class="container px-4 px-lg-5 h-100">
 
             <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
                 <div class="col-lg-8 align-self-end">
-                    <h1 class="text-white font-weight-bold">Maiwa Breeding Center (MBC)</h1>
-                    <hr class="divider" />
+                    {{-- <h1 class="text-white font-weight-bold">MBC</h1> --}}
+
                 </div>
                 <div class="col-lg-8 align-self-baseline">
+                    <h1 class="text-white font-weight-bold">Maiwa Breeding Center (MBC)</h1>
+
                     {{-- <p class="text-white-75 mb-5">Start Bootstrap can help you build better websites using the Bootstrap
                         framework! Just download a theme and start customizing, no strings attached!</p> --}}
-                    <a class="btn btn-primary btn-xl" href="#about">Find Out More</a>
+                    {{-- <a class="btn btn-primary btn-xl" href="#about">Find Out More</a> --}}
                 </div>
             </div>
         </div>
     </header>
+
     <!-- About-->
     <section class="page-section" id="about">
-        <div class="container-fluid px-3 px-lg-4">
+        <div class="container px-3 px-lg-4">
             <h2 class="text-center mt-0">About Us</h2>
             <hr class="divider" />
             <div class="ibox-content">
@@ -139,8 +164,9 @@
             </div>
         </div>
     </section>
+
     <!-- Services-->
-    <section class="page-section" id="services">
+    {{-- <section class="page-section" id="services">
         <div class="container px-4 px-lg-5">
             <h2 class="text-center mt-0">At Your Service</h2>
             <hr class="divider" />
@@ -206,7 +232,8 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
+
     <!-- Portfolio-->
     <section class="page-section" id="portfolio">
         <div class="container p-3 mb-3 mt-3">
@@ -233,41 +260,19 @@
         </div>
     </section>
 
-    <!-- Contact-->
-    <section class="page-section" id="contact">
+    <!-- Statistics-->
+    <section class="page-section" id="statistics">
         <div class="container px-4 px-lg-5">
             <h2 class="text-center mt-0">Statistics</h2>
             <hr class="divider" />
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Data Kelahiran Sapi</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="morris-wrapper-demo" id="morrisLine1"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <div class="card-title">Persentase Kelahiran</div>
-                        </div>
-                        <div class="card-body">
-                            <div class="morris-wrapper-demo" id="morrisBar1"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            @livewire('wirewelcome')
+
         </div>
     </section>
+
     <!-- Footer-->
-    <footer class="bg-light py-5">
-        <div class="container px-4 px-lg-5">
-            <div class="small text-center text-muted">Copyright &copy; 2021 - MBC</div>
-        </div>
-    </footer>
+    @include('layouts.footer')
+
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- SimpleLightbox plugin JS-->
@@ -280,248 +285,60 @@
     <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
     <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
     <script src="{{ asset('assets/js/jquery-3.5.1.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/morriscopy/morris.js') }}"></script>
-    <script src="{{ asset('assets/plugins/morriscopy/raphael-min.js') }}"></script>
+    {{-- <script src="{{ asset('assets/plugins/morriscopy/morris.js') }}"></script> --}}
+    {{-- <script src="{{ asset('assets/plugins/morriscopy/raphael-min.js') }}"></script> --}}
+
+
+    <!-- Bootstrap4 js-->
+    <script src="{{ URL::asset('assets/plugins/bootstrap/popper.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+
+    <!--INTERNAL Peitychart js-->
+    <script src="{{ URL::asset('assets/plugins/peitychart/jquery.peity.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/peitychart/peitychart.init.js') }}"></script>
+
+    <!--INTERNAL Apexchart js-->
+    <script src="{{ URL::asset('assets/js/apexcharts.js') }}"></script>
+
+    <!--INTERNAL ECharts js-->
+    <script src="{{ URL::asset('assets/plugins/echarts/echarts.js') }}"></script>
+
+    <!--INTERNAL Chart js -->
+    <script src="{{ URL::asset('assets/plugins/chart/chart.bundle.js') }}"></script>
+    <script src="{{ URL::asset('assets/plugins/chart/utils.js') }}"></script>
+
+    <!-- INTERNAL Select2 js -->
+    <script src="{{ URL::asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+    <script src="{{ URL::asset('assets/js/select2.js') }}"></script>
+
+    <!--INTERNAL Moment js-->
+    <script src="{{ URL::asset('assets/plugins/moment/moment.js') }}"></script>
+
+    <!--INTERNAL Index js-->
+    <script src="{{ URL::asset('assets/js/index1.js') }}"></script>
+
+    {{-- @include('home.cart1') --}}
+
+    @stack('script')
+
+    @livewireScripts
 
     <script>
-        $(function() {
-            'use strict';
-            var morrisData = [{
-                y: '2019',
-                a: 30.66,
-                b: 0.33
-            }, {
-                y: '2020',
-                a: 48.82,
-                b: 0.50
-            }, {
-                y: '2021',
-                a: 33.33,
-                b: 0.15
-            }];
-            var morrisData2 = [{
-                y: 'Jan',
-                a: 18,
-                b: 18,
-                c: 1
-            }, {
-                y: 'Feb',
-                a: 23,
-                b: 22,
-                c: 2
-            }, {
-                y: 'Mar',
-                a: 19,
-                b: 18,
-                c: 0
-            }, {
-                y: 'Apr',
-                a: 28,
-                b: 28,
-                c: 3
-            }, {
-                y: 'Mei',
-                a: 33,
-                b: 35,
-                c: 0
-            }, {
-                y: 'Jun',
-                a: 28,
-                b: 28,
-                c: 1
-            }, {
-                y: 'Jul',
-                a: 18,
-                b: 18,
-                c: 0
-            }];
-            new Morris.Line({
-                element: 'morrisLine1',
-                data: morrisData2,
-                xkey: 'y',
-                ykeys: ['a', 'b', 'c'],
-                labels: ['Data Kebuntingan', 'Data Kelahiran', 'Data Kematian'],
-                lineColors: ['#705ec8', '#7ACB79', '#BC4739'],
+        $(document).ready(function() {
 
-                parseTime: false,
-                lineWidth: 1,
-                ymax: 'auto 50',
-                gridTextSize: 11,
-                hideHover: 'auto',
-                resize: true
-            });
-            new Morris.Bar({
-                element: 'morrisBar1',
-                data: morrisData,
-                xkey: 'y',
-                ykeys: ['a', 'b'],
-                labels: ['Data Kelahiran', 'Data Kematian'],
-                barColors: ['#7ACB79', '#BC4739'],
-                gridTextSize: 11,
-                hideHover: 'auto',
-                units: '%',
-                resize: true
-            });
-            new Morris.Area({
-                element: 'morrisArea1',
-                data: [{
-                    y: '2006',
-                    a: 30,
-                    b: 18
-                }, {
-                    y: '2007',
-                    a: 18,
-                    b: 22
-                }, {
-                    y: '2008',
-                    a: 15,
-                    b: 18
-                }, {
-                    y: '2009',
-                    a: 25,
-                    b: 28
-                }, {
-                    y: '2010',
-                    a: 30,
-                    b: 35
-                }, {
-                    y: '2011',
-                    a: 18,
-                    b: 28
-                }, {
-                    y: '2012',
-                    a: 12,
-                    b: 18
-                }],
-                xkey: 'moon',
-                ykeys: ['a', 'b'],
-                labels: ['Series A', 'Series B'],
-                lineColors: ['#705ec8', '#fb1c52'],
-                lineWidth: 1,
-                fillOpacity: 0.9,
-                gridTextSize: 11,
-                hideHover: 'auto',
-                resize: true,
-                ymax: 'auto 100',
+            $('.year').click(function() {
+
+                var year = $(this).attr('data-id');
+
+                // alert(data);
+
+                window.location = "/#statistics/" + year;
+
+
+
             });
 
 
-            var nReloads = 0;
-
-            function data(offset) {
-                var ret = [];
-                for (var x = 0; x <= 360; x += 10) {
-                    var v = (offset + x) % 360;
-                    ret.push({
-                        x: x,
-                        y: Math.sin(Math.PI * v / 180).toFixed(4),
-                        z: Math.cos(Math.PI * v / 180).toFixed(4)
-                    });
-                }
-                return ret;
-            }
-
-            /*---- morrisBar6----*/
-            var graph = Morris.Line({
-                element: 'morrisBar6',
-                data: data(0),
-                xkey: 'x',
-                ykeys: ['y', 'z'],
-                labels: ['data1', 'data2'],
-                lineColors: ['#705ec8', '#fb1c52'],
-                parseTime: false,
-                ymin: -1.0,
-                ymax: 1.0,
-                hideHover: true
-            });
-
-            function update() {
-                nReloads++;
-                graph.setData(data(5 * nReloads));
-                $('#reloadStatus').text(nReloads + ' reloads');
-            }
-            setInterval(update, 100);
-
-            /*---- morrisBar7----*/
-            var day_data = [{
-                    "period": "2012-10-01",
-                    "licensed": 3407,
-                    "sorned": 660
-                },
-                {
-                    "period": "2012-09-30",
-                    "licensed": 3351,
-                    "sorned": 629
-                },
-                {
-                    "period": "2012-09-29",
-                    "licensed": 3269,
-                    "sorned": 618
-                },
-                {
-                    "period": "2012-09-20",
-                    "licensed": 3246,
-                    "sorned": 661
-                },
-                {
-                    "period": "2012-09-19",
-                    "licensed": 3257,
-                    "sorned": 667
-                },
-                {
-                    "period": "2012-09-18",
-                    "licensed": 3248,
-                    "sorned": 627
-                },
-                {
-                    "period": "2012-09-17",
-                    "licensed": 3171,
-                    "sorned": 660
-                },
-                {
-                    "period": "2012-09-16",
-                    "licensed": 3171,
-                    "sorned": 676
-                },
-                {
-                    "period": "2012-09-15",
-                    "licensed": 3201,
-                    "sorned": 656
-                },
-                {
-                    "period": "2012-09-10",
-                    "licensed": 3215,
-                    "sorned": 622
-                }
-            ];
-            new Morris.Line({
-                element: 'morrisBar7',
-
-                data: day_data,
-                xkey: 'period',
-                ykeys: ['licensed', 'sorned'],
-                labels: ['Licensed', 'SORN'],
-                lineColors: ['#705ec8', '#fb1c52'],
-            });
-
-            new Morris.Donut({
-                element: 'morrisDonut1',
-                data: [{
-                    label: 'Google',
-                    value: 42
-                }, {
-                    label: 'Firefox',
-                    value: 32
-                }, {
-                    label: 'IE',
-                    value: 26
-                }],
-                colors: ['#fb1c52', '#705ec8', '#2dce89'],
-                storke: ['#fb1c52', '#705ec8', '#2dce89'],
-                resize: true,
-                backgroundColor: 'rgba(119, 119, 142, 0.2)',
-                labelColor: '#8e9cad',
-            });
         });
     </script>
 

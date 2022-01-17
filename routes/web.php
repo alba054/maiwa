@@ -21,6 +21,7 @@ Auth::routes();
 
 Route::get('/notif', [App\Http\Controllers\NotifikasiController::class, 'index'])->name('notif');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
+Route::get('/#statistics/{year}', [App\Http\Controllers\HomeController::class, 'welcome']);
 
 Route::group(['middleware' => ['auth']], function () {
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

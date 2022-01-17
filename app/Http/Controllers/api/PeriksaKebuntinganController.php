@@ -119,10 +119,10 @@ class PeriksaKebuntinganController extends Controller
             if ($hasil->hasil == "Bunting") {
                 Notifikasi::create([
                     'sapi_id' => $request->sapi_id,
-                    'tanggal' => now()->adddays(180)->format('Y-m-d'),
+                    'tanggal' => now()->adddays(150)->format('Y-m-d'),
                     'pesan' => "Cek Kelahiran",
                     'keterangan' => "0,0",
-                    'role' => "10"
+                    'role' => "6"
                 ]);
 
                 $pesan = "Enam Bulan Akan Melahirkan";

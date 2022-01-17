@@ -210,7 +210,9 @@ class WireSapiForm extends Component
         $save ? $this->emit('isSuccess',"Berhasil") : $this->emit('isError',"Terjadi kesalahan");
         // dd($save);
 
-        $this->generate($sapi);
+        if ($sapi->kondisi_lahir != 'Mati') {
+            $this->generate($sapi);
+        }
 
         $this->emit('refreshParent');
         $this->dispatchBrowserEvent('closeModal');

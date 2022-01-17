@@ -41,14 +41,37 @@ class WireFormPkb extends Component
         'forceCloseModal',
     ];
 
+    public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->get();
+
+        $data = [];
+        foreach ($sapi as $key => $value) {
+            if ($value->panens->last() != null) {
+                if ($value->panens->last()->role != 1) {
+                    array_push($data, $value);   
+                }
+            }else {
+                array_push($data, $value);
+                
+            }
+            
+        }
+
+        return $data;
+    }
+
+
     public function render()
     {
         
         return view('livewire.pkb.wire-form-pkb',[
             'metodes' => Metode::orderBy('metode','ASC')->get(),
             'hasils' => Hasil::orderBy('hasil','ASC')->get(),
-            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
-            
+            'sapis' => $this->dataSapi(),
         ]);
     }
 

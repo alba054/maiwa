@@ -66,7 +66,7 @@
                                     @foreach ($datas as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->tgl_panen }}</td>
+                                            <td>{{ $item->tanggal }}</td>
                                             <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
                                             </td>
                                             <td>{{ $item->status }}</td>

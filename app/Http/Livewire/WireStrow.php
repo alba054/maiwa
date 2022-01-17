@@ -41,9 +41,31 @@ class WireStrow extends Component
         })
         ->get();
     }
+    public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->get();
+
+        $data = [];
+        foreach ($sapi as $key => $value) {
+            if ($value->panens->last() != null) {
+                if ($value->panens->last()->role != 1) {
+                    array_push($data, $value);   
+                }
+            }else {
+                array_push($data, $value);
+                
+            }
+            
+        }
+
+        return $data;
+    }
     public function render(){
         return view('livewire.wire-strow',[
-            'sapis' => Sapi::orderBy('generasi')->get(),
+            'sapis' => $this->dataSapi(),
             'strows' => $this->resultData()
         ]);
     }

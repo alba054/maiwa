@@ -44,10 +44,32 @@ class WireFormPerformaAdd extends Component
         $today = date('Y/m/d');
         $this->date = $today;
     }
+    public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->get();
+
+        $data = [];
+        foreach ($sapi as $key => $value) {
+            if ($value->panens->last() != null) {
+                if ($value->panens->last()->role != 1) {
+                    array_push($data, $value);   
+                }
+            }else {
+                array_push($data, $value);
+                
+            }
+            
+        }
+
+        return $data;
+    }
     public function render()
     {
         return view('livewire.performa.wire-form-performa-add',[
-            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
+            'sapis' => $this->dataSapi(),
             'pendampings' => Pendamping::orderBy('id','ASC')->get(),
             'tsrs' => Tsr::orderBy('id','ASC')->get(),
             'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get()

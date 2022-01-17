@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Mati;
 
 use App\Helper\Constcoba;
+use App\Models\Notifikasi;
 use App\Models\Panen;
 use App\Models\Peternak;
 use App\Models\Sapi;
@@ -25,10 +26,33 @@ class WireMonMatiAdd extends Component
         'forceCloseModal',
     ];
 
+    public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->get();
+
+        $data = [];
+        foreach ($sapi as $key => $value) {
+            if ($value->panens->last() != null) {
+                if ($value->panens->last()->role != 1) {
+                    array_push($data, $value);   
+                }
+            }else {
+                array_push($data, $value);
+                
+            }
+            
+        }
+
+        return $data;
+    }
+
     public function render()
     {
         return view('livewire.mati.wire-mon-mati-add',[
-            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
+            'sapis' => $this->dataSapi(),
             'keterangans' => Constcoba::getStatus()->where('status','Mati'),
 
         ]);
@@ -69,9 +93,13 @@ class WireMonMatiAdd extends Component
             
             $data['role'] = 1;
 
-            $save = $this->selectedItemId ? Panen::find($this->selectedItemId)->update($data) : Panen::create($data);
+            $deleteNotif = Notifikasi::where('sapi_id',$this->sapi_id)
+            ->where('status', 'no')
+            ->delete();
             
+            $save = $this->selectedItemId ? Panen::find($this->selectedItemId)->update($data) : Panen::create($data);
             $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
+
     
             
             $this->emit('refreshParent');

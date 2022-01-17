@@ -6,9 +6,7 @@
         console.log(dataKelahiran);
 
         /* E-chart */
-        var chartdata = [
-
-            {
+        var chartdata = [{
                 name: 'Data Panen',
                 type: 'line',
                 smooth: true,

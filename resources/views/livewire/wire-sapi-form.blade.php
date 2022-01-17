@@ -177,11 +177,21 @@
 
             </form>
         </div>
+
+        <div class="dimmer active" wire:target="save" style="height: 5px; margin-top: 0;" wire:loading>
+            <div class="spinner4">
+                <div class="bounce1"></div>
+                <div class="bounce2"></div>
+                <div class="bounce3"></div>
+            </div>
+        </div>
+
     </div>
     <div class="modal-footer">
         <div class="row">
             <div class="col d-flex justify-content-end">
-                <button wire:click="save" class="btn btn-outline-primary" type="submit">Save Changes</button>
+                <button wire:click="save" class="btn btn-outline-primary" type="submit"
+                    wire:loading.attr="disabled">Save Changes</button>
             </div>
         </div>
     </div>

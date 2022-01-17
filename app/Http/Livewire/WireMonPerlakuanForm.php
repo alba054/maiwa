@@ -50,10 +50,33 @@ class WireMonPerlakuanForm extends Component
         $this->date = $today;
     }
 
+    public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->get();
+
+        $data = [];
+        foreach ($sapi as $key => $value) {
+            if ($value->panens->last() != null) {
+                if ($value->panens->last()->role != 1) {
+                    array_push($data, $value);   
+                }
+            }else {
+                array_push($data, $value);
+                
+            }
+            
+        }
+
+        return $data;
+    }
+
     public function render()
     {
         return view('livewire.wire-mon-perlakuan-form',[
-            'sapis' => Sapi::orderBy('generasi')->get(),
+            'sapis' => $this->dataSapi(),
             'obats' => Obat::orderBy('name')->get(),
             'vaksins' => Vaksin::orderBy('name')->get(),
             'vitamins' => Vitamin::orderBy('name')->get(),

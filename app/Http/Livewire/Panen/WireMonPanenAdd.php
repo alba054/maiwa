@@ -38,6 +38,29 @@ class WireMonPanenAdd extends Component
     {
         // dd(Constcoba::getStatus()->where('status','Jual'));
     }
+    public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->get();
+
+        $data = [];
+        foreach ($sapi as $key => $value) {
+            if ($value->panens->last() != null) {
+                if ($value->panens->last()->role != 1) {
+                    array_push($data, $value);   
+                }
+            }else {
+                array_push($data, $value);
+                
+            }
+            
+        }
+
+        return $data;
+    }
+
     public function render()
     {
        if ($this->sapi_id) {
@@ -47,7 +70,7 @@ class WireMonPanenAdd extends Component
            
        }
         return view('livewire.panen.wire-mon-panen-add',[
-            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
+            'sapis' => $this->dataSapi(),
             'keterangans' => Constcoba::getStatus()->where('status','Jual'),
         ]);
     }

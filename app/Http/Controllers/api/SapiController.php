@@ -42,7 +42,6 @@ class SapiController extends Controller
                 }
                 
             })
-            
             ->latest()->get();
         }else if ($hak_akses == 2){
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
@@ -156,7 +155,9 @@ class SapiController extends Controller
             'tsr_id' => $peternak->pendamping->tsr_id
         ]);
 
-        $this->generate($sapi);
+        if ($sapi->kondisi_lahir != 'Mati') {
+            $this->generate($sapi);
+        }
 
         //performa
 

@@ -50,7 +50,7 @@ class WirePeternakSapi extends Component
             'datas' => $this->resultData(),
             'pendampings' => Pendamping::orderBy('user_id')->get(),
             'peternaks' => Peternak::orderBy('nama_peternak')->get(),
-            'sapis' => Sapi::orderBy('eartag')->get(),
+            'sapis' => Sapi::orderBy('generasi')->where('kondisi_lahir' ,'!=', 'Mati')->get(),
         ]);
     }
     public function submit()

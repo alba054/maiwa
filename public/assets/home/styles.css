@@ -4270,7 +4270,7 @@ textarea.form-control-lg {
   }
   .navbar-expand-lg .offcanvas-top,
 .navbar-expand-lg .offcanvas-bottom {
-    height: auto;
+    min-height: auto;
     border-top: 0;
     border-bottom: 0;
   }

@@ -28,53 +28,60 @@ class Wirenotifikasi extends Component
         $now = now()->format('Y-m-d');
         $filterTahun = Carbon::now()->year;
         $monthStart = '01';
+        $monthEnd = '12';
 
         // $this->startDate = now()->subDays(30)->format('Y/m/d');
         $this->startDate = date($filterTahun.'-'.$monthStart.'-01');
-        $this->endDate = now()->format('Y-m-d');
+        $this->endDate = date($filterTahun.'-'.$monthEnd.'-01');
         
         
-        // $data = Notifikasi::with(['sapi'])
-        // ->orderBy('tanggal', 'ASC')
-        // // ->whereDate('tanggal',now()->subdays(1)->format('Y-m-d'))
-        // ->where('status','no')
-        // // ->WhereBetween('tanggal', [now()->subdays(1)->format('Y-m-d'), now()->format('Y-m-d')])
-        // ->get();
-        // // return $data;
-        // // echo(now()->format('Y-m-d'));
+        $data = Notifikasi::with(['sapi'])
+            ->orderBy('tanggal', 'ASC')
+            ->where('tanggal', '>=', now()->subdays(7)->format('Y-m-d'))
+            ->where('status', 'no')
+            ->get();
 
-        // $array_tanggal = [];
-        // foreach ($data as $key => $value) {
-        //     $token = $value->sapi->peternak->pendamping->user->remember_token;
+            // dd($data);
 
-        //     if ($value->role == "0" && $value->tanggal <= now()->format('Y-m-d')) {
-        //         $bday = Carbon::parse($value->tanggal);
-        //         $diff = fmod($bday->diffInDays($now), 7);
+        $array_tanggal = [];
+        foreach ($data as $key => $value) {
+            $token = $value->sapi->peternak->pendamping->user->remember_token;
 
-        //         // dd($diff);
-        //         array_push($array_tanggal, $value->pesan);
+            if ($value->role == "0" && $value->tanggal <= now()->format('Y-m-d')) {
+                $bday = Carbon::parse($value->tanggal);
+                $diff = fmod($bday->diffInDays($now), 7);
 
-        //         if ($diff == 0.0) {
+                // dd($diff);
+                // array_push($array_tanggal, $value->pesan);
+
+                if ($diff == 0.0) {
                     
-        //             $pesan = $value->pesan.' ke Sapi '.$value->sapi->eartag;
-        //             $this->sendFCM($token, 'MBC', $pesan);
+                    $pesan = $value->pesan.' ke Sapi '.'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
+                    $this->sendFCM($token, 'MBC', $pesan);
 
-        //         }
-        //     }else {
-        //         if ($value->tanggal <= now()->format('Y-m-d') && $value->tanggal >= now()->subdays(1)->format('Y-m-d')) {
-        //             array_push($array_tanggal, $value->pesan);
-        //             $pesan = $value->pesan.' ke Sapi '.$value->sapi->eartag;
-        //             $this->sendFCM($token, 'MBC', $pesan);
-        //         }
-        //     }
+                }
+            }else {
+
+                if ($value->tanggal == now()->format('Y-m-d') ) {
+                    // array_push($array_tanggal, $value->pesan);
+                    $pesan = $value->pesan.' Hari ini ke Sapi '.'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
+                    $this->sendFCM($token, 'MBC', $pesan);
+                    
+                }else if ($value->tanggal == now()->adddays(1)->format('Y-m-d')) {
+                    $pesan = $value->pesan.' Esok Hari ke Sapi '.'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
+                    $this->sendFCM($token, 'MBC', $pesan);
+                    
+                }
+
+            }
             
         //     // dd($token);
         //     // echo($token.'<br/>');
         //     //
 
             
-        //     // Constcoba::sendFCM($token, 'MBC', $pesan, $value->role.','.$value->sapi->peternak->pendamping->user->id);
-        // }
+            // Constcoba::sendFCM($token, 'MBC', $pesan, $value->role.','.$value->sapi->peternak->pendamping->user->id);
+        }
         // // dd($array_tanggal);
 
 

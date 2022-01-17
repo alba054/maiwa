@@ -41,11 +41,34 @@ class WireFormIbAdd extends Component
         $today = date('Y/m/d');
         $this->date = $today;
     }
+    public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->get();
+
+        $data = [];
+        foreach ($sapi as $key => $value) {
+            if ($value->panens->last() != null) {
+                if ($value->panens->last()->role != 1) {
+                    array_push($data, $value);   
+                }
+            }else {
+                array_push($data, $value);
+                
+            }
+            
+        }
+
+        return $data;
+    }
+
     public function render()
     {
         
         return view('livewire.ib.wire-form-ib-add',[
-            'sapis' => Sapi::orderBy('generasi','ASC')->get(),
+            'sapis' => $this->dataSapi(),
             'strows' => Strow::orderBy('kode_batch','ASC')->get(),
         ]);
     }

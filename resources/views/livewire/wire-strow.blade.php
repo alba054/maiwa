@@ -74,7 +74,9 @@
                             <select class="custom-select" wire:model="sapiId">
                                 <option value="">Please Choose</option>
                                 @foreach ($sapis as $item)
-                                    <option value="{{ $item->id }}"> {{ $item->eartag }} </option>
+                                    <option value="{{ $item->id }}">
+                                        {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -103,7 +105,8 @@
                                 @foreach ($strows as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->sapi->eartag }}</td>
+                                        <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
+                                        </td>
                                         <td>{{ $item->kode_batch }}</td>
                                         <td>{{ $item->batch }}</td>
 
