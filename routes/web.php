@@ -22,6 +22,9 @@ Auth::routes();
 Route::get('/notif', [App\Http\Controllers\NotifikasiController::class, 'index'])->name('notif');
 Route::get('/', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
 Route::get('/#statistics/{year}', [App\Http\Controllers\HomeController::class, 'welcome']);
+Route::get('userPostAll', [PostController::class, 'userAll'])->name('posts.userPostAll');
+Route::get('userPostDetail/{post:slug}', [PostController::class, 'userDetail'])->name('posts.userPostDetail');
+
 
 Route::group(['middleware' => ['auth']], function () {
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -39,6 +42,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('posts')->group(function () {
         Route::get('index', [PostController::class, 'index'])->name('posts.index');
+        Route::get('indexAll', [PostController::class, 'indexAll'])->name('posts.indexAll');
         Route::get('create', [PostController::class, 'create'])->name('posts.create');
         Route::post('create', [PostController::class, 'store'])->name('posts.store');
         Route::get('{post:slug}', [PostController::class, 'show'])->name('posts.show');

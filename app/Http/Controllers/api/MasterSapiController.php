@@ -15,7 +15,6 @@ class MasterSapiController extends Controller
         $status_sapi = StatusSapi::orderBy('status')->get();
         $jenis_sapi = JenisSapi::orderBy('jenis')->get();
 
-
         return response()->json([
             'responsecode' => '1',
             'responsemsg' => 'Success',

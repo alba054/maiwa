@@ -52,7 +52,7 @@
                                      <tr>
                                          <th>#</th>
                                          <th>Waktu IB</th>
-                                         <th>S/C</th>
+                                         <th>IB ke - </th>
                                          <th>Strow</th>
                                          <th>Sapi</th>
                                          <th>Peternak</th>

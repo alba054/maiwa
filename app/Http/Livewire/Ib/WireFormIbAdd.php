@@ -4,10 +4,11 @@ namespace App\Http\Livewire\Ib;
 
 use App\Models\InsiminasiBuatan;
 use App\Models\Laporan;
-use App\Models\PeternakSapi;
+use App\Models\Peternak;
 use App\Models\Sapi;
 use App\Models\Strow;
 use App\Models\Upah;
+use Carbon\Carbon;
 use Intervention\Image\ImageManager;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
@@ -20,12 +21,10 @@ class WireFormIbAdd extends Component
     public $selectedItemId, $tinggi_badan, $berat_badan, $panjang_badan, $lingkar_dada, $bsc, $sapi_id;
     public $date, $foto;
     protected $rules = [
-        'dosis_ib' => 'required',
         'strow_id' => 'required',
         'sapi_id' => 'required',
     ];
     protected $messages = [
-        'dosis_ib.required' => 'this field is required.',
         'strow_id.required' => 'this field is required.',
         'sapi_id.required' => 'this field is required.',
     ];
@@ -78,7 +77,6 @@ class WireFormIbAdd extends Component
 
         $validateData = [];
         $validateData = array_merge($validateData,[
-            'dosis_ib' => 'required',
             'strow_id' => 'required',
             'sapi_id' => 'required',
         ]);
@@ -93,41 +91,56 @@ class WireFormIbAdd extends Component
 
         $data['waktu_ib'] = $this->date;
 
-        $user = PeternakSapi::orderBy('id','DESC')->where('sapi_id', $this->sapi_id)->first();
-        if ($user) {
+        $sapi = Sapi::find($this->sapi_id);
+        $peternak = Peternak::find($sapi->peternak_id);
+
+        $oldData = InsiminasiBuatan::where('sapi_id', $this->sapi_id)
+        ->latest()->first();
+
+        
+
+        $data['dosis_ib'] = 1;
+
+        if ($oldData != null) {
+            $diff= Carbon::parse($oldData->waktu_ib)->diffInDays(now()->format('Y/m/d'));
+            if ($diff < 28) {
+                $data['dosis_ib'] = $oldData->dosis_ib + 1;
+            }
+        }
+
+        if ($data['dosis_ib'] > 3) {
+            $this->isError("Maaf Sapi sudah Melebihi Dosis");
+        }else {
             $res_foto = $this->foto;
             if (!empty($res_foto)){
                 $data['foto'] = $this->handleImageIntervention($res_foto);
             }
-    
-            $data['peternak_id'] = $user->peternak_id;
-            $data['pendamping_id'] = $user->pendamping_id;
-            $data['tsr_id'] = $user->tsr_id;
-            
+
+            $data['peternak_id'] = $peternak->id;
+            $data['pendamping_id'] = $peternak->pendamping_id;
+            $data['tsr_id'] = $peternak->pendamping->tsr_id;
+
             $save = $this->selectedItemId ? InsiminasiBuatan::find($this->selectedItemId)->update($data) : InsiminasiBuatan::create($data);
             
-            $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
-    
-            if (!$this->selectedItemId) {
-                $upah = Upah::find(3);
-                    Laporan::create([
-                        'sapi_id' => $this->sapi_id,
-                        'peternak_id' => $data['peternak_id'], 
-                        'pendamping_id' => $data['pendamping_id'], 
-                        'tsr_id' => $data['tsr_id'], 
-                        'tanggal' => $this->date, 
-                        'perlakuan' => $upah->detail,
-                        'upah' => $upah->price,
-                        ]);
-            }
-
-            $this->emit('refreshParent');
-            $this->dispatchBrowserEvent('closeModalAdd');
-            $this->cleanVars();  
-
-        } else {
-            $this->isError("Belum ada relasi sapi");
+                $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
+        
+                if (!$this->selectedItemId) {
+                    $upah = Upah::find(3);
+                        Laporan::create([
+                            'sapi_id' => $this->sapi_id,
+                            'peternak_id' => $data['peternak_id'], 
+                            'pendamping_id' => $data['pendamping_id'], 
+                            'tsr_id' => $data['tsr_id'], 
+                            'tanggal' => $this->date, 
+                            'perlakuan' => $upah->detail,
+                            'upah' => $upah->price,
+                            ]);
+                }
         }
+    
+                $this->emit('refreshParent');
+                $this->dispatchBrowserEvent('closeModalAdd');
+                $this->cleanVars();  
     }
     public function getModelId($modelId)
      {

@@ -14,13 +14,7 @@
                             src="{{ URL::asset('assets/images/users/2.jpg') }}">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">S/C<span class="text-danger">*</span></label>
-                    <input wire:model="dosis_ib" type="number" class="form-control" placeholder="e.g: 100CM">
-                    @error('dosis_ib')
-                        <small class="mt-2 text-danger">{{ $message }}</small>
-                    @enderror
-                </div>
+
                 <div class="form-group">
                     <label class="form-label">Pilih Straw<span class="text-danger">*</span></label>
                     <select class="custom-select" wire:model="strow_id">

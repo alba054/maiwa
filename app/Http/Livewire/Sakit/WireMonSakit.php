@@ -22,7 +22,7 @@ class WireMonSakit extends Component
     use WithPagination;
 
     protected $paginationTheme = 'bootstrap';
-    public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate, $keterangan;
+    public $sapiId, $peternakId, $pendampingId, $tsrId, $startDate, $endDate, $status;
     public $datax = array(), $dataLabel = array();
 
     public $rows = "10";
@@ -39,8 +39,28 @@ class WireMonSakit extends Component
         'isSuccess',
         'isError',
         'insert',
+        'formFilter',
         'refreshParent'=>'$refresh',
     ];
+    public function openSearchModal()
+    {
+        $this->emit('cleanVars');
+        $this->dispatchBrowserEvent('openModalSearch');
+    }
+
+    public function formFilter($data)
+    {
+        // dd($data['startDate']);
+
+        $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
+        $this->endDate = $data['endDate'] == null ? $this->endDate : $data['endDate'];
+        $this->sapiId = $data['sapiId'];
+        $this->peternakId = $data['peternakId'];
+        $this->pendampingId = $data['pendampingId'];
+        $this->tsrId = $data['tsrId'];
+        $this->status = $data['status'];
+    }
+
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
@@ -94,8 +114,8 @@ class WireMonSakit extends Component
             if($this->tsrId != null){
                 $query->Where('tsr_id','like','%'.$this->tsrId.'%');
             }
-            if($this->keterangan != null){
-                $query->Where('keterangan','like','%'.$this->keterangan.'%');
+            if($this->status != null){
+                $query->Where('status','like','%'.$this->status.'%');
             }
             
         })

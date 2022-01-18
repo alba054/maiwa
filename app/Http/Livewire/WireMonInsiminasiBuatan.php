@@ -28,12 +28,12 @@ class WireMonInsiminasiBuatan extends Component
     public $yearNow;
 
      protected $rules = [
-        'dosis_ib' => 'required',
         'strow_id' => 'required',
         'sapi_id' => 'required',
     ];
     protected $messages = [
-        'waktu_ib.required' => 'this field is required.',
+        'strow_id.required' => 'this field is required.',
+        'sapi_id.required' => 'this field is required.',
     ];
     protected $listeners = [
         'confirmed',

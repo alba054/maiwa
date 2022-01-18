@@ -20,6 +20,26 @@ class PostController extends Controller
             'datas' => Post::latest()->get()
         ]);
     }
+    public function indexAll()
+    {
+        return view('post.all',[
+            'datas' => Post::latest()->get()
+        ]);
+    }
+    public function userAll()
+    {
+        return view('post.user-all',[
+            'datas' => Post::latest()->get()
+        ]);
+    }
+    public function userDetail(Post $post)
+    {
+
+        // return $post;
+        return view('post.user-detail',[
+            'post' => $post
+        ]);
+    }
 
     public function create()
     {

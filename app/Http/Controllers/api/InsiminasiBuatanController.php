@@ -14,6 +14,7 @@ use App\Models\Sapi;
 use App\Models\Tsr;
 use App\Models\Upah;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 
@@ -39,7 +40,6 @@ class InsiminasiBuatanController extends Controller
             $data = InsiminasiBuatan::with(['sapi','strow'])
             ->latest()->get();
         }
-        
         return response()->json([
                 'responsecode' => '1',
                 'responsemsg' => 'Success',
@@ -68,11 +68,21 @@ class InsiminasiBuatanController extends Controller
             $imageName = $this->handleImageIntervention($request->image);
         }
 
+        $oldData = InsiminasiBuatan::where('sapi_id', $request->sapi_id)
+        ->latest()->first();
+
+        $dosis_ib = 1;
+
+        if ($oldData != null) {
+            $diff= Carbon::parse($oldData->waktu_ib)->diffInDays(now()->format('Y/m/d'));
+            if ($diff < 28) {
+                $dosis_ib = $oldData->dosis_ib + 1;
+            }
+        }
+        
+        // return $dosis_ib;
         $notifikasi = Notifikasi::find($request->notifikasi_id);
-        $ketExp =  explode(",", $notifikasi->keterangan);
-        $ketIB = $ketExp[0];
-        $ketFrek = $ketExp[1];
-        $dosis_ib = $ketIB;
+        
 
         $data = [
             'waktu_ib' => $waktu_ib,
@@ -110,19 +120,19 @@ class InsiminasiBuatanController extends Controller
             if ($notifikasi) {
                 $notifikasi->update([
                     'status' => 'yes',
-                    'pesan' => "Cek Birahi Telah Dilakukan",
+                    
                 ]);
             }
 
             Notifikasi::create([
                 'sapi_id' => $sapi_id,
-                'tanggal' => now()->adddays(21)->format('Y-m-d'),
+                'tanggal' => now()->adddays(19)->format('Y-m-d'),
                 'pesan' => "Cek Birahi",
-                'keterangan' => $ketIB + 1 .',1',
+                'keterangan' => $dosis_ib,
                 'role' => "0"
             ]);
 
-            $pesan = 'Terima Kasih, Telah melakukan Insiminasi Buatan '.$sapi->eartag;
+            $pesan = 'Terima Kasih, Telah melakukan Insiminasi Buatan MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
 
             Constcoba::sendFCM($token, 'MBC', $pesan, "0");
             

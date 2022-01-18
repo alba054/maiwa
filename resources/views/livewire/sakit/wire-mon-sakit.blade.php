@@ -204,18 +204,13 @@
 
 
 
-        <!-- User Form Modal -->
+        <!-- Filter Form Modal -->
         <div class="modal fade" role="dialog" tabindex="-1" id="search-form-modal">
             <div class="modal-dialog" role="document">
-                @livewire('mati.wire-mon-mati-search')
+                @livewire('sakit.wire-mon-sakit-search')
             </div>
         </div>
-        <!-- User Form Modal -->
-        <div class="modal fade" role="dialog" tabindex="-1" id="add-form-modal">
-            <div class="modal-dialog" role="document">
-                @livewire('mati.wire-mon-mati-add')
-            </div>
-        </div>
+
 
     </div>
 

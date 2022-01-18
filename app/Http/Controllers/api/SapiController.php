@@ -15,6 +15,7 @@ use App\Models\Sapi;
 use App\Models\Tsr;
 use App\Models\Upah;
 use App\Models\User;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Intervention\Image\ImageManager;
 
@@ -35,6 +36,7 @@ class SapiController extends Controller
             
             $pendampingId = Pendamping::where('user_id', $userId)->first()->id;
             $data = Sapi::with(['jenis_sapi','peternak'])
+            // ->where('kondisi_lahir' ,'!=', 'Mati')
             ->whereHas('peternak', function($q) use($pendampingId) {
             
                 if($pendampingId != null){
@@ -46,6 +48,7 @@ class SapiController extends Controller
         }else if ($hak_akses == 2){
             $tsrId = Tsr::where('user_id', $userId)->first()->id;
             $data = Sapi::with(['jenis_sapi','peternak'])
+            // ->where('kondisi_lahir' ,'!=', 'Mati')
             ->whereHas('peternak.pendamping', function($q) use($tsrId) {
             
                 if($tsrId != null){
@@ -56,15 +59,29 @@ class SapiController extends Controller
             ->latest()->get();
         }else{
             $data = Sapi::with(['jenis_sapi','peternak'])
-            
+            // ->where('kondisi_lahir' ,'!=', 'Mati')            
             ->latest()->get();
         }
         
+        $alldata = Collection::empty();
+        foreach ($data as $key => $value) {
+            if ($value->kondisi_lahir != 'Mati') {
+                if ($value->panens->last() != null) {
+                    if ($value->panens->last()->role != 1) {
+                        $alldata->push($value);  
+                    }
+                }else {
+                    $alldata->push($value);  
+                }
+            }
+            
+            
+        }
        
         return response()->json([
                 'responsecode' => '1',
                 'responsemsg' => 'Success',
-                'sapi' => $data,
+                'sapi' => $alldata,
             ], 201);
 
     }

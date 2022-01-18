@@ -238,8 +238,14 @@
     <section class="page-section" id="portfolio">
         <div class="container p-3 mb-3 mt-3">
             <h2 class="text-center mt-0">Our News</h2>
+
+
             <hr class="divider" />
+            <a href="{{ route('posts.userPostAll') }}" class="mt-3 text-center float-right">
+                <h4>Lihat Selengkapnya <i class="fe fe-chevron-right"></i></h4>
+            </a>
             <div class="row">
+
                 @foreach ($datas as $item)
                     <div class="col-md-6 col-xl-4">
                         <div class="card overflow-hidden">
@@ -247,10 +253,9 @@
                                     src="{{ url('storage/photos_thumb/' . $item->images) }}" alt="img"
                                     height="250px"></a>
                             <div class="card-body d-flex flex-column">
-                                <h4><a class="btn-link" href="{{ url('/' . ($page = '#')) }}"
+                                <h4><a class="btn-link" href="{{ route('posts.userPostDetail', $item) }}"
                                         style="text-decoration: none">{{ $item->title }}</a></h4>
-                                <div class="text-muted">{!! Str::limit(strip_tags($item->detail), 150) !!}</div>
-                                <a href="" class="mt-3 btn btn-lg btn-primary">Read more</a>
+                                <div class="text-muted">{!! Str::limit(strip_tags($item->detail), 80) !!}</div>
                             </div>
                         </div>
                     </div>
