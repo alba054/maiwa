@@ -238,14 +238,13 @@
     <section class="page-section" id="portfolio">
         <div class="container p-3 mb-3 mt-3">
             <h2 class="text-center mt-0">Our News</h2>
-
-
             <hr class="divider" />
-            <a href="{{ route('posts.userPostAll') }}" class="mt-3 text-center float-right">
-                <h4>Lihat Selengkapnya <i class="fe fe-chevron-right"></i></h4>
-            </a>
-            <div class="row">
 
+
+            <div class="row">
+                <a href="{{ route('posts.userPostAll') }}" class=" text-right float-right">
+                    <h4>Lihat Selengkapnya <i class="fe fe-chevron-right"></i></h4>
+                </a>
                 @foreach ($datas as $item)
                     <div class="col-md-6 col-xl-4">
                         <div class="card overflow-hidden">
