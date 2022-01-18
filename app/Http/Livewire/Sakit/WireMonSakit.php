@@ -222,7 +222,7 @@ class WireMonSakit extends Component
                 'sapi_id' => $this->sapi->id,
                 'tanggal' => now()->adddays(1)->format('Y-m-d'),
                 'pesan' => "Cek Birahi",
-                'keterangan' => '0,0',
+                'keterangan' => '0',
                 'role' => "0"
             ]);
             Panen::find($this->selectedItemId)->update([

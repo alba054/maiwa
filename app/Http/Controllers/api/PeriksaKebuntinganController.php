@@ -121,7 +121,7 @@ class PeriksaKebuntinganController extends Controller
                     'sapi_id' => $request->sapi_id,
                     'tanggal' => now()->adddays(150)->format('Y-m-d'),
                     'pesan' => "Cek Kelahiran",
-                    'keterangan' => "0,0",
+                    'keterangan' => "0",
                     'role' => "6"
                 ]);
 
@@ -136,7 +136,7 @@ class PeriksaKebuntinganController extends Controller
                     'sapi_id' => $request->sapi_id,
                     'tanggal' => now()->format('Y-m-d'),
                     'pesan' => "Harap segera hubungi Dokter",
-                    'keterangan' => "0,0",
+                    'keterangan' => "0",
                     'role' => "10"
                 ]);
             }

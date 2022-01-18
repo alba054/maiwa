@@ -119,7 +119,7 @@ class SapiController extends Controller
                 'pesan' => "Cek Birahi",
                 'role' => '0',
                 'status' => 'no',
-                'keterangan' => "0,0"
+                'keterangan' => "0"
             ]);
 
             PeriksaKebuntingan::create( [
@@ -273,7 +273,7 @@ class SapiController extends Controller
                 'tanggal' => date('Y-m-d', strtotime($tgl)),
                 'pesan' => $teks,
                 'role' => $role,
-                'keterangan' => "0,0"
+                'keterangan' => "0"
             ]);
         }
     }

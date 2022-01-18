@@ -15,13 +15,13 @@ class NotifikasiController extends Controller
     public function index($userId)
     {
         date_default_timezone_set("Asia/Makassar");
-        // $this->createNotif(3, "Cek Birahi", "0", "0,0", Carbon::now()->adddays(69)->format('Y-m-d') );
-        // $this->createNotif(3, "Periksa Kebuntingan", "1", "0,0", Carbon::now()->adddays(69)->format('Y-m-d') );
-        // $this->createNotif(3, "Recording/Performa", "2", "0,0", Carbon::now()->adddays(69)->format('Y-m-d') );
-        // $this->createNotif(3, "Insiminasi Buatan", "3", "0,0", Carbon::now()->adddays(69)->format('Y-m-d') );
-        // $this->createNotif(3, "Berikan Vitamin, Obat, Vaksin, Hormon", "4", "0,0", Carbon::now()->adddays(69)->format('Y-m-d') );
-        // $this->createNotif(3, "Panen", "5", "0,0", Carbon::now()->adddays(69)->format('Y-m-d') );
-        // $this->createNotif(3, "Cek Kelahiran", "6", "0,0", Carbon::now()->adddays(69)->format('Y-m-d') );
+        // $this->createNotif(3, "Cek Birahi", "0", "0", Carbon::now()->adddays(69)->format('Y-m-d') );
+        // $this->createNotif(3, "Periksa Kebuntingan", "1", "0", Carbon::now()->adddays(69)->format('Y-m-d') );
+        // $this->createNotif(3, "Recording/Performa", "2", "0", Carbon::now()->adddays(69)->format('Y-m-d') );
+        // $this->createNotif(3, "Insiminasi Buatan", "3", "0", Carbon::now()->adddays(69)->format('Y-m-d') );
+        // $this->createNotif(3, "Berikan Vitamin, Obat, Vaksin, Hormon", "4", "0", Carbon::now()->adddays(69)->format('Y-m-d') );
+        // $this->createNotif(3, "Panen", "5", "0", Carbon::now()->adddays(69)->format('Y-m-d') );
+        // $this->createNotif(3, "Cek Kelahiran", "6", "0", Carbon::now()->adddays(69)->format('Y-m-d') );
 
         $data = [];
         $hak_akses = User::find($userId)->hak_akses;
