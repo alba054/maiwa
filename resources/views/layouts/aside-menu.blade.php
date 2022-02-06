@@ -1,4 +1,4 @@
-    <aside class="app-sidebar">
+    <aside class="app-sidebar" style="overflow:scroll !important">
         <div class="app-sidebar__logo">
             <a class="header-brand" href="{{ url('/') }}">
                 <img src="{{ URL::asset('assets/images/brand/mbc.png') }}" class="header-brand-img desktop-lgo"
@@ -21,7 +21,7 @@
                     <h5 class=" mb-1"> {{ auth()->user()->name }} <i
                             class="ion-checkmark-circled  text-success fs-12"></i></h5>
                     <span
-                        class="text-muted app-sidebar__user-name text-sm">{{ auth()->user()->hak_akses == '1' ? (auth()->user()->hak_akses == '1' ? 'Admin' : 'TSR') : (auth()->user()->hak_akses == '2' ? 'TSR' : 'Pendamping') }}</span>
+                        class="text-muted app-sidebar__user-name text-sm">{{ auth()->user()->hak_akses == '1'? (auth()->user()->hak_akses == '1'? 'Admin': 'TSR'): (auth()->user()->hak_akses == '2'? 'TSR': 'Pendamping') }}</span>
                 </div>
             </div>
             <div class="sidebar-navs">
