@@ -163,7 +163,8 @@ class WireSapiForm extends Component
     }
     public function create()
     {
-       
+        // dd($this->tanggal_lahir);
+
         $data  =  $this->validate();
 
         $res_foto_depan = $this->foto_depan;

@@ -53,7 +53,7 @@ class Wirehome extends Component
     }
     public function exportToExcel()
     {
-        return Excel::download(new PopulasiSapiExport($this->sapiData()), 'populasisapi.xlsx');
+        return Excel::download(new PopulasiSapiExport($this->sapiData()->get()), 'populasisapi.xlsx');
 
     }
     public function render()

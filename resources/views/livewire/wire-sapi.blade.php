@@ -93,7 +93,7 @@
                                                  date_default_timezone_set('Asia/Makassar');
                                                  $now = now()->format('Y/m/d');
                                                  $bday = Carbon\Carbon::parse($item->tanggal_lahir);
-                                                 echo $bday->diffInYears($now) . ' Tahun, ' . $bday->diffInMonths($now) . ' Bulan, ' . $bday->diffInDays($now) . ' Hari';
+                                                 echo $bday->diff($now)->format('%y Th, %m Bln and %d Hr');
                                              @endphp
                                          </td>
                                          <td>{{ $item->kelamin }}</td>
@@ -109,7 +109,6 @@
                                                          class="fe fe-git-merge f-16 btn btn-warning"
                                                          style="cursor:pointer"></i>
                                                  @endif
-
                                              @endif
 
                                              <i wire:click="selectedItem({{ $item->id }},'update')"
@@ -119,7 +118,6 @@
                                                  class="fe fe-trash-2 f-16 btn btn-danger" style="cursor:pointer"></i>
                                          </td>
                                      </tr>
-
                                  @endforeach
                              </tbody>
 

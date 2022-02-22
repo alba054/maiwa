@@ -6,6 +6,7 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Data Sapi {{ $year }}</h3>
+
                     <div class="card-options">
                         <a href="{{ url('/' . ($page = '#')) }}" class="option-dots" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal fs-20"></i></a>
@@ -13,16 +14,17 @@
                             <span wire:click="exportToExcel" class="dropdown-item">Export To Excel</span>
 
                             @php
-                                $last = date('Y') - 10;
+                                $last = date('Y') - 5;
                                 $now = date('Y');
                             @endphp
 
                             @for ($i = $now; $i >= $last; $i--)
                                 <span class="dropdown-item year" style="cursor:pointer"
                                     data-id="{{ $i }}">{{ $i }}</span>
-
                             @endfor
                         </div>
+
+
                     </div>
                 </div>
 
@@ -146,7 +148,6 @@
 
 
                                         </tr>
-
                                     @endforeach
                                 </tbody>
 
@@ -222,7 +223,7 @@
                                         finished
                                         task
                                         on<a href="{{ url('/' . ($page = '#')) }}" class="font-weight-semibold">
-                                            {{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}</a>
+                                            {{ 'MBC-' .$item->sapi->generasi .'.' .$item->sapi->anak_ke .'-' .$item->sapi->eartag_induk .'-' .$item->sapi->eartag }}</a>
                                     </p>
                                 </li>
                             @endforeach

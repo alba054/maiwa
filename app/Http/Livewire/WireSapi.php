@@ -46,8 +46,8 @@ class WireSapi extends Component
         $monthStart = '01';
 
         // $this->startDate = now()->subDays(30)->format('Y/m/d');
-        $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
-        $this->endDate = now()->format('Y/m/d');
+        // $this->startDate = date($filterTahun.'/'.$monthStart.'/01');
+        // $this->endDate = now()->format('Y/m/d');
 
         // dd(Constcoba::getStatus());
 
@@ -58,7 +58,7 @@ class WireSapi extends Component
         $penId = $this->pendampingId;
         $tsrId = $this->tsrId;
 
-        return Sapi::with(['jenis_sapi','peternak'])
+        $sapi =  Sapi::with(['jenis_sapi','peternak'])
         ->latest()
         ->where(function ($query){
             if($this->searchTerm != ""){
@@ -92,22 +92,26 @@ class WireSapi extends Component
                 $q->where('tsr_id', $tsrId);
             }
             
-        })
-        ->WhereBetween('tanggal_lahir',[$this->startDate, $this->endDate])
-
-        ->paginate($this->rows);
+        });
+        
+        if ($this->startDate == null || $this->endDate == null) {
+            return $sapi;
+        }else {
+            return $sapi->WhereBetween('tanggal_lahir',[$this->startDate, $this->endDate]);
+        }
+        
     }
     
     public function exportToExcel()
     {
-        return Excel::download(new SapiExport($this->resultData()), 'sapi.xlsx');
+        return Excel::download(new SapiExport($this->resultData()->get()), 'sapi.xlsx');
 
     }
     public function render()
     {
         // dd($this->resultData());
         return view('livewire.wire-sapi',[
-            'datas' => $this->resultData(),
+            'datas' => $this->resultData()->paginate($this->rows),
             'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get(),
             'pendampings' => Pendamping::orderBy('user_id','ASC')->get()
         ]);
