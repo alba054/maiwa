@@ -145,6 +145,12 @@ class WireSapi extends Component
         $data->straw()->delete();
         $data->laporans()->delete();
         $data->peternak_sapis()->delete();
+        $data->panens()->delete();
+        $data->anaks()->delete();
+        $data->induk()->delete();
+
+
+
         // $data->statussapi()->delete();
 
         $delete = Sapi::destroy($this->selectedItemId);

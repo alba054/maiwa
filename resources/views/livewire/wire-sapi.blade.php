@@ -57,6 +57,7 @@
                                      <th>Kelamin</th>
                                      <th>Jenis Sapi</th>
                                      <th>Kondisi Kelahiran</th>
+                                     <th>Status Sapi</th>
                                      <th>Peternak</th>
                                      <th>Pendamping</th>
 
@@ -99,6 +100,8 @@
                                          <td>{{ $item->kelamin }}</td>
                                          <td>{{ $item->jenis_sapi->jenis }}</td>
                                          <td>{{ $item->kondisi_lahir }}</td>
+                                         <td>{{ count($item->panens) == 0 ? 'Budidaya' : $item->panens->last()->status }}
+                                         </td>
                                          <td>{{ $item->peternak->nama_peternak }}</td>
                                          <td>{{ $item->peternak->pendamping->user->name }}</td>
 
@@ -120,7 +123,6 @@
                                      </tr>
                                  @endforeach
                              </tbody>
-
                          @else
                              There no Data Yet
                          @endif
