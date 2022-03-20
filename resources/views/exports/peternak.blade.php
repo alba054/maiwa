@@ -3,7 +3,6 @@
         <tr>
             <td colspan="12" style="text-align: center; border:none;"><b>DAFTAR PETERNAK</b></td>
             <td colspan="12" style="text-align: center; border:none;"></td>
-
         </tr>
         <tr>
             <th>#</th>

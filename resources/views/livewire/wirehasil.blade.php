@@ -72,9 +72,9 @@
                                             <i wire:click="selectedItem({{ $item->id }},'update')"
                                                 class="fe fe-edit f-16 btn btn-outline-success" style="cursor:
                             pointer"></i>
-                                            {{-- <i wire:click="selectedItem({{ $item->id }},'delete')"
+                                            <i wire:click="selectedItem({{ $item->id }},'delete')"
                                                 class="fe fe-trash-2 f-16 btn btn-outline-danger" style="cursor:
-                            pointer"></i> --}}
+                            pointer"></i>
                                         </td>
                                     </tr>
                             </tbody>

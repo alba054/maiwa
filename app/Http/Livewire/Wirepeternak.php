@@ -78,13 +78,13 @@ class Wirepeternak extends Component
             }
 
             
-        })
-        ->paginate(10);
+        });
+        
     }
 
     public function exportToExcel()
     {
-        return Excel::download(new PeternakExport($this->resultData()), 'peternak.xlsx');
+        return Excel::download(new PeternakExport($this->resultData()->get()), 'peternak.xlsx');
 
     }
 
@@ -92,7 +92,7 @@ class Wirepeternak extends Component
     {
         
         return view('livewire.wirepeternak',[
-            'peternaks' => $this->resultData(),
+            'peternaks' => $this->resultData()->paginate(10),
             'pendampings' => Pendamping::latest()->get(),
         ]);
     }

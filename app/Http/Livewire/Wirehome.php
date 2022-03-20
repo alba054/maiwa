@@ -39,17 +39,26 @@ class Wirehome extends Component
         date_default_timezone_set("Asia/Makassar");
         // dd(now()->format('Y-m-d H:i:s'));
 
-        $this->year = now()->format('Y');
+        // $this->year = now()->format('Y');
 
     }
 
     public function sapiData()
     {
-        return Sapi::with(['jenis_sapi','peternak'])
-        ->latest()
-        ->whereYear('tanggal_lahir', $this->year);
+        
+        $data =  Sapi::with(['jenis_sapi','peternak'])
+        ->latest();
+        if ($this->year != null) {
+            $data = $data->whereYear('tanggal_lahir', $this->year);
+        }
+        return $data;
+        
         
         // ->paginate(10);
+    }
+    public function allData()
+    {
+        $this->year = "";
     }
     public function exportToExcel()
     {

@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire;
 
+use App\Exports\KelompokExport;
 use Livewire\Component;
 use App\Models\Kelompok;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Wirekelompok extends Component
 {
@@ -21,6 +23,12 @@ class Wirekelompok extends Component
         'delete',
         'cancelled'
     ];
+
+    public function exportToExcel()
+    {
+        return Excel::download(new KelompokExport($this->resultData()), 'kelompok.xlsx');
+
+    }
 
     public function render()
     {

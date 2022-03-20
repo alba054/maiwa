@@ -12,6 +12,7 @@
                             aria-haspopup="true" aria-expanded="false"><i class="fe fe-more-horizontal fs-20"></i></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <span wire:click="exportToExcel" class="dropdown-item">Export To Excel</span>
+                            <span wire:click="allData" class="dropdown-item">Semua Data</span>
 
                             @php
                                 $last = date('Y') - 5;
@@ -150,7 +151,6 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-
                             @else
                                 There no Data Yet
                             @endif
@@ -728,5 +728,4 @@
             /* E-chart */
         }
     </script>
-
 @endpush

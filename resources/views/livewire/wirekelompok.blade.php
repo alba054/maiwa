@@ -41,6 +41,9 @@
                     <div class="card-title">Tabel Kelompok</div>
                 </div>
 
+                <button wire:click="exportToExcel" class="btn btn-outline-success"><i class="fe fe-printer"></i>
+                    Export to Excel</button>
+
             </div>
             <div class="card-body">
                 <div class="row">
