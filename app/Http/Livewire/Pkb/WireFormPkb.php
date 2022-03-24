@@ -14,12 +14,16 @@ use Intervention\Image\ImageManager;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Collection;
+
 
 class WireFormPkb extends Component
 {
     use WithFileUploads;
     use LivewireAlert;
     public $foto, $selectedItemId, $metode_id, $hasil_id, $sapi_id, $waktu_pk, $status , $reproduksi;
+    public $query, $search_results, $how_many, $sapiEartag = '';
+
     protected $rules = [
         'metode_id' => 'required',
         'hasil_id' => 'required',
@@ -32,7 +36,7 @@ class WireFormPkb extends Component
         
         'metode_id.required' => 'this field is required.',  
         'hasil_id.required' => 'this field is required.',  
-        'sapi_id.required' => 'this field is required.',  
+        'sapi_id.required' => 'this Sapi ID is required.',  
     ];
 
     protected $listeners = [
@@ -41,7 +45,60 @@ class WireFormPkb extends Component
         'forceCloseModal',
     ];
 
+    public function updatedQuery() {
+        // dd($this->dataSapi());
+        $this->search_results = $this->dataSapi()
+            ->take($this->how_many);
+    }
+
+    public function loadMore() {
+        $this->how_many += 5;
+        $this->updatedQuery();
+    }
+
+    public function resetQuery() {
+        $this->query = '';
+        $this->how_many = 5;
+        $this->search_results = Collection::empty();
+    }
+    public function selectSapi($sapiId) {
+        $sapi = Sapi::find($sapiId);
+        $this->sapi_id = $sapi->id;
+        $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+        // dd($sapiId);
+        
+    }
     public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->where('eartag', 'like', '%' . $this->query . '%')
+        ->orWhere('generasi', 'like', '%' . $this->query . '%')
+        ->orWhere('nama_sapi', 'like', '%' . $this->query . '%')
+        ->get();
+
+        // dd(count($sapi));
+
+        $data = Collection::empty();
+        foreach ($sapi as $key => $value) {
+            if ($value->kondisi_lahir != 'Mati') {
+                if ($value->panens->last() != null) {
+                    if ($value->panens->last()->role != 1) {
+                        $data->push($value);  
+                    }
+                }else {
+                    $data->push($value);  
+                }
+            }
+            
+            
+        }
+
+        return $data;
+    }
+
+    public function resultData()
     {
        
         $sapi =  Sapi::orderBy('generasi')
@@ -71,7 +128,7 @@ class WireFormPkb extends Component
         return view('livewire.pkb.wire-form-pkb',[
             'metodes' => Metode::orderBy('metode','ASC')->get(),
             'hasils' => Hasil::orderBy('hasil','ASC')->get(),
-            'sapis' => $this->dataSapi(),
+            'sapis' => $this->resultData(),
         ]);
     }
 
@@ -158,6 +215,10 @@ class WireFormPkb extends Component
        $this->status = $data->status;
        $this->reproduksi = $data->reproduksi;
 
+       $sapi = Sapi::find($this->sapi_id);
+       $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+      
+
      }
 
     public function cleanVars()
@@ -168,6 +229,8 @@ class WireFormPkb extends Component
        $this->hasil_id = null;
        $this->sapi_id = null;
        $this->waktu_pk = null;
+       $this->sapiEartag = null;
+
     //    $this->status = null;
     }
    

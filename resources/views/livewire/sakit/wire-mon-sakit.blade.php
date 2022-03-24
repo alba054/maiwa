@@ -23,7 +23,6 @@
     </div>
     <!--End Page header-->
 
-
     <div class="row">
         <div class="position-relative col-xl-12 col-lg-12">
             <div class="card mb-5 border-0 shadow-sm">
@@ -130,7 +129,7 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->tanggal }}</td>
-                                            <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
+                                            <td>{{ 'MBC-' .$item->sapi->generasi .'.' .$item->sapi->anak_ke .'-' .$item->sapi->eartag_induk .'-' .$item->sapi->eartag }}
                                             </td>
                                             <td>{{ $item->status }}</td>
 
@@ -216,8 +215,6 @@
 
 </div>
 @push('script')
-
-
     <!--INTERNAL ECharts js-->
     <script src="{{ URL::asset('assets/plugins/echarts/echarts.js') }}"></script>
     <script type="text/javascript">
@@ -313,6 +310,4 @@
             /* E-chart */
         });
     </script>
-
-
 @endpush

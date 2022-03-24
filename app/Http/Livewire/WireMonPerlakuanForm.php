@@ -15,6 +15,8 @@ use Intervention\Image\ImageManager;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Collection;
+
 
 class WireMonPerlakuanForm extends Component
 {
@@ -23,6 +25,8 @@ class WireMonPerlakuanForm extends Component
 
     public $selectedItemId, $sapi_id, $tgl_perlakuan, $obat_id, $dosis_obat, $vaksin_id, $dosis_vaksin, $vitamin_id, $dosis_vitamin, $hormon_id, $dosis_hormon, $ket_perlakuan;
     public $foto, $date;
+    public $query, $search_results, $how_many, $sapiEartag = '';
+
     protected $rules = [
         'sapi_id' => 'required',
         'obat_id' => 'required',
@@ -49,8 +53,60 @@ class WireMonPerlakuanForm extends Component
         $today = date('Y/m/d');
         $this->date = $today;
     }
+    public function updatedQuery() {
+        // dd($this->dataSapi());
+        $this->search_results = $this->dataSapi()
+            ->take($this->how_many);
+    }
 
+    public function loadMore() {
+        $this->how_many += 5;
+        $this->updatedQuery();
+    }
+
+    public function resetQuery() {
+        $this->query = '';
+        $this->how_many = 5;
+        $this->search_results = Collection::empty();
+    }
+    public function selectSapi($sapiId) {
+        $sapi = Sapi::find($sapiId);
+        $this->sapi_id = $sapi->id;
+        $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+        // dd($sapiId);
+        
+    }
     public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->where('eartag', 'like', '%' . $this->query . '%')
+        ->orWhere('generasi', 'like', '%' . $this->query . '%')
+        ->orWhere('nama_sapi', 'like', '%' . $this->query . '%')
+        ->get();
+
+        // dd(count($sapi));
+
+        $data = Collection::empty();
+        foreach ($sapi as $key => $value) {
+            if ($value->kondisi_lahir != 'Mati') {
+                if ($value->panens->last() != null) {
+                    if ($value->panens->last()->role != 1) {
+                        $data->push($value);  
+                    }
+                }else {
+                    $data->push($value);  
+                }
+            }
+            
+            
+        }
+
+        return $data;
+    }
+
+    public function resultData()
     {
        
         $sapi =  Sapi::orderBy('generasi')
@@ -76,7 +132,7 @@ class WireMonPerlakuanForm extends Component
     public function render()
     {
         return view('livewire.wire-mon-perlakuan-form',[
-            'sapis' => $this->dataSapi(),
+            'sapis' => $this->resultData(),
             'obats' => Obat::orderBy('name')->get(),
             'vaksins' => Vaksin::orderBy('name')->get(),
             'vitamins' => Vitamin::orderBy('name')->get(),
@@ -159,6 +215,11 @@ class WireMonPerlakuanForm extends Component
         $this->hormon_id = $data->hormon_id;
         $this->dosis_hormon = $data->dosis_hormon;
         $this->ket_perlakuan = $data->ket_perlakuan;
+
+        $sapi = Sapi::find($this->sapi_id);
+        $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+       
+
      }
 
     public function cleanVars()
@@ -174,6 +235,7 @@ class WireMonPerlakuanForm extends Component
         $this->hormon_id = null;
         $this->dosis_hormon = null;
         $this->ket_perlakuan = null;
+        $this->sapiEartag == null;
      }
     
     public function forceCloseModal()

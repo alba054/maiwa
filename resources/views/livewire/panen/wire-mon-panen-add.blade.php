@@ -15,7 +15,93 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div class="position-relative form-group">
+                    <div>
+                        <div class="form-group mb-0">
+                            <label class="form-label">Pilih Sapi<span class="text-danger">*</span></label>
+
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fe fe-search text-primary"></i>
+                                    </div>
+                                </div>
+                                <input wire:keydown.escape="resetQuery" wire:model.debounce.500ms="query" type="text"
+                                    class="form-control" placeholder="Cari Eartag sapi atau nama sapi....">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div wire:loading class="position-absolute mt-1 border-0" style="z-index: 1;left: 0;right: 0;">
+                        <div class="card-body shadow">
+                            <div class="d-flex justify-content-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!empty($query))
+                        <div wire:click="resetQuery" class="position-fixed w-100 h-100"
+                            style="left: 0; top: 0; right: 0; bottom: 0;z-index: 1;"></div>
+                        @if ($search_results->isNotEmpty())
+                            <div class="card position-absolute mt-1" style="z-index: 2;left: 0;right: 0;border: 0;">
+                                <div class="card-body shadow">
+                                    <ul class="list-group list-group-flush">
+                                        @foreach ($search_results as $result)
+                                            <li class="list-group-item list-group-item-action">
+                                                <a wire:click="resetQuery"
+                                                    wire:click.prevent="selectSapi({{ $result->id }})" href="#">
+                                                    {{ 'MBC-' . $result->generasi . '.' . $result->anak_ke . '-' . $result->eartag_induk . '-' . $result->eartag }}
+                                                    | {{ $result->nama_sapi }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                        @if ($search_results->count() >= $how_many)
+                                            <li class="list-group-item list-group-item-action text-center">
+                                                <a wire:click.prevent="loadMore" class="btn btn-primary btn-sm"
+                                                    href="#">
+                                                    Load More <i class="bi bi-arrow-down-circle"></i>
+                                                </a>
+                                            </li>
+                                        @endif
+                                    </ul>
+                                </div>
+                            </div>
+                        @else
+                            <div class="card position-absolute mt-1 border-0" style="z-index: 1;left: 0;right: 0;">
+                                <div class="card-body shadow">
+                                    <div class="alert alert-warning mb-0">
+                                        No Sapi Found....
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    @endif
+                    @error('sapi_id')
+                        <small class="mt text-danger text-center">{{ $message }}</small>
+                    @enderror
+
+
+                    <h2 class="text-muted  text-center mt-3">{{ $sapiEartag }}</h2>
+                    @if ($tanggal_lahir)
+                        <div class="text-center">
+                            @php
+                                date_default_timezone_set('Asia/Makassar');
+                                $now = now()->format('Y/m/d');
+                                $bday = Carbon\Carbon::parse($tanggal_lahir);
+                                echo 'Umur ' . $bday->diffInYears($now) . ' Tahun, ' . $bday->diffInMonths($now) . ' Bulan, ' . $bday->diffInDays($now) . ' Hari';
+                            @endphp
+                        </div>
+                    @endif
+
+                </div>
+
+
+
+
+                {{-- <div class="form-group">
                     <label class="form-label">Pilih Sapi<span class="text-danger">*</span></label>
                     <select class="custom-select" wire:model="sapi_id">
                         <option value="">Please Choose</option>
@@ -29,19 +115,9 @@
                         <small class="mt-2 text-danger">{{ $message }}</small>
                     @enderror
 
-                    @if ($tanggal_lahir)
-                        <div>
-                            @php
-                                date_default_timezone_set('Asia/Makassar');
-                                $now = now()->format('Y/m/d');
-                                $bday = Carbon\Carbon::parse($tanggal_lahir);
-                                echo 'Umur ' . $bday->diffInYears($now) . ' Tahun, ' . $bday->diffInMonths($now) . ' Bulan, ' . $bday->diffInDays($now) . ' Hari';
-                            @endphp
-                        </div>
-                    @endif
+                    
 
-
-                </div>
+                </div> --}}
 
                 <div class="form-group">
                     <label class="form-label">Status Panen <span class="text-danger">*</span></label>

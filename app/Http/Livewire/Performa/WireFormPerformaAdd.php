@@ -13,6 +13,8 @@ use Intervention\Image\ImageManager;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Collection;
+
 
 class WireFormPerformaAdd extends Component
 {
@@ -20,6 +22,8 @@ class WireFormPerformaAdd extends Component
     use LivewireAlert;
     public $selectedItemId, $tinggi_badan, $berat_badan = 0, $panjang_badan, $lingkar_dada, $bsc, $sapi_id;
     public $date, $foto;
+    public $query, $search_results, $how_many, $sapiEartag = '';
+
     protected $rules = [
         'tinggi_badan' => 'required',
         'berat_badan' => 'nullable',
@@ -28,6 +32,7 @@ class WireFormPerformaAdd extends Component
         'bsc' => 'required',
         'sapi_id' => 'required',
     ];
+
     protected $messages = [
         'tanggal_performa.required' => 'this field is required.',
     ];
@@ -44,7 +49,59 @@ class WireFormPerformaAdd extends Component
         $today = date('Y/m/d');
         $this->date = $today;
     }
+    public function updatedQuery() {
+        // dd($this->dataSapi());
+        $this->search_results = $this->dataSapi()
+            ->take($this->how_many);
+    }
+
+    public function loadMore() {
+        $this->how_many += 5;
+        $this->updatedQuery();
+    }
+
+    public function resetQuery() {
+        $this->query = '';
+        $this->how_many = 5;
+        $this->search_results = Collection::empty();
+    }
+    public function selectSapi($sapiId) {
+        $sapi = Sapi::find($sapiId);
+        $this->sapi_id = $sapi->id;
+        $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+        // dd($sapiId);
+        
+    }
     public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->where('eartag', 'like', '%' . $this->query . '%')
+        ->orWhere('generasi', 'like', '%' . $this->query . '%')
+        ->orWhere('nama_sapi', 'like', '%' . $this->query . '%')
+        ->get();
+
+        // dd(count($sapi));
+
+        $data = Collection::empty();
+        foreach ($sapi as $key => $value) {
+            if ($value->kondisi_lahir != 'Mati') {
+                if ($value->panens->last() != null) {
+                    if ($value->panens->last()->role != 1) {
+                        $data->push($value);  
+                    }
+                }else {
+                    $data->push($value);  
+                }
+            }
+            
+            
+        }
+
+        return $data;
+    }
+    public function resultData()
     {
        
         $sapi =  Sapi::orderBy('generasi')
@@ -69,7 +126,7 @@ class WireFormPerformaAdd extends Component
     public function render()
     {
         return view('livewire.performa.wire-form-performa-add',[
-            'sapis' => $this->dataSapi(),
+            'sapis' => $this->resultData(),
             'pendampings' => Pendamping::orderBy('id','ASC')->get(),
             'tsrs' => Tsr::orderBy('id','ASC')->get(),
             'peternaks' => Peternak::orderBy('nama_peternak','ASC')->get()
@@ -148,6 +205,10 @@ class WireFormPerformaAdd extends Component
         $this->bsc = $data->bsc;
         $this->sapi_id = $data->sapi_id;
 
+        $sapi = Sapi::find($this->sapi_id);
+        $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+       
+
      }
 
     public function cleanVars()
@@ -159,6 +220,7 @@ class WireFormPerformaAdd extends Component
         $this->lingkar_dada = null;
         $this->bsc = null;
         $this->sapi_id = null;
+        $this->sapiEartag = null;
     }
    
    public function forceCloseModal()

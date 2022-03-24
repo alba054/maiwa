@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Panen;
 
+
 use App\Helper\Constcoba;
 use App\Models\Laporan;
 use App\Models\Panen;
@@ -12,6 +13,8 @@ use Intervention\Image\ImageManager;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Collection;
+
 
 class WireMonPanenAdd extends Component
 {
@@ -19,6 +22,8 @@ class WireMonPanenAdd extends Component
     use LivewireAlert;
     public $foto, $date, $selectedItemId, $status, $keterangan, $sapi_id;
     public $tanggal_lahir;
+    public $query, $search_results, $how_many, $sapiEartag = '';
+
 
     protected $rules = [
         'status' => 'required',
@@ -38,7 +43,59 @@ class WireMonPanenAdd extends Component
     {
         // dd(Constcoba::getStatus()->where('status','Jual'));
     }
+    public function updatedQuery() {
+        // dd($this->dataSapi());
+        $this->search_results = $this->dataSapi()
+            ->take($this->how_many);
+    }
+
+    public function loadMore() {
+        $this->how_many += 5;
+        $this->updatedQuery();
+    }
+
+    public function resetQuery() {
+        $this->query = '';
+        $this->how_many = 5;
+        $this->search_results = Collection::empty();
+    }
+    public function selectSapi($sapiId) {
+        $sapi = Sapi::find($sapiId);
+        $this->sapi_id = $sapi->id;
+        $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+        // dd($sapiId);
+        
+    }
     public function dataSapi()
+    {
+       
+        $sapi =  Sapi::orderBy('generasi')
+        ->where('kondisi_lahir' ,'!=', 'Mati')
+        ->where('eartag', 'like', '%' . $this->query . '%')
+        ->orWhere('generasi', 'like', '%' . $this->query . '%')
+        ->orWhere('nama_sapi', 'like', '%' . $this->query . '%')
+        ->get();
+
+        // dd(count($sapi));
+
+        $data = Collection::empty();
+        foreach ($sapi as $key => $value) {
+            if ($value->kondisi_lahir != 'Mati') {
+                if ($value->panens->last() != null) {
+                    if ($value->panens->last()->role != 1) {
+                        $data->push($value);  
+                    }
+                }else {
+                    $data->push($value);  
+                }
+            }
+            
+            
+        }
+
+        return $data;
+    }
+    public function resultData()
     {
        
         $sapi =  Sapi::orderBy('generasi')
@@ -70,7 +127,7 @@ class WireMonPanenAdd extends Component
            
        }
         return view('livewire.panen.wire-mon-panen-add',[
-            'sapis' => $this->dataSapi(),
+            'sapis' => $this->resultData(),
             'keterangans' => Constcoba::getStatus()->where('status','Jual'),
         ]);
     }
@@ -159,6 +216,10 @@ class WireMonPanenAdd extends Component
         $this->status = $data->status;
         $this->keterangan = $data->keterangan;
 
+        $sapi = Sapi::find($this->sapi_id);
+        $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
+       
+
      }
 
     public function cleanVars()
@@ -168,6 +229,7 @@ class WireMonPanenAdd extends Component
         $this->keterangan = null;
         $this->status = null;
         $this->foto = null;
+        $this->sapiEartag = null;
     }
    
    public function forceCloseModal()
