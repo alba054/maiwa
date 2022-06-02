@@ -3,7 +3,8 @@
         var dataKelahiran = @this.dataxkelahiran;
         var dataKematian = @this.dataxkematian;
         var dataPanen = @this.dataxpanen;
-        console.log(dataKelahiran);
+        var dataLabelKematian = @this.dataLabelKematian;
+        console.log(dataLabelKematian);
 
         /* E-chart */
         var chartdata = [{
@@ -91,9 +92,7 @@
                 left: '25',
             },
             xAxis: {
-                data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov',
-                    'Dec'
-                ],
+                data: dataLabelKematian,
                 axisLine: {
                     lineStyle: {
                         color: 'rgba(67, 87, 133, .09)'
