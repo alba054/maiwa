@@ -160,7 +160,7 @@ class Wirehome extends Component
 
         $dataKelahiran =  Sapi::orderBy('tanggal_lahir')
             // ->whereYear('tanggal_lahir', $this->year)
-            ->get();
+        ;
         $dataKematian =  Panen::where('role', '1')
             // ->whereYear('tanggal', $this->year)
             ->orderBy('tanggal')
@@ -175,54 +175,73 @@ class Wirehome extends Component
 
         // dd($dataKematian);
 
-        $year = now()->format('Y');
 
-        $this->countKematian = count($dataKematian);
-        $this->countPanen = count($dataPanen);
-        $this->countSapi = count($dataKelahiran);
 
-        $dataKematian = $dataKematian->groupBy(function ($val) {
-            return Carbon::parse($val->tanggal)->format('Y');
-        });
-        $dataKelahiran = $dataKelahiran->groupBy(function ($val) {
-            return Carbon::parse($val->tanggal_lahir)->format('Y');
-        });
+        $this->year = '2022';
+        if ($this->year) {
+            $dataKelahiran = $dataKelahiran->whereYear('tanggal_lahir', $this->year)->get();
+            $this->countSapi = count($dataKelahiran);
+            $dataKelahiran = $dataKelahiran->groupBy(function ($val) {
+                return Carbon::parse($val->tanggal_lahir)->format('m');
+            });
+            foreach ($this->dataLabelKelamin as $key => $valueLabel) {
 
-        for ($i = $year - 10; $i <= $year; $i++) {
-            array_push($this->dataLabelKematian, $i);
-            if ($dataKematian->has($i)) {
-                $kematian = $dataKematian[$i];
-                array_push($this->dataxkematian, count($kematian));
-            } else {
-                array_push($this->dataxkematian, 0);
+                array_push($this->dataLabelKematian, $valueLabel);
+
+                if ($dataKelahiran->has($valueLabel)) {
+                    $lahir = $dataKelahiran[$valueLabel];
+                    array_push($this->dataxkelahiran, count($lahir));
+                } else {
+                    array_push($this->dataxkelahiran, 0);
+                }
+
+                // if ($dataKematian->has($valueLabel)) {
+                //     $kematian = $dataKematian[$valueLabel];
+                //     array_push($this->dataxkematian, count($kematian));
+                // } else {
+                //     array_push($this->dataxkematian, 0);
+                // }
+
+                // if ($dataPanen->has($valueLabel)) {
+                //     $panen = $dataPanen[$valueLabel];
+                //     array_push($this->dataxpanen, count($panen));
+                // } else {
+                //     array_push($this->dataxpanen, 0);
+                // }
             }
+        } else {
+            $year = now()->format('Y');
 
-            if ($dataKelahiran->has($i)) {
-                $lahir = $dataKelahiran[$i];
-                array_push($this->dataxkelahiran, count($lahir));
-            } else {
-                array_push($this->dataxkelahiran, 0);
+            $this->countKematian = count($dataKematian);
+            $this->countPanen = count($dataPanen);
+            $this->countSapi = count($dataKelahiran->get());
+
+            $dataKematian = $dataKematian->groupBy(function ($val) {
+                return Carbon::parse($val->tanggal)->format('Y');
+            });
+            $dataKelahiran = $dataKelahiran->get()->groupBy(function ($val) {
+                return Carbon::parse($val->tanggal_lahir)->format('Y');
+            });
+
+            for ($i = $year - 10; $i <= $year; $i++) {
+                array_push($this->dataLabelKematian, $i);
+                if ($dataKematian->has($i)) {
+                    $kematian = $dataKematian[$i];
+                    array_push($this->dataxkematian, count($kematian));
+                } else {
+                    array_push($this->dataxkematian, 0);
+                }
+
+                if ($dataKelahiran->has($i)) {
+                    $lahir = $dataKelahiran[$i];
+                    array_push($this->dataxkelahiran, count($lahir));
+                } else {
+                    array_push($this->dataxkelahiran, 0);
+                }
             }
         }
+
         // dd($this->dataLabelKematian);
-
-        foreach ($this->dataLabelKelamin as $key => $valueLabel) {
-
-
-            // if ($dataKematian->has($valueLabel)) {
-            //     $kematian = $dataKematian[$valueLabel];
-            //     array_push($this->dataxkematian, count($kematian));
-            // } else {
-            //     array_push($this->dataxkematian, 0);
-            // }
-
-            // if ($dataPanen->has($valueLabel)) {
-            //     $panen = $dataPanen[$valueLabel];
-            //     array_push($this->dataxpanen, count($panen));
-            // } else {
-            //     array_push($this->dataxpanen, 0);
-            // }
-        }
     }
 
     public function isSuccess($msg)

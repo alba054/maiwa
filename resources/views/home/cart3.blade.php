@@ -1,46 +1,20 @@
 <script type="text/javascript">
     $(document).ready(function() {
+        var dataJantan = @json($dataxjantan);
+        var dataBetina = @json($dataxbetina);
+        var dataLabel = @json($labelSapi);
+        console.log(dataLabel);
 
-        var label = @json($labelSapi);
-        var dataKelahiran = @json($dataxkelahiran);
-        var dataKematian = @json($dataxkematian);
-        var dataPanen = @json($dataxpanen);
-        console.log(label);
-       
         /* E-chart */
         var chartdata = [
 
-            {
-                name: 'Data Panen',
-                type: 'line',
-                smooth: true,
-                data: dataPanen,
-                itemStyle: {
-                    normal: {
-                        barBorderRadius: [50, 50, 0, 0],
-                        color: new echarts.graphic.LinearGradient(
-                            0, 0, 0, 1,
-                            [{
-                                    offset: 0,
-                                    color: '#ecb403'
-                                },
-                                {
-                                    offset: 1,
-                                    color: '#ecb403'
-                                }
-                            ]
-                        )
-                    }
-                },
-            },
 
-            
             {
-                name: 'Data Kelahiran',
+                name: 'Data Sapi Jantan',
                 symbolSize: 20,
-                barWidth: 20,
+                barWidth: 10,
                 type: 'bar',
-                data: dataKelahiran,
+                data: dataJantan,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],
@@ -61,11 +35,11 @@
                 },
             },
             {
-                name: 'Data Kematian',
+                name: 'Data Sapi Betina',
                 symbolSize: 20,
-                barWidth: 20,
+                barWidth: 10,
                 type: 'bar',
-                data: dataKematian,
+                data: dataBetina,
                 itemStyle: {
                     normal: {
                         barBorderRadius: [50, 50, 0, 0],
@@ -85,12 +59,8 @@
                     }
                 },
             }
-            
         ];
-
-        //Grafik Kelahiran
-        
-        var chart = document.getElementById('echart1');
+        var chart = document.getElementById('echart3');
         var barChart = echarts.init(chart);
         var option = {
             grid: {
@@ -100,7 +70,7 @@
                 left: '25',
             },
             xAxis: {
-                data: label,
+                data: dataLabel,
                 axisLine: {
                     lineStyle: {
                         color: 'rgba(67, 87, 133, .09)'
@@ -145,6 +115,5 @@
         };
         barChart.setOption(option);
         /* E-chart */
-
     });
 </script>

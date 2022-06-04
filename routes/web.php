@@ -28,13 +28,14 @@ Route::get('userPostDetail/{post:slug}', [PostController::class, 'userDetail'])-
 
 Route::group(['middleware' => ['auth']], function () {
     // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('/home/{year}', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::post('/home/filter', [App\Http\Controllers\HomeController::class, 'filter'])->name('home.filter');
     Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'index']);
     Route::get('/sapi/{sapi:eartag}', [App\Http\Controllers\SapiController::class, 'show'])->name('sapi.show');
     Route::get('/pages/{page}', [App\Http\Controllers\AdminController::class, 'index']);
-    
+
     Route::get('/export/pkb/{statusNo}/{id}', [App\Http\Controllers\ExportStrukController::class, 'ExportPKB']);
-    
+
     // Route::resource('/post', PostController::class);
     // Route::get('post/delete/{id}', [PostController::class, 'destroy']);
 
@@ -47,14 +48,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('create', [PostController::class, 'store'])->name('posts.store');
         Route::get('{post:slug}', [PostController::class, 'show'])->name('posts.show');
         Route::get('{post:slug}/edit', [PostController::class, 'edit'])->name('posts.edit');
-        Route::put('{post:slug}/edit', [PostController::class, 'update'])->name('posts.update'); 
+        Route::put('{post:slug}/edit', [PostController::class, 'update'])->name('posts.update');
     });
 
     Route::get('/download', function () {
         return response()->download(storage_path('app/public/apk/mbc.apk'));
     });
-
-    
 });
-
-

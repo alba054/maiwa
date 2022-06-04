@@ -1,6 +1,7 @@
 $(function(e){
   'use strict'
 
+
 	/* E-chart */
 	var chartdata = [
 		{
@@ -70,7 +71,7 @@ $(function(e){
 		  left: '25',
 		},
 		xAxis: {
-		  data: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		  data: [ 'Apr', 'May', 'June', 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 		  axisLine: {
 			lineStyle: {
 			  color: 'rgba(67, 87, 133, .09)'

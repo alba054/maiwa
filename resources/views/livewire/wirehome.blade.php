@@ -21,7 +21,7 @@
 
                             @for ($i = $now; $i >= $last; $i--)
                                 <span class="dropdown-item year" style="cursor:pointer"
-                                    data-id="{{ $i }}">{{ $i }}</span>
+                                    data-id="{{ $i }}" id="year">{{ $i }}</span>
                             @endfor
                         </div>
 
@@ -332,4 +332,13 @@
     @include('livewire.home.cart2')
     @include('livewire.home.cart3')
     
+    <script>
+        $(".year").on('click', function(event){
+            var data = $(this).attr('data-id');
+
+            @this.set('year', data);
+
+            
+        });
+    </script>
 @endpush

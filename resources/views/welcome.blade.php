@@ -61,7 +61,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Login</a></li>
 
                     @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('home','0') }}">Home</a></li>
 
                     @endguest
                 </ul>
