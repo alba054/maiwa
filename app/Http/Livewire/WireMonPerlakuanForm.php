@@ -29,15 +29,15 @@ class WireMonPerlakuanForm extends Component
 
     protected $rules = [
         'sapi_id' => 'required',
-        'obat_id' => 'required',
-        'dosis_obat' => 'required',
-        'vaksin_id' => 'required',
-        'dosis_vaksin' => 'required',
-        'vitamin_id' => 'required',
-        'dosis_vitamin' => 'required',
-        'hormon_id' => 'required',
-        'dosis_hormon' => 'required',
-        'ket_perlakuan' => 'required',
+        'obat_id' => 'nullable',
+        'dosis_obat' => 'nullable',
+        'vaksin_id' => 'nullable',
+        'dosis_vaksin' => 'nullable',
+        'vitamin_id' => 'nullable',
+        'dosis_vitamin' => 'nullable',
+        'hormon_id' => 'nullable',
+        'dosis_hormon' => 'nullable',
+        'ket_perlakuan' => 'nullable',
         'foto' => 'required',
     ];
 
@@ -53,38 +53,42 @@ class WireMonPerlakuanForm extends Component
         $today = date('Y/m/d');
         $this->date = $today;
     }
-    public function updatedQuery() {
+    public function updatedQuery()
+    {
         // dd($this->dataSapi());
         $this->search_results = $this->dataSapi()
             ->take($this->how_many);
     }
 
-    public function loadMore() {
+    public function loadMore()
+    {
         $this->how_many += 5;
         $this->updatedQuery();
     }
 
-    public function resetQuery() {
+    public function resetQuery()
+    {
         $this->query = '';
         $this->how_many = 5;
         $this->search_results = Collection::empty();
     }
-    public function selectSapi($sapiId) {
+    public function selectSapi($sapiId)
+    {
         $sapi = Sapi::find($sapiId);
         $this->sapi_id = $sapi->id;
         $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
         // dd($sapiId);
-        
+
     }
     public function dataSapi()
     {
-       
+
         $sapi =  Sapi::orderBy('generasi')
-        ->where('kondisi_lahir' ,'!=', 'Mati')
-        ->where('eartag', 'like', '%' . $this->query . '%')
-        ->orWhere('generasi', 'like', '%' . $this->query . '%')
-        ->orWhere('nama_sapi', 'like', '%' . $this->query . '%')
-        ->get();
+            ->where('kondisi_lahir', '!=', 'Mati')
+            ->where('eartag', 'like', '%' . $this->query . '%')
+            ->orWhere('generasi', 'like', '%' . $this->query . '%')
+            ->orWhere('nama_sapi', 'like', '%' . $this->query . '%')
+            ->get();
 
         // dd(count($sapi));
 
@@ -93,14 +97,12 @@ class WireMonPerlakuanForm extends Component
             if ($value->kondisi_lahir != 'Mati') {
                 if ($value->panens->last() != null) {
                     if ($value->panens->last()->role != 1) {
-                        $data->push($value);  
+                        $data->push($value);
                     }
-                }else {
-                    $data->push($value);  
+                } else {
+                    $data->push($value);
                 }
             }
-            
-            
         }
 
         return $data;
@@ -108,22 +110,20 @@ class WireMonPerlakuanForm extends Component
 
     public function resultData()
     {
-       
+
         $sapi =  Sapi::orderBy('generasi')
-        ->where('kondisi_lahir' ,'!=', 'Mati')
-        ->get();
+            ->where('kondisi_lahir', '!=', 'Mati')
+            ->get();
 
         $data = [];
         foreach ($sapi as $key => $value) {
             if ($value->panens->last() != null) {
                 if ($value->panens->last()->role != 1) {
-                    array_push($data, $value);   
+                    array_push($data, $value);
                 }
-            }else {
+            } else {
                 array_push($data, $value);
-                
             }
-            
         }
 
         return $data;
@@ -131,7 +131,7 @@ class WireMonPerlakuanForm extends Component
 
     public function render()
     {
-        return view('livewire.wire-mon-perlakuan-form',[
+        return view('livewire.wire-mon-perlakuan-form', [
             'sapis' => $this->resultData(),
             'obats' => Obat::orderBy('name')->get(),
             'vaksins' => Vaksin::orderBy('name')->get(),
@@ -143,31 +143,31 @@ class WireMonPerlakuanForm extends Component
     public function save()
     {
         $validateData = [];
-        
-        $validateData = array_merge($validateData,[
-           'sapi_id' => 'required',
-           'obat_id' => 'required',
-            'dosis_obat' => 'required',
-            'vaksin_id' => 'required',
-            'dosis_vaksin' => 'required',
-            'vitamin_id' => 'required',
-            'dosis_vitamin' => 'required',
-            'hormon_id' => 'required',
-            'dosis_hormon' => 'required',
-            'ket_perlakuan' => 'required',
+
+        $validateData = array_merge($validateData, [
+            'sapi_id' => 'required',
+            'obat_id' => 'nullable',
+            'dosis_obat' => 'nullable',
+            'vaksin_id' => 'nullable',
+            'dosis_vaksin' => 'nullable',
+            'vitamin_id' => 'nullable',
+            'dosis_vitamin' => 'nullable',
+            'hormon_id' => 'nullable',
+            'dosis_hormon' => 'nullable',
+            'ket_perlakuan' => 'nullable',
         ]);
         if (!$this->selectedItemId) {
-            $validateData = array_merge($validateData,[
+            $validateData = array_merge($validateData, [
                 'foto' => 'required|image|max:1024',
             ]);
         }
         $data = $this->validate($validateData);
 
         $data['tgl_perlakuan'] = $this->date;
-        $user = PeternakSapi::orderBy('id','DESC')->where('sapi_id', $this->sapi_id)->first();
+        $user = PeternakSapi::orderBy('id', 'DESC')->where('sapi_id', $this->sapi_id)->first();
         if ($user) {
             $res_foto = $this->foto;
-            if (!empty($res_foto)){
+            if (!empty($res_foto)) {
                 $data['foto'] = $this->handleImageIntervention($res_foto);
             }
 
@@ -177,32 +177,31 @@ class WireMonPerlakuanForm extends Component
 
             $save = $this->selectedItemId ? Perlakuan::find($this->selectedItemId)->update($data) : Perlakuan::create($data);
             $save ? $this->isSuccess("Data Berhasil Tersimpan") : $this->isError("Data Gagal Tersimpan");
-    
+
             if (!$this->selectedItemId) {
                 $upah = Upah::find(4);
-                    Laporan::create([
-                        'sapi_id' => $this->sapi_id,
-                        'peternak_id' => $data['peternak_id'], 
-                        'pendamping_id' => $data['pendamping_id'], 
-                        'tsr_id' => $data['tsr_id'], 
-                        'tanggal' => $this->date, 
-                        'perlakuan' => $upah->detail,
-                        'upah' => $upah->price,
-                        ]);
+                Laporan::create([
+                    'sapi_id' => $this->sapi_id,
+                    'peternak_id' => $data['peternak_id'],
+                    'pendamping_id' => $data['pendamping_id'],
+                    'tsr_id' => $data['tsr_id'],
+                    'tanggal' => $this->date,
+                    'perlakuan' => $upah->detail,
+                    'upah' => $upah->price,
+                ]);
             }
 
             $this->emit('refreshParent');
             $this->dispatchBrowserEvent('closeModal');
-            $this->cleanVars();  
+            $this->cleanVars();
         } else {
             $this->isError("Belum ada relasi sapi");
         }
-        
     }
-    
+
 
     public function getModelId($modelId)
-     {
+    {
         $this->selectedItemId = $modelId;
         $data = Perlakuan::find($modelId);
         $this->sapi_id = $data->sapi_id;
@@ -218,12 +217,10 @@ class WireMonPerlakuanForm extends Component
 
         $sapi = Sapi::find($this->sapi_id);
         $this->sapiEartag = 'MBC-' . $sapi->generasi . '.' . $sapi->anak_ke . '-' . $sapi->eartag_induk . '-' . $sapi->eartag;
-       
-
-     }
+    }
 
     public function cleanVars()
-     {
+    {
         $this->selectedItemId = null;
         $this->sapi_id = null;
         $this->obat_id = null;
@@ -236,51 +233,51 @@ class WireMonPerlakuanForm extends Component
         $this->dosis_hormon = null;
         $this->ket_perlakuan = null;
         $this->sapiEartag == null;
-     }
-    
-    public function forceCloseModal()
-     {
-         $this->cleanVars();
-         $this->resetErrorBag();
-         $this->resetValidation();
-     }
+    }
 
-     public function handleImageIntervention($res_foto)
+    public function forceCloseModal()
+    {
+        $this->cleanVars();
+        $this->resetErrorBag();
+        $this->resetValidation();
+    }
+
+    public function handleImageIntervention($res_foto)
     {
         $res_foto->store('public/photos');
         $imageName = $res_foto->hashName();
         $data['foto'] = $imageName;
 
         $manager = new ImageManager();
-        $image = $manager->make('storage/photos/'.$imageName)->resize(500,300);
-        $image->save('storage/photos_thumb/'.$imageName);
+        $image = $manager->make('storage/photos/' . $imageName)->resize(500, 300);
+        $image->save('storage/photos_thumb/' . $imageName);
 
         return $imageName;
     }
     public function isSuccess($msg)
     {
         $this->alert('success', $msg, [
-            'position' =>  'top-end', 
-            'timer' =>  3000,  
-            'toast' =>  true, 
-            'text' =>  '', 
-            'confirmButtonText' =>  'Ok', 
-            'cancelButtonText' =>  'Cancel', 
-            'showCancelButton' =>  false, 
-            'showConfirmButton' =>  false, 
-      ]);
+            'position' =>  'top-end',
+            'timer' =>  3000,
+            'toast' =>  true,
+            'text' =>  '',
+            'confirmButtonText' =>  'Ok',
+            'cancelButtonText' =>  'Cancel',
+            'showCancelButton' =>  false,
+            'showConfirmButton' =>  false,
+        ]);
     }
     public function isError($msg)
     {
         $this->alert('error', $msg, [
-            'position' =>  'top-end', 
-            'timer' =>  3000,  
-            'toast' =>  true, 
-            'text' =>  '', 
-            'confirmButtonText' =>  'Ok', 
-            'cancelButtonText' =>  'Cancel', 
-            'showCancelButton' =>  false, 
-            'showConfirmButton' =>  false, 
-      ]);
+            'position' =>  'top-end',
+            'timer' =>  3000,
+            'toast' =>  true,
+            'text' =>  '',
+            'confirmButtonText' =>  'Ok',
+            'cancelButtonText' =>  'Cancel',
+            'showCancelButton' =>  false,
+            'showConfirmButton' =>  false,
+        ]);
     }
 }

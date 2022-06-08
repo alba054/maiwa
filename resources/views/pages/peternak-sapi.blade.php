@@ -1,5 +1,8 @@
 @extends('layouts.master')
 @section('css')
+<!-- INTERNAL Select2 css -->
+<link href="{{ asset('assets/plugins/select2/select2.min.css') }}" rel="stylesheet" />
+
 @endsection
 @section('page-header')
     <!--Page header-->
@@ -27,5 +30,7 @@
     </div>
 @endsection
 @section('js')
-
+<!-- INTERNAL Select2 js -->
+<script src="{{ asset('assets/plugins/select2/select2.full.min.js') }}"></script>
+<script src="{{ asset('assets/js/select2.js') }}"></script>
 @endsection

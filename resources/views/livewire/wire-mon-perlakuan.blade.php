@@ -71,15 +71,15 @@
                                             <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
                                             </td>
                                             <td>{{ $item->tgl_perlakuan }}</td>
-                                            <td>{{ $item->obat->name }}</td>
-                                            <td>{{ $item->dosis_obat }}</td>
-                                            <td>{{ $item->vaksin->name }}</td>
-                                            <td>{{ $item->dosis_vaksin }}</td>
-                                            <td>{{ $item->vitamin->name }}</td>
-                                            <td>{{ $item->dosis_vitamin }}</td>
-                                            <td>{{ $item->hormon->name }}</td>
-                                            <td>{{ $item->dosis_hormon }}</td>
-                                            <td>{{ $item->ket_perlakuan }}</td>
+                                            <td>{{ $item->obat->name ??   '-' }}</td>
+                                            <td>{{ $item->dosis_obat ??   '-'}}</td>
+                                            <td>{{ $item->vaksin->name ??   '-'}}</td>
+                                            <td>{{ $item->dosis_vaksin ??   '-'}}</td>
+                                            <td>{{ $item->vitamin->name ??   '-'}}</td>
+                                            <td>{{ $item->dosis_vitamin ??   '-'}}</td>
+                                            <td>{{ $item->hormon->name ??   '-'}}</td>
+                                            <td>{{ $item->dosis_hormon ??   '-'}}</td>
+                                            <td>{{ $item->ket_perlakuan ??   '-'}}</td>
                                             <td>{{ $item->peternak->nama_peternak }}</td>
                                             <td>{{ $item->pendamping->user->name }}
                                             </td>

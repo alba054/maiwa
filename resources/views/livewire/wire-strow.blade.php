@@ -105,7 +105,7 @@
                                 @foreach ($strows as $item)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag }}
+                                        <td>{{ $item->sapi_id ? 'MBC-' . $item->sapi->generasi . '.' . $item->sapi->anak_ke . '-' . $item->sapi->eartag_induk . '-' . $item->sapi->eartag : '-' }}
                                         </td>
                                         <td>{{ $item->kode_batch }}</td>
                                         <td>{{ $item->batch }}</td>
