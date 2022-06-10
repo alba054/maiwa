@@ -81,7 +81,7 @@
 
      <!-- Row-1 -->
      <div class="row">
-        <div class="col-xl-12 col-lg-6 col-md-6 col-xm-12">
+        <div class="col-xl-12">
             <div class="card overflow-hidden dash1-card border-0">
                 <div class="card-body">
                     <div class="form-group"> 
@@ -128,7 +128,7 @@
     {{-- @livewire('wirehome') --}}
    
     <div class="row">
-        <div class="col-xl-12 col-lg-6 col-md-6 col-xm-12">
+        <div class="col-xl-12 ">
             <div class="card overflow-hidden dash1-card border-0">
                 <div class="card-header">
                     <h3 class="card-title">Data Sapi {{ $year }}</h3>
@@ -279,7 +279,7 @@
    
         <!-- Row-2 -->
     <div class="row">
-        <div class="col-xl-8 col-lg-8 col-md-12">
+        <div class="col-xl-8">
             
             <div class="card">
                 <div class="card-header">
@@ -379,7 +379,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-xl-4 col-md-12">
+        <div class="col-xl-4">
             <div class="card" style="height: 100%;">
                 <div class="card-header">
                     <h3 class="card-title">Recent Activity</h3>
