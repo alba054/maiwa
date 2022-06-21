@@ -13,39 +13,7 @@
                     </div>
                 </div>
 
-                <div class="form-group" wire:ignore>
-                    <label class="form-label"> Select2 with search box</label>
-                    <select class="form-control select2-show-search" data-placeholder="Choose one (with searchbox)">
-                        <optgroup label="Mountain Time Zone">
-                            <option value="AZ">Arizona</option>
-                            <option value="CO">Colorado</option>
-                            <option value="ID">Idaho</option>
-                            <option value="MT">Montana</option><option value="NE">Nebraska</option>
-                            <option value="NM">New Mexico</option>
-                            <option value="ND">North Dakota</option>
-                            <option value="UT">Utah</option>
-                            <option value="WY">Wyoming</option>
-                        </optgroup>
-                        <optgroup label="Central Time Zone">
-                            <option value="AL">Alabama</option>
-                            <option value="AR">Arkansas</option>
-                            <option value="IL">Illinois</option>
-                            <option value="IA">Iowa</option>
-                            <option value="KS">Kansas</option>
-                            <option value="KY">Kentucky</option>
-                            <option value="LA">Louisiana</option>
-                            <option value="MN">Minnesota</option>
-                            <option value="MS">Mississippi</option>
-                            <option value="MO">Missouri</option>
-                            <option value="OK">Oklahoma</option>
-                            <option value="SD">South Dakota</option>
-                            <option value="TX">Texas</option>
-                            <option value="TN">Tennessee</option>
-                            <option value="WI">Wisconsin</option>
-                        </optgroup>
-                    </select>
-                </div>
-
+                
 
                 <div class="form-group">
                     <label class="form-label">Pilih Peternak<span class="text-danger">*</span></label>
@@ -119,7 +87,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-sm-4">
+                    {{-- <div class="col-sm-3">
                         <div class="form-group">
                             <select class="custom-select" wire:model="sapiId">
                                 <option value="">Pilih Sapi</option>
@@ -130,6 +98,21 @@
                                 @endforeach
                             </select>
                         </div>
+                    </div> --}}
+
+                    <div class="col-sm-4">
+                        <div class="form-group" wire:ignore>
+                            <select class="form-control select2-show-search" data-placeholder="Pilih Sapi" id="select2-show-search">
+                                <option value="">Pilih Sapi</option>
+
+                                @foreach ($sapis as $item)
+                                    <option value="{{ $item->id }}">
+                                        {{ 'MBC-' . $item->generasi . '.' . $item->anak_ke . '-' . $item->eartag_induk . '-' . $item->eartag }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+        
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -181,3 +164,17 @@
         </div>
     </div>
 </div>
+
+
+@push('script')
+    
+<script>
+    $('.select2-show-search').change(function(event) {
+    // var val = $(".select2-show-search option:selected").text();
+    @this.set('sapiId', event.target.value);
+    // alert(event.target.value);
+});
+
+
+</script>
+@endpush
