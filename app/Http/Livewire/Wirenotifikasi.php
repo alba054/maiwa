@@ -16,11 +16,11 @@ class Wirenotifikasi extends Component
     public $status, $searchTerm;
 
     protected $listeners = [
-        
-        'refreshParent'=>'$refresh',
+
+        'refreshParent' => '$refresh',
         'formFilter'
     ];
-    
+
     public function mount()
     {
         date_default_timezone_set("Asia/Makassar");
@@ -31,17 +31,17 @@ class Wirenotifikasi extends Component
         $monthEnd = '12';
 
         // $this->startDate = now()->subDays(30)->format('Y/m/d');
-        $this->startDate = date($filterTahun.'-'.$monthStart.'-01');
-        $this->endDate = date($filterTahun.'-'.$monthEnd.'-01');
-        
-        
+        $this->startDate = date($filterTahun . '-' . $monthStart . '-01');
+        $this->endDate = date($filterTahun . '-' . $monthEnd . '-01');
+
+
         $data = Notifikasi::with(['sapi'])
             ->orderBy('tanggal', 'ASC')
             ->where('tanggal', '>=', now()->subdays(7)->format('Y-m-d'))
             ->where('status', 'no')
             ->get();
 
-            // dd($data);
+        // dd($data);
 
         $array_tanggal = [];
         foreach ($data as $key => $value) {
@@ -55,31 +55,27 @@ class Wirenotifikasi extends Component
                 // array_push($array_tanggal, $value->pesan);
 
                 if ($diff == 0.0) {
-                    
-                    $pesan = $value->pesan.' ke Sapi '.'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
+
+                    $pesan = $value->pesan . ' ke Sapi ' . 'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
                     $this->sendFCM($token, 'MBC', $pesan);
-
                 }
-            }else {
+            } else {
 
-                if ($value->tanggal == now()->format('Y-m-d') ) {
+                if ($value->tanggal == now()->format('Y-m-d')) {
                     // array_push($array_tanggal, $value->pesan);
-                    $pesan = $value->pesan.' Hari ini ke Sapi '.'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
+                    $pesan = $value->pesan . ' Hari ini ke Sapi ' . 'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
                     $this->sendFCM($token, 'MBC', $pesan);
-                    
-                }else if ($value->tanggal == now()->adddays(1)->format('Y-m-d')) {
-                    $pesan = $value->pesan.' Esok Hari ke Sapi '.'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
+                } else if ($value->tanggal == now()->adddays(1)->format('Y-m-d')) {
+                    $pesan = $value->pesan . ' Esok Hari ke Sapi ' . 'MBC-' . $value->sapi->generasi . '.' . $value->sapi->anak_ke . '-' . $value->sapi->eartag_induk . '-' . $value->sapi->eartag;
                     $this->sendFCM($token, 'MBC', $pesan);
-                    
                 }
-
             }
-            
-        //     // dd($token);
-        //     // echo($token.'<br/>');
-        //     //
 
-            
+            //     // dd($token);
+            //     // echo($token.'<br/>');
+            //     //
+
+
             // Constcoba::sendFCM($token, 'MBC', $pesan, $value->role.','.$value->sapi->peternak->pendamping->user->id);
         }
         // // dd($array_tanggal);
@@ -94,45 +90,38 @@ class Wirenotifikasi extends Component
         $tsrId = $this->tsrId;
 
         return Notifikasi::with('sapi')
-        ->orderBy('tanggal')
-        ->where(function ($query){
-           
-            if($this->searchTerm != ""){
-                $query->where('pesan','like','%'.$this->searchTerm.'%');
-                
-                 
-            }
+            ->orderBy('tanggal')
+            ->where(function ($query) {
 
-            if($this->sapiId != null){
-                $query->Where('sapi_id','like','%'.$this->sapiId.'%');
-            }
-            if($this->status != null){
-                $query->Where('status','like','%'.$this->status.'%');
-            }
-            
- 
-        })
-        ->whereHas('sapi', function($q) use($peterId) {
-            if($peterId != null){
-                $q->where('peternak_id', $peterId);
-            }
-            
-        })
-        ->whereHas('sapi.peternak', function($q) use($penId) {
-            if($penId != null){
-                $q->where('pendamping_id', $penId);
-            }
-            
-        })
-        ->whereHas('sapi.peternak.pendamping', function($q) use($tsrId) {
-            if($tsrId != null){
-                $q->where('tsr_id', $tsrId);
-            }
-            
-        })
-        ->WhereBetween('tanggal',[$this->startDate, $this->endDate])
+                if ($this->searchTerm != "") {
+                    $query->where('pesan', 'like', '%' . $this->searchTerm . '%');
+                }
 
-        ->get();
+                if ($this->sapiId != null) {
+                    $query->Where('sapi_id', 'like', '%' . $this->sapiId . '%');
+                }
+                if ($this->status != null) {
+                    $query->Where('status', 'like', '%' . $this->status . '%');
+                }
+            })
+            ->whereHas('sapi', function ($q) use ($peterId) {
+                if ($peterId != null) {
+                    $q->where('peternak_id', $peterId);
+                }
+            })
+            ->whereHas('sapi.peternak', function ($q) use ($penId) {
+                if ($penId != null) {
+                    $q->where('pendamping_id', $penId);
+                }
+            })
+            ->whereHas('sapi.peternak.pendamping', function ($q) use ($tsrId) {
+                if ($tsrId != null) {
+                    $q->where('tsr_id', $tsrId);
+                }
+            })
+            ->WhereBetween('tanggal', [$this->startDate, $this->endDate])
+
+            ->get();
     }
 
     public function formFilter($data)
@@ -146,8 +135,6 @@ class Wirenotifikasi extends Component
         $this->pendampingId = $data['pendampingId'];
         $this->tsrId = $data['tsrId'];
         $this->status = $data['status'];
-
-
     }
 
     public function openSearchModal()
@@ -159,19 +146,18 @@ class Wirenotifikasi extends Component
     public function exportToExcel()
     {
         return Excel::download(new NotifikasiExport($this->resultData()), 'Data Notifikasi.xlsx');
-
     }
     public function render()
     {
         // dd($this->resultData());
-        return view('livewire.wirenotifikasi',[
+        return view('livewire.wirenotifikasi', [
             'datas' => $this->resultData()
         ]);
     }
     public function sendFCM($token, $title, $body)
     {
-        $SERVER_API_KEY = "AAAAXIxpSbY:APA91bEQ__NawWw36uFJA5BakyFdXYAEoolgzrIPhsfFhF0PzH978EY-FDYGE6Qbqaoqcs3LRRuwjIHX2-LCRwQMKYloWMqPYxhtRxV9E4OH9cR-tjivKq9FdXTpjx9vYtlwwRtQ4suX";
-        
+        $SERVER_API_KEY = "AAAArQZRqL4:APA91bGQ2b8Q1d-F2mNDQ9dRGs4X8kyEWA7yP5tnXcNDqgQ2MV0Yji9qL-_jjdHWUaulDe7COKnOJpdGMF9fzRCKMMLFFdnH7f0F8eA0aTxHrJ4Yke7PPOflLsE4Up93gzwD530UXUZy";
+
         // $token = [];
         // $dataUser = User::where('hak_akses', '2')->get();
         // foreach ($dataUser as $key => $value) {
@@ -182,9 +168,9 @@ class Wirenotifikasi extends Component
 
         $data = [
 
-            "registration_ids" => 
-                [$token],
-            
+            "registration_ids" =>
+            [$token],
+
 
             "notification" => [
 
@@ -192,43 +178,43 @@ class Wirenotifikasi extends Component
 
                 "body" => $body,
 
-                "sound"=> "default", // required for sound on ios
+                "sound" => "default", // required for sound on ios
 
-               
+
 
             ],
             "data" => [
-                "event" => "2,".$title
+                "event" => "2," . $title
             ]
 
         ];
 
-    $dataString = json_encode($data);
+        $dataString = json_encode($data);
 
-    $headers = [
+        $headers = [
 
-        'Authorization: key=' . $SERVER_API_KEY,
+            'Authorization: key=' . $SERVER_API_KEY,
 
-        'Content-Type: application/json',
+            'Content-Type: application/json',
 
-    ];
+        ];
 
-    $ch = curl_init();
+        $ch = curl_init();
 
-    curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
 
-    curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POST, true);
 
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
 
-    $response = curl_exec($ch);
+        $response = curl_exec($ch);
 
-    // dd($response);
+        // dd($response);
     }
 }
