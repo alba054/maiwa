@@ -64,7 +64,8 @@ class HomeController extends Controller
             'year' => $this->year,
             'laporansPaginate' => $this->laporanData()->get(),
             'yearSelected' => $this->year,
-            'sapis' => $this->sapiData()->paginate(10, ['*'], '1pagination'),
+            // 'sapis' => $this->sapiData()->paginate(10, ['*'], '1pagination'),
+            'sapis' => $this->sapiData()->get(),
             'sapisKelamin' => $this->sapiData()->get(),
             'countPendamping' => count(Pendamping::all()),
 

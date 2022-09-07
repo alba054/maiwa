@@ -2,6 +2,12 @@
 @section('css')
 <script src="{{ URL::asset('assets/js/select2.js') }}"></script>
 
+<!-- Data table css -->
+<link href="{{URL::asset('assets/plugins/datatable/css/dataTables.bootstrap4.min-rtl.css')}}" rel="stylesheet" />
+<link href="{{URL::asset('assets/plugins/datatable/css/buttons.bootstrap4.min.css')}}"  rel="stylesheet">
+<link href="{{URL::asset('assets/plugins/datatable/responsive.bootstrap4.min.css')}}" rel="stylesheet" />
+
+
 @endsection
 @section('page-header')
     <!--Page header-->
@@ -138,7 +144,7 @@
                 <div class="card-body">
                     
                     <div class="table-responsive">
-                        <table class="table table-vcenter text-nowrap mb-0 table-striped table-bordered border-top">
+                        <table class="table table-vcenter text-nowrap mb-0 table-striped table-bordered border-top" id="example">
                             @if (count($sapis) != 0)
                                 <thead>
                                     <tr>
@@ -268,9 +274,9 @@
                     </div>
                     
                 </div>
-                <div class="d-flex justify-content-center">
+                {{-- <div class="d-flex justify-content-center">
                     {!! $sapis->links() !!}
-                </div>
+                </div> --}}
                 
             </div>
         </div>
@@ -444,6 +450,21 @@
 
     <!--INTERNAL Index js-->
     <script src="{{ URL::asset('assets/js/index1.js') }}"></script>
+
+    <!-- INTERNAL Data tables -->
+		<script src="{{URL::asset('assets/plugins/datatable/js/jquery.dataTables.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.bootstrap4.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/dataTables.buttons.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/buttons.bootstrap4.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/jszip.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/pdfmake.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/vfs_fonts.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/buttons.html5.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/buttons.print.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/js/buttons.colVis.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/dataTables.responsive.min.js')}}"></script>
+		<script src="{{URL::asset('assets/plugins/datatable/responsive.bootstrap4.min.js')}}"></script>
+		<script src="{{URL::asset('assets/js/datatables.js')}}"></script>
 
     @include('home.cart1')
     @include('home.cart2')
