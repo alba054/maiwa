@@ -139,7 +139,6 @@
                 <div class="card-header">
                     <h3 class="card-title">Data Sapi {{ $year }}</h3>
 
-                   
                 </div>
                 <div class="card-body">
                     
@@ -201,8 +200,22 @@
                                                 @php
                                                     date_default_timezone_set('Asia/Makassar');
                                                     $now = now()->format('Y/m/d');
-                                                    $bday = Carbon\Carbon::parse($item->tanggal_lahir);
-                                                    echo $bday->diffInYears($now) . ' Tahun, ' . $bday->diffInMonths($now) . ' Bulan, ' . $bday->diffInDays($now) . ' Hari';
+                                                    $bday = strtotime($item->tanggal_lahir);
+                                                    $now = strtotime($now);
+                                                    $bday = $now - $bday;
+                                                    //$bday = 40608000;
+                                                    $SECONDS_TO_DAY = 86400;
+                                                    $hari = floor($bday / $SECONDS_TO_DAY);
+                                                    $tahun = floor($hari / 365);
+                                                    $hari = $hari % 365;
+                                                    $bulan = floor($hari / 30);
+                                                    $hari = $hari % 30;
+                                                    
+                                                    echo $tahun . ' Tahun ' . $bulan . ' Bulan ' . $hari . ' Hari';
+
+                                                    //$bday = Carbon\Carbon::parse($item->tanggal_lahir);
+                                                    //echo $bday;
+                                                    //echo $bday->diffInYears($now) . ' Tahun, ' . $bday->diffInMonths($now) . ' ////Bulan, ' . $bday->diffInDays($now) . ' Hari';
                                                 @endphp
                                             </td>
                                             <td>{{ $item->kelamin }}</td>
@@ -311,11 +324,20 @@
                             </div>
     
                         </div>
-                        <div id="echart1" class="chart-tasks chart-dropshadow text-center" wire:ignore></div>
+                        <div id="echart1" class="chart-tasks chart-dropshadow text-center" wire:ignore style="display:none;"></div>
+                        <div class="text-center mt-2">
+                        </div>
+                        <div id="echart4" class="chart-tasks chart-dropshadow text-center" wire:ignore></div>
+                        <div class="text-center mt-2">
+                            <span><span class="dot-label bg-warning"></span>Data Panen</span>
+                        </div>
+                        <div id="echart5" class="chart-tasks chart-dropshadow text-center" wire:ignore></div>
                         <div class="text-center mt-2">
                             <span class="mr-4"><span class="dot-label bg-primary"></span>Data Kelahiran</span>
+                        </div>
+                        <div id="echart6" class="chart-tasks chart-dropshadow text-center" wire:ignore></div>
+                        <div class="text-center mt-2">
                             <span><span class="dot-label bg-secondary"></span>Data Kematian</span>
-                            <span><span class="dot-label bg-warning"></span>Data Panen</span>
                         </div>
                 </div>
             </div>
@@ -471,17 +493,14 @@
     @include('home.cart3')
 
     <script type="text/javascript">
-        $(document).ready(function() {
-            // var tmp2 = parseInt('{!! $countSapi !!}');
-            // alert(tmp2);
+        // $(document).ready(function() {
+        //     var tmp2 = parseInt('{!! $countSapi !!}');
+        //     alert(tmp2);
             
-            // var dataKelahiran = {{json_encode($dataxkelahiran)}};
-            // console.log(array);
-            // alert(tmp2);
-
-            
-        });
-        
+        //     var dataKelahiran = {{json_encode($dataxkelahiran)}};
+        //     console.log(array);
+        //     alert(tmp2);
+        // });
     </script>
     
 

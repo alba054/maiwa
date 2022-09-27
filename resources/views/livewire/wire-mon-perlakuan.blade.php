@@ -26,7 +26,6 @@
     <!--End Page header-->
     <div class="row">
 
-
         <div class="col-xl-12 col-lg-12">
             <div class="card">
                 <div class="card-header">
@@ -40,7 +39,6 @@
 
                     <div class="table-responsive">
                         <table class="table table-hover card-table table-vcenter text-nowrap">
-
                             @if (count($perlakuans) != 0)
                                 <thead>
                                     <tr>
@@ -60,6 +58,7 @@
                                         <th>Peternak</th>
                                         <th>Pendamping</th>
                                         <th>TSR</th>
+                                        <th>Foto</th>
 
                                         <th class="text-right">Aksi</th>
                                     </tr>
@@ -84,7 +83,7 @@
                                             <td>{{ $item->pendamping->user->name }}
                                             </td>
                                             <td>{{ $item->tsr->user->name }}</td>
-
+                                            <td ><a target="blank" href="{{ url('/') . '/storage/photos_thumb/' . $item->foto }}">buka foto perlakuan</a></td>
                                             <td class="text-right">
                                                 <i wire:click="selectedItem({{ $item->id }},'export')"
                                                     class="fe fe-list f-16 btn btn-outline-warning"

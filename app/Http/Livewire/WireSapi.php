@@ -63,12 +63,21 @@ class WireSapi extends Component
         ->where(function ($query){
             if($this->searchTerm != ""){
                 $query->where('eartag','like','%'.$this->searchTerm.'%');
-                $query->orWhere('eartag_induk','like','%'.$this->searchTerm.'%');   
-                $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');   
-                $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');   
-                $query->orWhere('tanggal_lahir','like','%'.$this->searchTerm.'%');   
-                $query->orWhere('generasi','like','%'.$this->searchTerm.'%');   
-                 
+                $query->orWhere('eartag_induk','like','%'.$this->searchTerm.'%');
+                $query->orWhere('nama_sapi','like','%'.$this->searchTerm.'%');
+                $query->orWhere('kelamin','like','%'.$this->searchTerm.'%');
+                $query->orWhere('tanggal_lahir','like','%'.$this->searchTerm.'%');
+                $query->orWhere('generasi','like','%'.$this->searchTerm.'%');
+                $query->orWhere('kondisi_lahir','like','%'.$this->searchTerm.'%');
+                $query->orWhereHas('jenis_sapi', function($q) {
+                    $q->where('jenis','like','%'.$this->searchTerm.'%');
+                });
+                $query->orWhereHas('peternak.pendamping.user', function($q) {
+                    $q->where('name','like','%'.$this->searchTerm.'%');
+                });
+                $query->orWhereHas('peternak', function($q) {
+                    $q->where('nama_peternak','like','%'.$this->searchTerm.'%');
+                });
             }
 
             if($this->sapiId != null){
@@ -85,23 +94,23 @@ class WireSapi extends Component
             if($penId != null){
                 $q->where('pendamping_id', $penId);
             }
-            
+
         })
         ->whereHas('peternak.pendamping', function($q) use($tsrId) {
             if($tsrId != null){
                 $q->where('tsr_id', $tsrId);
             }
-            
+
         });
-        
+
         if ($this->startDate == null || $this->endDate == null) {
             return $sapi;
         }else {
             return $sapi->WhereBetween('tanggal_lahir',[$this->startDate, $this->endDate]);
         }
-        
+
     }
-    
+
     public function exportToExcel()
     {
         return Excel::download(new SapiExport($this->resultData()->get()), 'sapi.xlsx');
@@ -136,7 +145,7 @@ class WireSapi extends Component
         $path = "public/photos/";
         $path_thumb = "public/photos_thumb/";
         $data = Sapi::find($this->selectedItemId);
-        
+
         $data->pkb()->delete();
         $data->ib()->delete();
         $data->performa()->delete();
@@ -154,7 +163,7 @@ class WireSapi extends Component
         // $data->statussapi()->delete();
 
         $delete = Sapi::destroy($this->selectedItemId);
-        
+
         if(Storage::exists($path.$data->foto_depan)){
             Storage::delete([
                 $path.$data->foto_depan,
@@ -167,7 +176,7 @@ class WireSapi extends Component
                 $path_thumb.$data->foto_peternak,
                 $path_thumb.$data->foto_rumah,
             ]);
-            
+
         }
 
         $delete ? $this->isSuccess("Berhasil Mengahapus") : $this->isError("Terjai kesalahan, Gagal Mengahapus");
@@ -185,7 +194,7 @@ class WireSapi extends Component
 
     public function formFilter($data)
     {
-        // dd($data);
+        //dd($data);
 
         $this->startDate = $data['startDate'] == null ? $this->startDate : $data['startDate'];
         $this->endDate = $data['endDate'] == null ? $this->endDate : $data['endDate'];
@@ -203,7 +212,7 @@ class WireSapi extends Component
         $this->resetErrorBag();
         $this->resetValidation();
 
-        
+
     }
 
     public function triggerConfirm()
@@ -212,7 +221,7 @@ class WireSapi extends Component
             'toast' => false,
             'position' => 'center',
             'showConfirmButton' => true,
-            'showCancelButton' =>  true, 
+            'showCancelButton' =>  true,
             'onConfirmed' => 'delete',
             'onCancelled' => 'cancelled'
         ]);
@@ -221,49 +230,49 @@ class WireSapi extends Component
     public function isSuccess($msg)
     {
         $this->alert('success', $msg, [
-            'position' =>  'top-end', 
-            'timer' =>  3000,  
-            'toast' =>  true, 
-            'text' =>  '', 
-            'confirmButtonText' =>  'Ok', 
-            'cancelButtonText' =>  'Cancel', 
-            'showCancelButton' =>  false, 
-            'showConfirmButton' =>  false, 
+            'position' =>  'top-end',
+            'timer' =>  3000,
+            'toast' =>  true,
+            'text' =>  '',
+            'confirmButtonText' =>  'Ok',
+            'cancelButtonText' =>  'Cancel',
+            'showCancelButton' =>  false,
+            'showConfirmButton' =>  false,
       ]);
     }
     public function isError($msg)
     {
         $this->alert('error', $msg, [
-            'position' =>  'top-end', 
-            'timer' =>  3000,  
-            'toast' =>  true, 
-            'text' =>  '', 
-            'confirmButtonText' =>  'Ok', 
-            'cancelButtonText' =>  'Cancel', 
-            'showCancelButton' =>  false, 
-            'showConfirmButton' =>  false, 
+            'position' =>  'top-end',
+            'timer' =>  3000,
+            'toast' =>  true,
+            'text' =>  '',
+            'confirmButtonText' =>  'Ok',
+            'cancelButtonText' =>  'Cancel',
+            'showCancelButton' =>  false,
+            'showConfirmButton' =>  false,
       ]);
     }
     public function confirmed()
     {
         // Example code inside confirmed callback
-    
+
         $this->alert('success', 'Hello World!', [
-            'position' =>  'top-end', 
-            'timer' =>  3000,  
-            'toast' =>  true, 
-            'text' =>  '', 
-            'confirmButtonText' =>  'Ok', 
-            'cancelButtonText' =>  'Cancel', 
-            'showCancelButton' =>  true, 
-            'showConfirmButton' =>  true, 
+            'position' =>  'top-end',
+            'timer' =>  3000,
+            'toast' =>  true,
+            'text' =>  '',
+            'confirmButtonText' =>  'Ok',
+            'cancelButtonText' =>  'Cancel',
+            'showCancelButton' =>  true,
+            'showConfirmButton' =>  true,
       ]);
     }
-    
+
     public function cancelled()
     {
         // Example code inside cancelled callback
-    
+
         $this->alert('info', 'Understood');
     }
 }

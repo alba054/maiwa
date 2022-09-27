@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Jenis Vaksin<span class="text-danger">*</span></label>
+                    <label class="form-label">Jenis Vaksin<span class="text-danger"></span></label>
                     <select class="custom-select" wire:model="vaksin_id">
                         <option value="">Please Choose</option>
                         @foreach ($vaksins as $item)
@@ -140,7 +140,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Jenis Vitamin<span class="text-danger">*</span></label>
+                    <label class="form-label">Jenis Vitamin<span class="text-danger"></span></label>
                     <select class="custom-select" wire:model="vitamin_id">
                         <option value="">Please Choose</option>
                         @foreach ($vitamins as $item)
@@ -162,7 +162,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Jenis Hormon<span class="text-danger">*</span></label>
+                    <label class="form-label">Jenis Hormon<span class="text-danger"></span></label>
                     <select class="custom-select" wire:model="hormon_id">
                         <option value="">Please Choose</option>
                         @foreach ($hormons as $item)

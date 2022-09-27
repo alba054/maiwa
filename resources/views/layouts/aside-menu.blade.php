@@ -1,4 +1,4 @@
-    <aside class="app-sidebar" style="overflow:scroll !important">
+    <aside class="app-sidebar" style="overflow:scroll !important" id="scrollable-aside">
         <div class="app-sidebar__logo">
             <a class="header-brand" href="{{ url('/') }}">
                 <img src="{{ URL::asset('assets/images/brand/mbc.png') }}" class="header-brand-img desktop-lgo"
@@ -62,7 +62,7 @@
                     <span class="side-menu__label">Dashboard</span></a>
             </li>
             <li class="side-item side-item-category">Tabel Master</li>
-            <li class="slide">
+            <li class="slide" id="test-scroll">
                 <a class="side-menu__item" data-toggle="slide" href="{{ url('/pages/' . ($page = '#')) }}">
                     <svg class="side-menu__icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"
                         width="24">
@@ -311,3 +311,15 @@
         </ul>
     </aside>
     <!--aside closed-->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            
+            const selectedMenu = document.getElementById("test-scroll")
+            console.log("TEst log")
+            console.log(typeof topTest.offsetTop)
+    
+            document.getElementById("scrollable-aside").scrollTop = topTest.offsetTop - 74
+        })
+
+    </script>

@@ -247,10 +247,12 @@ class WireMonPerlakuanForm extends Component
         $res_foto->store('public/photos');
         $imageName = $res_foto->hashName();
         $data['foto'] = $imageName;
-
+        
+        // dd($res_foto);
+        // dd($imageName);
         $manager = new ImageManager();
-        $image = $manager->make('storage/photos/' . $imageName)->resize(500, 300);
-        $image->save('storage/photos_thumb/' . $imageName);
+        $image = $manager->make($res_foto->getRealPath())->resize(500, 300);
+        $image->save(public_path().'/storage/photos_thumb/' . $imageName);
 
         return $imageName;
     }
